@@ -1,4 +1,4 @@
-package main.java.it.unisa.diem.dao.interfacce;
+package it.unisa.diem.dao.interfacce;
 
 import java.util.List;
 import java.util.Optional;

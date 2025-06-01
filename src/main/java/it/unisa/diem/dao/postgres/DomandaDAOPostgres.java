@@ -1,6 +1,6 @@
-package main.java.it.unisa.diem.dao.postgres;
-import main.java.it.unisa.diem.dao.interfacce.DomandaDAO;
-import main.java.it.unisa.diem.model.gestionedomande.Domanda;
+package it.unisa.diem.dao.postgres;
+import it.unisa.diem.dao.interfacce.DomandaDAO;
+import it.unisa.diem.model.gestione.sessione.Domanda;
 
 import java.util.Collections;
 import java.util.List;

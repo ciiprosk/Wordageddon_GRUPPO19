@@ -1,7 +1,7 @@
-package main.java.it.unisa.diem.dao.postgres;
+package it.unisa.diem.dao.postgres;
 
-import main.java.it.unisa.diem.dao.interfacce.UtenteDAO;
-import main.java.it.unisa.diem.model.gestioneutenti.Utente;
+import it.unisa.diem.dao.interfacce.UtenteDAO;
+import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.util.Collections;
 import java.util.List;
