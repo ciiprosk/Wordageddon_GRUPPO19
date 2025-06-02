@@ -9,7 +9,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        if(FXMLLoader.load(getClass().getResource("./view/FXMLDocument.fxml"))==null){
+            throw new RuntimeException("FXML load failed");
+        }
+        Parent root = FXMLLoader.load(getClass().getResource("./view/FXMLDocument.fxml"));
         primaryStage.setTitle("La mia App");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
