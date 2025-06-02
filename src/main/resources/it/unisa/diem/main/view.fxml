@@ -37,7 +37,7 @@
                   <Label fx:id="goToRegisterLabel" text="Registrati" textFill="#004aff" underline="true" onMouseClicked="#showRegister"/>
                </children>
             </HBox>
-            <Button text="Accedi" onAction="#handleLogin">
+            <Button fx:id="loginButton" text="Accedi" onAction="#handleLogin">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -84,7 +84,7 @@
                   <Label fx:id="goToLoginLabel" text="Accedi" textFill="#004aff" underline="true" onMouseClicked="#showLogin"/>
                </children>
             </HBox>
-            <Button text="Registrati" onAction="#handleRegister">
+            <Button fx:id="registerButton" text="Registrati" onAction="#handleRegister">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
