@@ -2,6 +2,7 @@ package it.unisa.diem.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -14,6 +15,7 @@ public class ViewController {
     @FXML private TextField registerEmailField, registerUsernameField;
     @FXML private PasswordField registerPasswordField, registerConfirmField;
     @FXML private Button registerButton, loginButton;
+    @FXML private Label passwordMismatchLabel;
 
     @FXML
     public void initialize() {
@@ -61,12 +63,16 @@ public class ViewController {
         String password = registerPasswordField.getText();
         String confirmPassword = registerConfirmField.getText();
 
-        boolean isValid = !email.isEmpty()
-                && email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")
-                && !username.isEmpty()
-                && !password.isEmpty()
-                && password.equals(confirmPassword);
+        boolean fieldsFilled = !email.isEmpty() && !username.isEmpty()
+                && !password.isEmpty() && !confirmPassword.isEmpty();
 
+        boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
+        boolean passwordsMatch = password.equals(confirmPassword);
+
+        // Mostra/Nasconde l'avviso rosso
+        passwordMismatchLabel.setVisible(!passwordsMatch && !confirmPassword.isEmpty());
+
+        boolean isValid = fieldsFilled && emailValid && passwordsMatch;
         registerButton.setDisable(!isValid);
     }
 

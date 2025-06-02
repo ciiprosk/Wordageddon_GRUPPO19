@@ -74,6 +74,12 @@
                   <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                </VBox.margin>
             </PasswordField>
+            <Label fx:id="passwordMismatchLabel" text="Le password non corrispondono"
+                   textFill="red" visible="false">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="50.0" right="50.0" />
+               </VBox.margin>
+            </Label>
             <HBox alignment="CENTER" prefHeight="4.0" prefWidth="600.0">
                <children>
                   <Label text="Hai già un account? ">
