@@ -64,7 +64,7 @@ public class ViewController {
         String confirmPassword = registerConfirmField.getText();
 
         boolean fieldsFilled = !email.isEmpty() && !username.isEmpty()
-                && !password.isEmpty() && !confirmPassword.isEmpty();
+                && password.length() >= 8 && confirmPassword.length() >= 8;
 
         boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
         boolean passwordsMatch = password.equals(confirmPassword);
@@ -80,7 +80,7 @@ public class ViewController {
         String username = loginUsernameField.getText();
         String password = loginPasswordField.getText();
 
-        boolean isValid = !username.isEmpty() && !password.isEmpty();
+        boolean isValid = !username.isEmpty() && password.length() >= 8;
         loginButton.setDisable(!isValid);
     }
 
