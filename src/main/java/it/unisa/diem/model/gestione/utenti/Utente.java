@@ -5,14 +5,13 @@ public class Utente {
     private String username;
     private String email;
     private String password;
-    private static long id=0;
+
 
     public Utente(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        id++;
-        this.id = id;
+
     }
 
     public String getUsername() {
@@ -31,9 +30,6 @@ public class Utente {
         return password;
     }
 
-    public long getId() {
-        return id;
-    }
 
     public boolean equals(Utente o) {
 
@@ -44,8 +40,8 @@ public class Utente {
         if (o.getClass() != Utente.class) return false;
 
         Utente temp = (Utente) o;
-
-        return this.getId() == temp.getId();
+        return true;
+       // return this.getId() == temp.getId();
     }
 
 }
