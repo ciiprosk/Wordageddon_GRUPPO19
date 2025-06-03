@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.LoadViewController">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="402.0" prefWidth="600.0">
+         <children>
+            <HBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="600.0">
+               <children>
+                  <Label text="Difficoltà: ">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Label text="var">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="70.0" />
+               </VBox.margin>
+            </HBox>
+            <Label alignment="TOP_LEFT" prefHeight="170.0" prefWidth="420.0" text="testo">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <ProgressBar prefWidth="420.0" progress="0.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </ProgressBar>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
