@@ -20,17 +20,17 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Label>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="Nuova Partita">
+            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#goToNewGame" prefHeight="50.0" prefWidth="400.0" text="Nuova Partita">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="LeaderBoard">
+            <Button fx:id="leaderboardButton" mnemonicParsing="false" onAction="#goToLeaderboard" prefHeight="50.0" prefWidth="400.0" text="LeaderBoard">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="History">
+            <Button fx:id="historyButton" mnemonicParsing="false" onAction="#goToHistory" prefHeight="50.0" prefWidth="400.0" text="History">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
