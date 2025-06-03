@@ -18,7 +18,8 @@
     <PasswordField fx:id="registerPasswordField" promptText="password" />
     <PasswordField fx:id="registerConfirmField" promptText="conferma password" />
 
-    <Label fx:id="passwordTooShortLabel" text="La password deve contenere almeno 8 caratteri"
+    <Label fx:id="passwordValidationLabel"
+           text="La password deve avere almeno 8 caratteri, un simbolo e nessuno spazio."
            textFill="red" visible="false"/>
     <Label fx:id="passwordMismatchLabel" text="Le password non corrispondono"
            textFill="red" visible="false" />

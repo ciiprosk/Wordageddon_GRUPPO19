@@ -10,7 +10,7 @@ public class SignUpViewController {
     @FXML private TextField registerUsernameField;
     @FXML private PasswordField registerPasswordField;
     @FXML private PasswordField registerConfirmField;
-    @FXML private Label passwordMismatchLabel, passwordTooShortLabel;
+    @FXML private Label passwordMismatchLabel, passwordValidationLabel;
     @FXML private Button registerButton;
 
     @FXML
@@ -39,12 +39,22 @@ public class SignUpViewController {
         boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
         boolean passwordsMatch = password.equals(confirmPassword);
         boolean passwordLongEnough = password.length() >= 8;
+        boolean passwordHasSpecialChar = password.matches(".*[!@#\\$%\\^&\\*()_\\-+=\\[\\]{};:'\",.<>?/\\\\|`~].*");
+        boolean passwordHasNoSpaces = !password.contains(" ");
+
 
         // Etichette rosse visibili solo quando serve
         passwordMismatchLabel.setVisible(!passwordsMatch && !confirmPassword.isEmpty());
-        passwordTooShortLabel.setVisible(!passwordLongEnough && !password.isEmpty());
+        passwordValidationLabel.setVisible(
+                !password.isEmpty() && (
+                        !passwordLongEnough ||
+                                !passwordHasNoSpaces ||
+                                !passwordHasSpecialChar
+                )
+        );
 
-        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough;
+        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough
+                && passwordHasSpecialChar && passwordHasNoSpaces;
         registerButton.setDisable(!isValid);
     }
 
