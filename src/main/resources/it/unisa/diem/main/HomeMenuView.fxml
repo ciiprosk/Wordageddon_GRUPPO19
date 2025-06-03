@@ -8,11 +8,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.HomeMenuViewController" stylesheets="@style.css">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.HomeMenuViewController">
    <children>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Label text="WORDAGEDDON">
+            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="WORDAGEDDON">
                <font>
                   <Font name="Britannic Bold" size="55.0" />
                </font>
@@ -32,10 +32,18 @@
             </Button>
             <Button fx:id="historyButton" mnemonicParsing="false" onAction="#goToHistory" prefHeight="50.0" prefWidth="400.0" text="History">
                <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" text="Log out">
+               <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </Button>
          </children>
+         <padding>
+            <Insets top="60.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

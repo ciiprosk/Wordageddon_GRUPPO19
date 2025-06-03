@@ -10,6 +10,7 @@ public class HomeMenuViewController {
     @FXML private Button newGameButton;
     @FXML private Button leaderboardButton;
     @FXML private Button historyButton;
+    @FXML private Button logOutButton;
 
     public void goToNewGame(ActionEvent actionEvent) {
         SceneLoader.load("DifficultySelectionView.fxml", newGameButton);
@@ -21,5 +22,9 @@ public class HomeMenuViewController {
 
     public void goToHistory(ActionEvent actionEvent) {
         SceneLoader.load("HistoryView.fxml", historyButton);
+    }
+
+    public void goToLogIn(ActionEvent actionEvent) {
+        SceneLoader.load("LoginView.fxml", logOutButton);
     }
 }

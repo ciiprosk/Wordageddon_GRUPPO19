@@ -1,5 +1,7 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.utility.SceneLoader;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,14 +10,13 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class DifficultySelectionViewController {
-    @FXML
-    private Button facileButton;
+    @FXML private Button facileButton;
 
-    @FXML
-    private Button medioButton;
+    @FXML private Button medioButton;
 
-    @FXML
-    private Button difficileButton;
+    @FXML private Button difficileButton;
+
+    @FXML private  Button backButton;
 
     @FXML
     public void initialize() {
@@ -41,6 +42,10 @@ public class DifficultySelectionViewController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void goToMainMenu(ActionEvent actionEvent) {
+        SceneLoader.load("HomeMenuView.fxml", backButton);
     }
 }
 
