@@ -4,10 +4,41 @@ import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 
 public class LeaderboardViewController {
     @FXML private Button historyButton;
     @FXML private Button backButton;
+    @FXML
+    private ComboBox<String> difficoltaComboBox;
+
+    @FXML
+    public void initialize() {
+        difficoltaComboBox.getItems().addAll("facile", "medio", "difficile");
+
+
+        // Aggiungi il listener per gestire la selezione
+        difficoltaComboBox.setOnAction(event -> {
+            String selezione = difficoltaComboBox.getValue();
+            switch (selezione) {
+                case "facile":
+                    loadTable("facile");
+                    break;
+                case "medio":
+                    loadTable("medio");
+                    break;
+                case "difficile":
+                    loadTable("difficile");
+                    break;
+            }
+        });
+    }
+
+    private void loadTable(String difficolta) {
+        difficoltaComboBox.setValue(difficolta);
+        System.out.println("la tabella selezionata è: " + difficolta);
+    }
+
 
     public void goToMainMenu(ActionEvent actionEvent) {
         SceneLoader.load("HomeMenuView.fxml", backButton);
