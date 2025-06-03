@@ -1,0 +1,62 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #FAFAFA
+  BorderColor Black
+  ArrowColor Black
+}
+
+actor Guest
+actor User
+actor Admin
+
+rectangle "Funzionalità Base" {
+  (Registrazione) as reg
+  (Login) as login
+  (Logout) as logout
+}
+
+rectangle "Sessione di Gioco" {
+  (Partecipazione alla sessione di Gioco) as sessione
+  (Riprende una partita sospesa) as sessione_sospesa
+  (Abbandona una partita sospesa) as sessione_abbandonata
+  (Sospende una partita) as sospensione
+  (Termina una partita) as termina
+  (Visualizza Statistiche Post-Game) as post
+  sessione <.. termina : include
+  termina <. post :include
+}
+
+rectangle "Statistiche" {
+  (Visualizza Leaderboard) as leaderboard
+  (Visualizza Storico) as storico
+}
+
+rectangle "Gestione Amministrativa" {
+  (Caricamento Documenti) as documents
+  (Testo non valido) as error_testo
+  (Gestione Stopwords) as stopwords
+  stopwords ..> documents : include
+}
+
+Guest -> reg
+login .> reg : include
+
+User -> login
+User --> logout
+User --> sessione
+User --> sessione_sospesa
+User --> sessione_abbandonata
+User --> leaderboard
+User --> storico
+User --> sospensione
+
+Admin --> documents
+Admin --> stopwords
+documents <. error_testo : extends
+
+
+Guest <|- User
+User <|- Admin
+@enduml
