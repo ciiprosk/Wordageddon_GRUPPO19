@@ -13,9 +13,9 @@
          <children>
             <HBox prefHeight="30.0" prefWidth="600.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="i" />
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="30.0" prefWidth="30.0" text="i" />
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="L" textAlignment="CENTER" />
+                  <Button fx:id="leaderboardButton" mnemonicParsing="false" onAction="#goToLeaderboard" prefHeight="30.0" prefWidth="30.0" text="L" textAlignment="CENTER" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
