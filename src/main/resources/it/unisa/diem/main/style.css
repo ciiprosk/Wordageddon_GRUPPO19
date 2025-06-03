@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: #ffd700;
+}
+
+.label, .text-field, .password-field, .button {
+    -fx-text-fill: #ffd700;
+}
+
+/* Bordo giallo per i campi di input */
+.text-field, .password-field {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #ffd700;
+    -fx-border-width: 1;
+}
+
+/* Pulsanti con sfondo grigio medio e testo giallo */
+.button {
+    -fx-background-color: #444444;
+    -fx-border-color: #ffd700;
+    -fx-border-width: 1;
+}
+
+.table-view {
+    -fx-background-color: #444444;
+    -fx-border-color: #ffd700;
+}
+
+.table-column {
+    -fx-background-color: #2b2b2b;
+}
