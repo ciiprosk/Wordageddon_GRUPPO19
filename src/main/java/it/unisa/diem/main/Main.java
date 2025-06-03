@@ -9,14 +9,12 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        if(FXMLLoader.load(getClass().getResource("SignUpView.fxml"))==null){
-            throw new RuntimeException("FXML load failed");
-        }
-        Parent root = FXMLLoader.load(getClass().getResource("SignUpView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml")); // o LoginView.fxml
         primaryStage.setTitle("La mia App");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
+
 
     public static void main(String[] args) {
         launch(args);
