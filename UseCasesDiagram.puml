@@ -15,6 +15,11 @@ rectangle "Funzionalità Base" {
   (Registrazione) as reg
   (Login) as login
   (Logout) as logout
+  note right of login
+  Questo caso d'uso è associato a Guest in quanto
+  finché l''utente non inserisce le credenziali
+  non può accedere alla home
+  end note
 }
 
 rectangle "Sessione di Gioco" {
@@ -23,10 +28,22 @@ rectangle "Sessione di Gioco" {
   (Abbandona una partita sospesa) as sessione_abbandonata
   (Sospende una partita) as sospensione
   (Termina una partita) as termina
+  note right of termina
+  Questo caso d'uso non è strettamente collegato
+  all'utente e in quanto tale non sarà descritto
+  nel documento
+  end note
+
   (Visualizza Statistiche Post-Game) as post
-  sessione <.. termina : include
+
+  sessione <. termina : include
   termina <. post :include
-}
+
+  (Selezione difficoltà) as diff
+  (Selezione lingua) as ling
+  sessione ..> diff: include
+  sessione ..> ling: include
+  }
 
 rectangle "Statistiche" {
   (Visualizza Leaderboard) as leaderboard
@@ -37,13 +54,14 @@ rectangle "Gestione Amministrativa" {
   (Caricamento Documenti) as documents
   (Testo non valido) as error_testo
   (Gestione Stopwords) as stopwords
-  stopwords ..> documents : include
+
 }
 
 Guest -> reg
 login .> reg : include
+Guest -> login
 
-User -> login
+
 User --> logout
 User --> sessione
 User --> sessione_sospesa
@@ -54,8 +72,9 @@ User --> sospensione
 
 Admin --> documents
 Admin --> stopwords
-documents <. error_testo : extends
 
+documents <.. error_testo : extends
+stopwords .> documents : include
 
 Guest <|- User
 User <|- Admin
