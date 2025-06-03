@@ -12,7 +12,7 @@ public class HomeMenuViewController {
     @FXML private Button historyButton;
 
     public void goToNewGame(ActionEvent actionEvent) {
-        SceneLoader.load("LoadView.fxml", newGameButton);
+        SceneLoader.load("DifficultySelectionView.fxml", newGameButton);
     }
 
     public void goToLeaderboard(ActionEvent actionEvent) {
