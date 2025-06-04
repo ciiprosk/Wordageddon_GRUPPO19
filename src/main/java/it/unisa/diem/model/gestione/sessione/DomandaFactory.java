@@ -110,16 +110,22 @@ public class DomandaFactory {
         }
 
         // Lista di parole comuni da cui prendere la parola  //aggiungeremo poi altro, eventualmente un dizionario per testo
-        List<String> dizionario = Arrays.asList("aquila", "giocattolo", "filosofia", "montagna", "computer", "zebra", "filamento", "arcobaleno");
+        List<String> dizionario = Arrays.asList("aquila", "giocattolo", "filosofia", "montagna", "zebra", "computer", "lampione");
+        List<String> assenti = new ArrayList<>();
 
-        // Trova una parola assente
-        String parolaCorretta = null;
         for (String p : dizionario) {
             if (!presenti.contains(p)) {
-                parolaCorretta = p;
-                break;
+                assenti.add(p);
             }
         }
+
+        if (assenti.isEmpty()) {
+            throw new IllegalStateException("Nessuna parola assente trovata nel dizionario.");
+        }
+
+        Collections.shuffle(assenti);
+        String parolaCorretta = assenti.get(0);
+
 
         if (parolaCorretta == null) {
             parolaCorretta = "fantasma"; // "Se non sono riuscito a trovare nessuna parola assente nei documenti tra quelle del dizionario, allora usa una parola predefinita ('fantasma') come risposta corretta."
