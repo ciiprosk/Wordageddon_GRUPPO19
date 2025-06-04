@@ -30,8 +30,8 @@ rectangle "Sessione di Gioco" {
   (Termina una partita) as termina
   note right of termina
   Questo caso d'uso non è strettamente collegato
-  all'utente e in quanto tale non sarà descritto
-  nel documento
+  all'utente poiché è solo un caso in cui l'utente
+  termini una partita
   end note
 
   (Visualizza Statistiche Post-Game) as post

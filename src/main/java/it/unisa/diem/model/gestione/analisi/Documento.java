@@ -1,7 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
 public class Documento {
-
+//la classe deve prendere un file in input e trasformarlo in file binario
     private final String lingua;    //tipo enum???????
     private final String nome;
     private final String estensione;

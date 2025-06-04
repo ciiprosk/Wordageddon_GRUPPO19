@@ -5,12 +5,14 @@ public class Utente {
     private String username;
     private String email;
     private String password;
+    private final boolean isAdmin;
 
 
     public Utente(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isAdmin = false;
 
     }
 
