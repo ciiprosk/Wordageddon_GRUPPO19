@@ -39,6 +39,9 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
             </TextArea>
             <Label text="Exclude also">
                <font>
