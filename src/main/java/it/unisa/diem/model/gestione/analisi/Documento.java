@@ -18,10 +18,12 @@ public class Documento {
     }
 
     public String getNome() {
+
         return nome;
     }
 
     public String getContenuto() {
+
         return contenuto;
     }
 
