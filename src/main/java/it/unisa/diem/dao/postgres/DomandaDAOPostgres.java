@@ -18,6 +18,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
         return Collections.emptyList();
     }
 
+    //questo metodo inserisce all'interno del db: nome del documento, posizione relativa del file, estensione, limgua
     @Override
     public void insert(Domanda domanda) {
 

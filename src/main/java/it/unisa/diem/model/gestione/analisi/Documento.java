@@ -5,7 +5,7 @@ public class Documento {
     private final String lingua;    //tipo enum???????
     private final String nome;
     private final String estensione;
-    private final String percorsoFile;
+    private final String percorsoFile; // --> il percorso file è creato da noi; si usa data/
     private final String difficolta;    //tipo enum????????
 
     public Documento(String lingua, String nome, String estensione, String percorsoFile, String difficolta) {
