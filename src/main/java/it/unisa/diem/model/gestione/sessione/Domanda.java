@@ -1,18 +1,49 @@
 package it.unisa.diem.model.gestione.sessione;
 
+import java.util.List;
+import it.unisa.diem.utility.TipoDomanda;
+
+//ciao
+
+
 public class Domanda {
+    private String testoDomanda;
+    private TipoDomanda tipo;
+    private List<String> opzioni;  // 4 opzioni di risposta
+    private String rispostaCorretta;
+    private int tempoLimiteSecondi = 15;
 
-    private final Sessione sessione;
-    private static int numero;
-    private final int valore;   //nel diagramma è chiamato PUNTI
-    private final String tipologia;     //tipo enum????????
-    private String rispostaInserita;
-    private final String testo;
+    public Domanda(String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+        this.testoDomanda = testoDomanda;
+        this.tipo = tipo;
+        this.opzioni = opzioni;
+        this.rispostaCorretta = rispostaCorretta;
+    }
 
-    public Domanda(Sessione sessione, int valore, String tipologia, String testo) {
-        this.sessione = sessione;
-        this.valore = valore;
-        this.tipologia = tipologia;
-        this.testo = testo;
+    // Getter
+    public String getTestoDomanda() {
+        return testoDomanda;
+    }
+
+    public TipoDomanda getTipo() {
+        return tipo;
+    }
+
+    public List<String> getOpzioni() {
+        return opzioni;
+    }
+
+    public String getRispostaCorretta() {
+        return rispostaCorretta;
+    }
+
+    public int getTempoLimiteSecondi() {
+        return tempoLimiteSecondi;
+    }
+
+    // Verifica se la risposta dell'utente è corretta
+    public boolean verificaRisposta(String rispostaUtente) {
+        return rispostaCorretta.equalsIgnoreCase(rispostaUtente);
     }
 }
+
