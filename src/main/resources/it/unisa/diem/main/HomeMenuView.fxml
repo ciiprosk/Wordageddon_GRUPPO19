@@ -52,6 +52,18 @@
                   <Font size="20.0" />
                </font>
             </Button>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="60.0" prefWidth="1200.0">
+               <children>
+                  <Button fx:id="adminButton" mnemonicParsing="false" onAction="#goToLoadDocument" prefHeight="60.0" prefWidth="160.0" text="Admin">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="120.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
          </children>
          <padding>
             <Insets top="60.0" />

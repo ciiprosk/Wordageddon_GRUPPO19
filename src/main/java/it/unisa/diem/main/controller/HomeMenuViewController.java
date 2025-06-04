@@ -11,6 +11,15 @@ public class HomeMenuViewController {
     @FXML private Button leaderboardButton;
     @FXML private Button historyButton;
     @FXML private Button logOutButton;
+    @FXML private Button adminButton;
+
+    private boolean isAdmin = false; //da modificare
+
+    @FXML
+    public void initialize() {
+        isAdmin = true;            // Temporaneo, finché non c'è il database
+        showAdminButton();
+    }
 
     public void goToNewGame(ActionEvent actionEvent) {
         SceneLoader.load("DifficultySelectionView.fxml", newGameButton);
@@ -26,5 +35,15 @@ public class HomeMenuViewController {
 
     public void goToLogIn(ActionEvent actionEvent) {
         SceneLoader.load("LoginView.fxml", logOutButton);
+    }
+
+    public void goToLoadDocument(ActionEvent actionEvent) {
+        SceneLoader.load("AdminScreenView.fxml", adminButton);
+    }
+
+    private void showAdminButton() {
+        adminButton.setVisible(isAdmin);
+        adminButton.setManaged(isAdmin);
+        adminButton.setDisable(!isAdmin);
     }
 }

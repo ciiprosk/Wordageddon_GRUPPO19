@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.AdminScreenView">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="1200.0">
+         <children>
+            <Label text="Scegli il testo da importare:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="60.0" prefWidth="800.0">
+               <children>
+                  <Region prefHeight="60.0" prefWidth="300.0" />
+                  <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Importa" underline="true">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Label text="Lista parole da escludere:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <TextArea prefHeight="382.0" prefWidth="800.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </TextArea>
+            <Label text="Escludi anche:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <CheckBox mnemonicParsing="false" text="articoli" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" text="preposizioni" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" text="verbo essere" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" text="verbo avere" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" text="connettivi e congiunzioni" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+            <CheckBox mnemonicParsing="false" text="pronomi" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+         </children>
+         <padding>
+            <Insets left="200.0" right="200.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
