@@ -6,32 +6,32 @@ import it.unisa.diem.utility.SceneLoader;
 
 public class SignUpViewController {
 
-    @FXML private TextField registerEmailField;
-    @FXML private TextField registerUsernameField;
-    @FXML private PasswordField registerPasswordField;
-    @FXML private PasswordField registerConfirmField;
+    @FXML private TextField signUpEmailField;
+    @FXML private TextField signUpUsernameField;
+    @FXML private PasswordField signUpPasswordField;
+    @FXML private PasswordField signUpConfirmField;
     @FXML private Label passwordMismatchLabel, passwordTooShortLabel;
-    @FXML private Button registerButton;
+    @FXML private Button signUpButton;
 
     @FXML
     public void initialize() {
-        registerEmailField.textProperty().addListener((obs, oldVal, newVal) -> validateRegisterForm());
-        registerUsernameField.textProperty().addListener((obs, oldVal, newVal) -> validateRegisterForm());
-        registerPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateRegisterForm());
-        registerConfirmField.textProperty().addListener((obs, oldVal, newVal) -> validateRegisterForm());
-        validateRegisterForm();
+        signUpEmailField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
+        signUpUsernameField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
+        signUpPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
+        signUpConfirmField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
+        validateSignUpForm();
     }
 
     @FXML
-    private void handleRegister() {
+    private void handleSignUp() {
         System.out.println("Registrazione premuta");
     }
 
-    private void validateRegisterForm() {
-        String email = registerEmailField.getText();
-        String username = registerUsernameField.getText();
-        String password = registerPasswordField.getText();
-        String confirmPassword = registerConfirmField.getText();
+    private void validateSignUpForm() {
+        String email = signUpEmailField.getText();
+        String username = signUpUsernameField.getText();
+        String password = signUpPasswordField.getText();
+        String confirmPassword = signUpConfirmField.getText();
 
         boolean fieldsFilled = !email.isEmpty() && !username.isEmpty()
                 && !password.isEmpty() && !confirmPassword.isEmpty();
@@ -40,7 +40,6 @@ public class SignUpViewController {
         boolean passwordsMatch = password.equals(confirmPassword);
         boolean passwordLongEnough = password.length() >= 8;
 
-        // Etichette rosse visibili solo quando serve — e non occupano spazio se nascoste
         boolean showMismatch = !passwordsMatch && !confirmPassword.isEmpty();
         passwordMismatchLabel.setVisible(showMismatch);
         passwordMismatchLabel.setManaged(showMismatch);
@@ -50,13 +49,11 @@ public class SignUpViewController {
         passwordTooShortLabel.setManaged(showTooShort);
 
         boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough;
-        registerButton.setDisable(!isValid);
+        signUpButton.setDisable(!isValid);
     }
-
-
 
     @FXML
     private void goToLogin() {
-        SceneLoader.load("LoginView.fxml", registerButton);
+        SceneLoader.load("LoginView.fxml", signUpButton);
     }
 }
