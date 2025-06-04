@@ -28,7 +28,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Label text="Risultati">
+                  <Label text="Score:">
                      <font>
                         <Font size="30.0" />
                      </font>

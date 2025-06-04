@@ -20,9 +20,9 @@ public class DifficultySelectionViewController {
 
     @FXML
     public void initialize() {
-        facileButton.setOnAction(e -> goToLoadView("Facile", facileButton));
-        medioButton.setOnAction(e -> goToLoadView("Medio", medioButton));
-        difficileButton.setOnAction(e -> goToLoadView("Difficile", difficileButton));
+        facileButton.setOnAction(e -> goToLoadView("Easy", facileButton));
+        medioButton.setOnAction(e -> goToLoadView("Normal", medioButton));
+        difficileButton.setOnAction(e -> goToLoadView("Hard", difficileButton));
     }
 
     private void goToLoadView(String difficulty, Button sourceButton) {

@@ -14,7 +14,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
                <children>
-                  <Label text="Difficoltà: ">
+                  <Label text="Mode: ">
                      <font>
                         <Font size="60.0" />
                      </font>

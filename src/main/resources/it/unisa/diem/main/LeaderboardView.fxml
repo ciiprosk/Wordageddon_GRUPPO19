@@ -28,14 +28,14 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="75.0" prefWidth="600.0">
                      <children>
-                        <Label text="Migliori Giocatori">
+                        <Label text="Best Score">
                            <font>
                               <Font size="40.0" />
                            </font>
                         </Label>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label text="difficoltà: ">
+                              <Label text="difficulty: ">
                                  <font>
                                     <Font size="38.0" />
                                  </font>

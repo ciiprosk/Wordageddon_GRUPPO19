@@ -12,7 +12,7 @@
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="Seleziona la difficoltà" textAlignment="CENTER">
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="Select game mode" textAlignment="CENTER">
                <font>
                   <Font size="80.0" />
                </font>
@@ -20,7 +20,7 @@
                   <Insets bottom="10.0" top="120.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="facileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Facile">
+            <Button fx:id="facileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Easy">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -28,7 +28,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button fx:id="medioButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Medio">
+            <Button fx:id="medioButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Normal">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -36,7 +36,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button fx:id="difficileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Difficile">
+            <Button fx:id="difficileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Hard">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

@@ -9,7 +9,7 @@
 <VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.SignUpViewController">
    <children>
    
-       <Label text="Registrazione">
+       <Label text="Sign Up">
            <font>
             <Font size="40.0" />
          </font>
@@ -40,36 +40,36 @@
             <Font size="25.0" />
          </font></PasswordField>
    
-       <Label fx:id="passwordTooShortLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="La password deve contenere almeno 8 caratteri" visible="false">
+       <Label fx:id="passwordTooShortLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="The password has to have at least 8 characters" visible="false">
          <font>
             <Font size="20.0" />
          </font></Label>
-       <PasswordField fx:id="registerConfirmField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="conferma password">
+       <PasswordField fx:id="registerConfirmField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="confirm password">
          <VBox.margin>
             <Insets />
          </VBox.margin>
          <font>
             <Font size="25.0" />
          </font></PasswordField>
-       <Label fx:id="passwordMismatchLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="Le password non corrispondono" visible="false">
+       <Label fx:id="passwordMismatchLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="The passwords are not the same" visible="false">
          <font>
             <Font size="20.0" />
          </font></Label>
    
        <HBox alignment="CENTER">
            <children>
-               <Label text="Hai già un account? ">
+               <Label text="Already have an account? ">
                <font>
                   <Font size="30.0" />
                </font></Label>
-               <Label fx:id="goToLoginLabel" onMouseClicked="#goToLogin" style="-fx-text-fill: rgb(0, 155, 255)" text="Accedi" underline="true">
+               <Label fx:id="goToLoginLabel" onMouseClicked="#goToLogin" style="-fx-text-fill: rgb(0, 155, 255)" text="Login" underline="true">
                <font>
                   <Font size="28.0" />
                </font></Label>
            </children>
        </HBox>
    
-       <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="60.0" prefWidth="180.0" text="Registrati">
+       <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="60.0" prefWidth="180.0" text="Sign Up">
          <font>
             <Font size="25.0" />
          </font>

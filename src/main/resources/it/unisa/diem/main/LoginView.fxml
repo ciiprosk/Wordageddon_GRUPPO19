@@ -9,7 +9,7 @@
 <VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.LoginViewController">
    <children>
    
-       <Label text="Accedi">
+       <Label text="Login">
            <font>
             <Font size="40.0" />
          </font>
@@ -31,12 +31,12 @@
    
        <HBox alignment="CENTER">
            <children>
-               <Label text="Non hai un account? ">
+               <Label text="Don't have an account? ">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-               <Label fx:id="goToRegisterLabel" onMouseClicked="#goToRegister" style="-fx-text-fill: rgb(0,155,255)" text="Registrati" underline="true">
+               <Label fx:id="goToRegisterLabel" onMouseClicked="#goToRegister" style="-fx-text-fill: rgb(0,155,255)" text="Sign Up" underline="true">
                <font>
                   <Font size="30.0" />
                </font>
@@ -44,7 +44,7 @@
            </children>
        </HBox>
    
-       <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="60.0" prefWidth="120.0" text="Accedi">
+       <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="60.0" prefWidth="120.0" text="Login">
          <font>
             <Font size="20.0" />
          </font>

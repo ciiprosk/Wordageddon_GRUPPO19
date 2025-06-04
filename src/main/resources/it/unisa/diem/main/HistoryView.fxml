@@ -26,7 +26,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label text="Storico">
+                  <Label text="History">
                      <font>
                         <Font size="40.0" />
                      </font>

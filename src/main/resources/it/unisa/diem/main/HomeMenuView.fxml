@@ -20,7 +20,7 @@
                   <Insets bottom="10.0" top="60.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#goToNewGame" prefHeight="100.0" prefWidth="800.0" text="Nuova Partita">
+            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#goToNewGame" prefHeight="100.0" prefWidth="800.0" text="New Game">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -44,7 +44,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" prefHeight="60.0" prefWidth="160.0" text="Log out">
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" prefHeight="60.0" prefWidth="160.0" text="Log out" underline="true">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
