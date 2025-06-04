@@ -4,6 +4,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import it.unisa.diem.utility.TipoDomanda;
 
+//ciao
+
+
 public class DomandaFactory {
 
     private List<String> stopwords;

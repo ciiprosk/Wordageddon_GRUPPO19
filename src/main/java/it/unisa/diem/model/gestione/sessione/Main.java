@@ -8,6 +8,8 @@ import it.unisa.diem.model.gestione.sessione.DomandaFactory;
 import java.io.IOException;
 import java.util.*;
 
+//ciao
+
 public class Main {
     public static void main(String[] args) {
         // Step 1: Definizione delle stopword a mano

@@ -3,6 +3,9 @@ package it.unisa.diem.model.gestione.sessione;
 import java.util.List;
 import it.unisa.diem.utility.TipoDomanda;
 
+//ciao
+
+
 public class Domanda {
     private String testoDomanda;
     private TipoDomanda tipo;
