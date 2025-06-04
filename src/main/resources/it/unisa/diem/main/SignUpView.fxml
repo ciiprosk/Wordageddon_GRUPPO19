@@ -19,9 +19,9 @@
     <PasswordField fx:id="registerConfirmField" promptText="conferma password" />
 
     <Label fx:id="passwordTooShortLabel" text="La password deve contenere almeno 8 caratteri"
-           textFill="red" visible="false"/>
+           textFill="red" visible="false" style="-fx-text-fill: red"/>
     <Label fx:id="passwordMismatchLabel" text="Le password non corrispondono"
-           textFill="red" visible="false" />
+           textFill="red" visible="false" style="-fx-text-fill: red" />
 
     <HBox alignment="CENTER">
         <children>
