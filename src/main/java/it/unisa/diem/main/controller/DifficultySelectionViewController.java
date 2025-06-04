@@ -44,6 +44,7 @@ public class DifficultySelectionViewController {
     }
 
     public void goToMainMenu(ActionEvent actionEvent) {
+        selectedDifficulty = null;
         SceneLoader.load("HomeMenuView.fxml", backButton);
     }
 
