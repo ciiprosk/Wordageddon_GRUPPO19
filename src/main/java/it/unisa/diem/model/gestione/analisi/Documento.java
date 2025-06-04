@@ -27,19 +27,14 @@ public class Documento {
         return contenuto;
     }
 
-    public static List<Documento> caricaDocumenti(String livelloDifficolta, int quanti) throws IOException {
+    public static List<Documento> caricaDocumenti(Difficoltà livelloDifficolta, Lingua lingua, int quanti) throws IOException {
         String cartella;
-        livelloDifficolta = livelloDifficolta.toLowerCase();
 
-        if (livelloDifficolta.equals("facile")) {
-            cartella = "testi/testiFacili";
-        } else if (livelloDifficolta.equals("medio")) {
-            cartella = "testi/testiMedi";
-        } else if (livelloDifficolta.equals("difficile")) {
-            cartella = "testi/testiDifficili";
-        } else {
-            throw new IllegalArgumentException("Livello difficoltà non valido");
-        }
+        String difficolta = livelloDifficolta.toString().toLowerCase();
+
+        String l = lingua.toString().toUpperCase();
+
+        cartella = "data/" + l + "/" + difficolta;
 
         List<Documento> tutti = new ArrayList<>();
         Path dir = Paths.get(cartella);
