@@ -19,8 +19,8 @@
     <HBox alignment="CENTER">
         <children>
             <Label text="Non hai un account? " />
-            <Label fx:id="goToRegisterLabel" text="Registrati" textFill="#004aff" underline="true"
-                   onMouseClicked="#goToRegister" />
+            <Label fx:id="goToRegisterLabel" text="Registrati" underline="true"
+                   onMouseClicked="#goToRegister" style="-fx-text-fill: rgb(0,155,255)"/>
         </children>
     </HBox>
 

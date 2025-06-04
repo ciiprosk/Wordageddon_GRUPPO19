@@ -10,7 +10,7 @@ public class SignUpViewController {
     @FXML private TextField registerUsernameField;
     @FXML private PasswordField registerPasswordField;
     @FXML private PasswordField registerConfirmField;
-    @FXML private Label passwordMismatchLabel, passwordValidationLabel;
+    @FXML private Label passwordMismatchLabel, passwordTooShortLabel;
     @FXML private Button registerButton;
 
     @FXML
@@ -39,24 +39,20 @@ public class SignUpViewController {
         boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
         boolean passwordsMatch = password.equals(confirmPassword);
         boolean passwordLongEnough = password.length() >= 8;
-        boolean passwordHasSpecialChar = password.matches(".*[!@#\\$%\\^&\\*()_\\-+=\\[\\]{};:'\",.<>?/\\\\|`~].*");
-        boolean passwordHasNoSpaces = !password.contains(" ");
 
+        // Etichette rosse visibili solo quando serve — e non occupano spazio se nascoste
+        boolean showMismatch = !passwordsMatch && !confirmPassword.isEmpty();
+        passwordMismatchLabel.setVisible(showMismatch);
+        passwordMismatchLabel.setManaged(showMismatch);
 
-        // Etichette rosse visibili solo quando serve
-        passwordMismatchLabel.setVisible(!passwordsMatch && !confirmPassword.isEmpty());
-        passwordValidationLabel.setVisible(
-                !password.isEmpty() && (
-                        !passwordLongEnough ||
-                                !passwordHasNoSpaces ||
-                                !passwordHasSpecialChar
-                )
-        );
+        boolean showTooShort = !passwordLongEnough && !password.isEmpty();
+        passwordTooShortLabel.setVisible(showTooShort);
+        passwordTooShortLabel.setManaged(showTooShort);
 
-        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough
-                && passwordHasSpecialChar && passwordHasNoSpaces;
+        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough;
         registerButton.setDisable(!isValid);
     }
+
 
 
     @FXML

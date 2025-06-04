@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
-<VBox fx:controller="it.unisa.diem.main.controller.SignUpViewController" alignment="TOP_CENTER" spacing="10.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      prefHeight="400.0" prefWidth="600.0"  style="-fx-padding: 40;" stylesheets="@style.css">
-
-    <Label text="Registrazione">
-        <font><Font size="20.0" /></font>
-        <VBox.margin><Insets top="50.0" bottom="5.0" /></VBox.margin>
-    </Label>
-
-    <TextField fx:id="registerEmailField" promptText="e-mail" />
-    <TextField fx:id="registerUsernameField" promptText="username" />
-    <PasswordField fx:id="registerPasswordField" promptText="password" />
-    <PasswordField fx:id="registerConfirmField" promptText="conferma password" />
-
-    <Label fx:id="passwordTooShortLabel" text="La password deve contenere almeno 8 caratteri"
-           textFill="red" visible="false" style="-fx-text-fill: red"/>
-    <Label fx:id="passwordMismatchLabel" text="Le password non corrispondono"
-           textFill="red" visible="false" style="-fx-text-fill: red" />
-
-    <HBox alignment="CENTER">
-        <children>
-            <Label text="Hai già un account? " />
-            <Label fx:id="goToLoginLabel" text="Accedi" textFill="#004aff" underline="true"
-                   onMouseClicked="#goToLogin" />
-        </children>
-    </HBox>
-
-    <Button fx:id="registerButton" text="Registrati" onAction="#handleRegister" />
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.SignUpViewController">
+   <children>
+   
+       <Label text="Registrazione">
+           <font>
+            <Font size="20.0" />
+         </font>
+           <VBox.margin>
+            <Insets bottom="5.0" top="50.0" />
+         </VBox.margin>
+       </Label>
+   
+       <TextField fx:id="registerEmailField" promptText="e-mail" />
+       <TextField fx:id="registerUsernameField" promptText="username" />
+       <PasswordField fx:id="registerPasswordField" promptText="password" />
+   
+       <Label fx:id="passwordTooShortLabel" style="-fx-text-fill: red" text="La password deve contenere almeno 8 caratteri" visible="false" />
+       <PasswordField fx:id="registerConfirmField" promptText="conferma password" />
+       <Label fx:id="passwordMismatchLabel" style="-fx-text-fill: red" text="Le password non corrispondono" visible="false" />
+   
+       <HBox alignment="CENTER">
+           <children>
+               <Label text="Hai già un account? " />
+               <Label fx:id="goToLoginLabel" onMouseClicked="#goToLogin" style="-fx-text-fill: rgb(0, 155, 255)" text="Accedi" underline="true" />
+           </children>
+       </HBox>
+   
+       <Button fx:id="registerButton" onAction="#handleRegister" text="Registrati" />
+   </children>
 </VBox>
