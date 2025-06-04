@@ -14,7 +14,7 @@ public class LeaderboardViewController {
 
     @FXML
     public void initialize() {
-        difficoltaComboBox.getItems().addAll("EASY", "HARD", "NORMAL");
+        difficoltaComboBox.getItems().addAll("EASY", "NORMAL", "HARD");
 
 
         // Aggiungi il listener per gestire la selezione

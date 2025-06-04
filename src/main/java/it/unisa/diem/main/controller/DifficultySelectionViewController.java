@@ -22,10 +22,33 @@ public class DifficultySelectionViewController {
 
     @FXML
     public void initialize() {
-        facileButton.setOnAction(e -> selectedDifficulty = "Easy");
-        medioButton.setOnAction(e -> selectedDifficulty = "Normal");
-        difficileButton.setOnAction(e -> selectedDifficulty = "Hard");
+        facileButton.setOnAction(e -> {
+            selectedDifficulty = "Easy";
+            highlightSelectedButton(facileButton);
+        });
+
+        medioButton.setOnAction(e -> {
+            selectedDifficulty = "Normal";
+            highlightSelectedButton(medioButton);
+        });
+
+        difficileButton.setOnAction(e -> {
+            selectedDifficulty = "Hard";
+            highlightSelectedButton(difficileButton);
+        });
     }
+
+    //funzione per aggiungere css a pulsante cliccato
+    private void highlightSelectedButton(Button selectedButton) {
+        facileButton.getStyleClass().remove("selected-button");
+        medioButton.getStyleClass().remove("selected-button");
+        difficileButton.getStyleClass().remove("selected-button");
+
+        if (!selectedButton.getStyleClass().contains("selected-button")) {
+            selectedButton.getStyleClass().add("selected-button");
+        }
+    }
+
 
     private void goToLoadView(String difficulty, Button sourceButton) {
         try {
@@ -60,10 +83,18 @@ public class DifficultySelectionViewController {
     @FXML
     private void handleItButton() {
         System.out.println("You have pressed it");
+        engButton.getStyleClass().remove("selected-button");
+        if (!itButton.getStyleClass().contains("selected-button")) {
+            itButton.getStyleClass().add("selected-button");
+        }
     }
 
     @FXML
     private void handleEngButton() {
         System.out.println("You have pressed eng");
+        itButton.getStyleClass().remove("selected-button");
+        if (!engButton.getStyleClass().contains("selected-button")) {
+            engButton.getStyleClass().add("selected-button");
+        }
     }
 }

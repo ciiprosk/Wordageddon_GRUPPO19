@@ -21,6 +21,13 @@
     -fx-border-width: 1;
 }
 
+.selected-button {
+    -fx-border-color: blue;
+    -fx-border-radius: 5px;
+    -fx-background-color: #2b2a2a;
+    -fx-text-fill: blue;
+}
+
 .table-view {
     -fx-background-color: #444444;
     -fx-border-color: #ffd700;
