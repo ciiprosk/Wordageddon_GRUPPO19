@@ -28,7 +28,7 @@
                <children>
                   <Label text="History">
                      <font>
-                        <Font size="40.0" />
+                        <Font name="Arial Black" size="40.0" />
                      </font>
                   </Label>
                </children>

@@ -82,7 +82,8 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleItButton() {
-        System.out.println("You have pressed it");
+        System.out.println("hai clickato it");
+        //css on click
         engButton.getStyleClass().remove("selected-button");
         if (!itButton.getStyleClass().contains("selected-button")) {
             itButton.getStyleClass().add("selected-button");
@@ -91,7 +92,8 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleEngButton() {
-        System.out.println("You have pressed eng");
+        System.out.println("hai clickato eng");
+        //css on click
         itButton.getStyleClass().remove("selected-button");
         if (!engButton.getStyleClass().contains("selected-button")) {
             engButton.getStyleClass().add("selected-button");

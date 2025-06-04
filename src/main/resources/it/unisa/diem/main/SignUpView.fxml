@@ -11,8 +11,8 @@
    
        <Label text="Sign Up">
            <font>
-            <Font size="40.0" />
-         </font>
+               <Font name="Arial Black" size="30.0" />
+           </font>
            <VBox.margin>
             <Insets bottom="5.0" />
          </VBox.margin>

@@ -14,7 +14,7 @@
          <children>
             <Label text="Select Language">
                <font>
-                  <Font size="30.0" />
+                  <Font name="Arial Black" size="30.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="5.0" top="60.0" />
@@ -37,9 +37,9 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="Select game mode" textAlignment="CENTER">
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="SELECT GAME MODE" textAlignment="CENTER">
                <font>
-                  <Font size="80.0" />
+                  <Font name="Arial Black" size="63.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="10.0" />

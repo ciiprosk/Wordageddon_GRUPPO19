@@ -16,7 +16,7 @@
                <children>
                   <Label text="Mode: ">
                      <font>
-                        <Font size="60.0" />
+                        <Font name="Arial Black" size="60.0" />
                      </font>
                   </Label>
                   <Label fx:id="difficultyLabel" text="var">

@@ -25,7 +25,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
                <font>
-                  <Font size="30.0" />
+                  <Font name="Arial Black" size="30.0" />
                </font>
             </Button>
             <Button fx:id="leaderboardButton" mnemonicParsing="false" onAction="#goToLeaderboard" prefHeight="100.0" prefWidth="800.0" text="LeaderBoard">
@@ -33,7 +33,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
                <font>
-                  <Font size="30.0" />
+                  <Font name="Arial Black" size="30.0" />
                </font>
             </Button>
             <Button fx:id="historyButton" mnemonicParsing="false" onAction="#goToHistory" prefHeight="100.0" prefWidth="800.0" text="History">
@@ -41,7 +41,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
                <font>
-                  <Font size="30.0" />
+                  <Font name="Arial Black" size="30.0" />
                </font>
             </Button>
             <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" prefHeight="60.0" prefWidth="160.0" text="Log out" underline="true">

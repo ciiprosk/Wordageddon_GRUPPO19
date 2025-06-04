@@ -30,14 +30,14 @@
                      <children>
                         <Label text="Best Score">
                            <font>
-                              <Font size="40.0" />
+                              <Font name="Arial Black" size="40.0" />
                            </font>
                         </Label>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label text="difficulty: ">
                                  <font>
-                                    <Font size="38.0" />
+                                    <Font name="Arial Black" size="30.0" />
                                  </font>
                               </Label>
                               <ComboBox fx:id="difficoltaComboBox" prefHeight="60.0" prefWidth="300.0" />
