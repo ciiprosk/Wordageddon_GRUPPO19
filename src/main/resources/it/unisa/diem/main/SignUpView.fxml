@@ -6,33 +6,75 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.SignUpViewController">
+<VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.SignUpViewController">
    <children>
    
        <Label text="Registrazione">
            <font>
-            <Font size="20.0" />
+            <Font size="40.0" />
          </font>
            <VBox.margin>
-            <Insets bottom="5.0" top="50.0" />
+            <Insets bottom="5.0" />
          </VBox.margin>
        </Label>
    
-       <TextField fx:id="registerEmailField" promptText="e-mail" />
-       <TextField fx:id="registerUsernameField" promptText="username" />
-       <PasswordField fx:id="registerPasswordField" promptText="password" />
+       <TextField fx:id="registerEmailField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="e-mail">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font size="25.0" />
+         </font></TextField>
+       <TextField fx:id="registerUsernameField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="username">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font size="25.0" />
+         </font></TextField>
+       <PasswordField fx:id="registerPasswordField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="password">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font size="25.0" />
+         </font></PasswordField>
    
-       <Label fx:id="passwordTooShortLabel" style="-fx-text-fill: red" text="La password deve contenere almeno 8 caratteri" visible="false" />
-       <PasswordField fx:id="registerConfirmField" promptText="conferma password" />
-       <Label fx:id="passwordMismatchLabel" style="-fx-text-fill: red" text="Le password non corrispondono" visible="false" />
+       <Label fx:id="passwordTooShortLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="La password deve contenere almeno 8 caratteri" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+       <PasswordField fx:id="registerConfirmField" maxHeight="60.0" maxWidth="1200.0" prefHeight="60.0" prefWidth="1200.0" promptText="conferma password">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font size="25.0" />
+         </font></PasswordField>
+       <Label fx:id="passwordMismatchLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="Le password non corrispondono" visible="false">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
    
        <HBox alignment="CENTER">
            <children>
-               <Label text="Hai già un account? " />
-               <Label fx:id="goToLoginLabel" onMouseClicked="#goToLogin" style="-fx-text-fill: rgb(0, 155, 255)" text="Accedi" underline="true" />
+               <Label text="Hai già un account? ">
+               <font>
+                  <Font size="30.0" />
+               </font></Label>
+               <Label fx:id="goToLoginLabel" onMouseClicked="#goToLogin" style="-fx-text-fill: rgb(0, 155, 255)" text="Accedi" underline="true">
+               <font>
+                  <Font size="28.0" />
+               </font></Label>
            </children>
        </HBox>
    
-       <Button fx:id="registerButton" onAction="#handleRegister" text="Registrati" />
+       <Button fx:id="registerButton" onAction="#handleRegister" prefHeight="60.0" prefWidth="180.0" text="Registrati">
+         <font>
+            <Font size="25.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin></Button>
    </children>
 </VBox>

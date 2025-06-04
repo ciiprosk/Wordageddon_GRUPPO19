@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
-<VBox fx:controller="it.unisa.diem.main.controller.LoginViewController" alignment="TOP_CENTER" spacing="10.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      prefHeight="450.0" prefWidth="600.0" style="-fx-padding: 40;" stylesheets="@style.css">
-
-    <Label text="Accedi">
-        <font><Font size="20.0" /></font>
-        <VBox.margin><Insets top="100.0" bottom="5.0" /></VBox.margin>
-    </Label>
-
-    <TextField fx:id="loginUsernameField" promptText="username" />
-    <PasswordField fx:id="loginPasswordField" promptText="password" />
-
-    <HBox alignment="CENTER">
-        <children>
-            <Label text="Non hai un account? " />
-            <Label fx:id="goToRegisterLabel" text="Registrati" underline="true"
-                   onMouseClicked="#goToRegister" style="-fx-text-fill: rgb(0,155,255)"/>
-        </children>
-    </HBox>
-
-    <Button fx:id="loginButton" text="Accedi" onAction="#handleLogin" />
+<VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="10.0" style="-fx-padding: 40;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.LoginViewController">
+   <children>
+   
+       <Label text="Accedi">
+           <font>
+            <Font size="40.0" />
+         </font>
+           <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+       </Label>
+   
+       <TextField fx:id="loginUsernameField" prefHeight="60.0" prefWidth="1200.0" promptText="username">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </TextField>
+       <PasswordField fx:id="loginPasswordField" prefHeight="60.0" prefWidth="1200.0" promptText="password">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </PasswordField>
+   
+       <HBox alignment="CENTER">
+           <children>
+               <Label text="Non hai un account? ">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+               <Label fx:id="goToRegisterLabel" onMouseClicked="#goToRegister" style="-fx-text-fill: rgb(0,155,255)" text="Registrati" underline="true">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+           </children>
+       </HBox>
+   
+       <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="60.0" prefWidth="120.0" text="Accedi">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
 </VBox>

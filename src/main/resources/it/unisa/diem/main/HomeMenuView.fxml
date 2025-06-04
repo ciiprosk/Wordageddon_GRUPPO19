@@ -8,37 +8,49 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.HomeMenuViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.HomeMenuViewController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="WORDAGEDDON">
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="WORDAGEDDON">
                <font>
-                  <Font name="Britannic Bold" size="55.0" />
+                  <Font name="Britannic Bold" size="110.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="10.0" top="60.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#goToNewGame" prefHeight="50.0" prefWidth="400.0" text="Nuova Partita">
+            <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#goToNewGame" prefHeight="100.0" prefWidth="800.0" text="Nuova Partita">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button fx:id="leaderboardButton" mnemonicParsing="false" onAction="#goToLeaderboard" prefHeight="50.0" prefWidth="400.0" text="LeaderBoard">
+            <Button fx:id="leaderboardButton" mnemonicParsing="false" onAction="#goToLeaderboard" prefHeight="100.0" prefWidth="800.0" text="LeaderBoard">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button fx:id="historyButton" mnemonicParsing="false" onAction="#goToHistory" prefHeight="50.0" prefWidth="400.0" text="History">
+            <Button fx:id="historyButton" mnemonicParsing="false" onAction="#goToHistory" prefHeight="100.0" prefWidth="800.0" text="History">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" text="Log out">
+            <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#goToLogIn" prefHeight="60.0" prefWidth="160.0" text="Log out">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
             </Button>
          </children>
          <padding>

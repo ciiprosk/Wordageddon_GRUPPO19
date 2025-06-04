@@ -8,20 +8,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.LoadViewController" stylesheets="@style.css">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.LoadViewController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="402.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0">
          <children>
-            <HBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="600.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
                <children>
                   <Label text="Difficoltà: ">
                      <font>
-                        <Font size="40.0" />
+                        <Font size="60.0" />
                      </font>
                   </Label>
                   <Label fx:id="difficultyLabel" text="var">
                      <font>
-                        <Font size="40.0" />
+                        <Font size="60.0" />
                      </font>
                   </Label>
                </children>
@@ -29,15 +29,15 @@
                   <Insets bottom="5.0" top="70.0" />
                </VBox.margin>
             </HBox>
-            <Label fx:id="textLabel" alignment="TOP_LEFT" prefHeight="170.0" prefWidth="420.0" text="testo">
+            <Label fx:id="textLabel" alignment="TOP_LEFT" prefHeight="480.0" prefWidth="840.0" text="testo">
                <font>
-                  <Font size="30.0" />
+                  <Font size="60.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ProgressBar prefWidth="420.0" progress="0.0">
+            <ProgressBar prefHeight="30.0" prefWidth="840.0" progress="0.0">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
