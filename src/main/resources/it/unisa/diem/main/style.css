@@ -68,6 +68,21 @@
     -fx-background-color: #ffd700;
 }
 
+.check-box .box {
+    -fx-background-color: #232323;
+    -fx-border-color: #ffd700;
+}
+
+/* colore della spunta */
+.check-box:selected .mark {
+    -fx-background-color: #ffd700;
+}
+
+/* colore del box selezionato*/
+.check-box:selected .box {
+    -fx-background-color: #171717;
+    -fx-border-color: #ffd700;
+}
 
 
 
