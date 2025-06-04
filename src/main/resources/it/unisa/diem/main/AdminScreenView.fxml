@@ -10,9 +10,9 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.AdminScreenView">
    <children>
-      <VBox alignment="CENTER_LEFT" prefHeight="800.0" prefWidth="1200.0">
+      <VBox prefHeight="800.0" prefWidth="1200.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label text="Scegli il testo da importare:">
+            <Label text="Choose the text to import:">
                <font>
                   <Font size="30.0" />
                </font>
@@ -20,7 +20,7 @@
             <HBox prefHeight="60.0" prefWidth="800.0">
                <children>
                   <Region prefHeight="60.0" prefWidth="300.0" />
-                  <Button mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Importa" underline="true">
+                  <Button fx:id="importButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -30,22 +30,22 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <Label text="Lista parole da escludere:">
+            <Label text="Stopwords list:">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <TextArea prefHeight="300.0" prefWidth="800.0">
+            <TextArea fx:id="stopwordsArea" prefHeight="300.0" prefWidth="800.0">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </TextArea>
-            <Label text="Escludi anche:">
+            <Label text="Exclude also">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-            <CheckBox mnemonicParsing="false" text="articoli" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="articles" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
@@ -53,7 +53,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="preposizioni" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="prepositions" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
@@ -61,7 +61,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="verbo essere" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="verb to be" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
@@ -69,7 +69,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="verbo avere" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="verb to have" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
@@ -77,7 +77,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="connettivi e congiunzioni" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="connectives and conjunctions" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
@@ -85,15 +85,24 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="pronomi" textFill="GOLD">
+            <CheckBox mnemonicParsing="false" text="pronouns" textFill="GOLD">
                <font>
                   <Font size="20.0" />
                </font>
             </CheckBox>
          </children>
          <padding>
-            <Insets left="200.0" right="200.0" />
+            <Insets left="200.0" right="200.0" top="60.0" />
          </padding>
       </VBox>
+      <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="60.0" text="i">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
