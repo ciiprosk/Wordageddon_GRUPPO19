@@ -104,5 +104,14 @@
             </Button>
          </children>
       </HBox>
+      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="715.0">
+         <children>
+            <Button fx:id="confirmButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Confirm">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
