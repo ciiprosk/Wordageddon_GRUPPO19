@@ -31,7 +31,14 @@
 }
 
 .combo-box {
-    -fx-border-color: #ffd700;
+    -fx-background-color: #2e2e2e; /* dark grey background */
+    -fx-border-color: #ffd700; /* yellow border */
+}
+
+.combo-box .text {
+    -fx-font-size: 20px;
+    -fx-fill: #ffd700;
+    -fx-font-weight: bold;
 }
 
 .combo-box-popup .list-view {
@@ -47,4 +54,6 @@
 .combo-box .arrow {
     -fx-background-color: #ffd700;
 }
+
+
 

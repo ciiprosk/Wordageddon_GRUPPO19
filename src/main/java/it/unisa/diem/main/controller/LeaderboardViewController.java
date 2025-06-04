@@ -14,21 +14,21 @@ public class LeaderboardViewController {
 
     @FXML
     public void initialize() {
-        difficoltaComboBox.getItems().addAll("easy", "normal", "hard");
+        difficoltaComboBox.getItems().addAll("EASY", "HARD", "NORMAL");
 
 
         // Aggiungi il listener per gestire la selezione
         difficoltaComboBox.setOnAction(event -> {
             String selezione = difficoltaComboBox.getValue();
             switch (selezione) {
-                case "easy":
-                    loadTable("easy");
+                case "EASY":
+                    loadTable("EASY");
                     break;
-                case "normal":
-                    loadTable("normal");
+                case "NORMAL":
+                    loadTable("NORMAL");
                     break;
-                case "hard":
-                    loadTable("hard");
+                case "HARD":
+                    loadTable("HARD");
                     break;
             }
         });
