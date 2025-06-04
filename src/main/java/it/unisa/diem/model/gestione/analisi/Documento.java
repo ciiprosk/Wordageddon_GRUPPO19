@@ -6,9 +6,9 @@ public class Documento {
     private final String nome;
     private final String estensione;
     private final String percorsoFile;
-    private final String difficolta;    //tipo enum????????
+    private final Difficoltà difficolta;    //tipo enum????????
 
-    public Documento(String lingua, String nome, String estensione, String percorsoFile, String difficolta) {
+    public Documento(String lingua, String nome, String estensione, String percorsoFile, Difficoltà difficolta) {
         this.lingua = lingua;
         this.nome = nome;
         this.estensione = estensione;
@@ -32,7 +32,7 @@ public class Documento {
         return percorsoFile;
     }
 
-    public String getDifficolta() {
+    public Difficoltà getDifficolta() {
         return difficolta;
     }
 
