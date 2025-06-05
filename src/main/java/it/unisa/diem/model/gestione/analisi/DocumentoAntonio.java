@@ -4,17 +4,19 @@ import java.io.*;
 
 public class DocumentoAntonio implements Serializable {
 
-    private String nome;
+    private String titolo;
     private Lingua lingua;
     private Difficolta difficolta;
     private Stopword stopword;
 
-    public DocumentoAntonio(String nome, Lingua lingua, Difficolta difficolta, Stopword stopword) {
-        this.nome = nome;
+    public DocumentoAntonio(String titolo, Lingua lingua, Difficolta difficolta, Stopword stopword) {
+        this.titolo = titolo;
         this.lingua = lingua;
         this.difficolta = difficolta;
         this.stopword = stopword;
     }
+
+    public String getTitolo() { return titolo;}
 
     /*public Analisi analisiDocumento() {
         if()

@@ -4,16 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnalisiRosa {
-    private final Documento doc;
+    private final DocumentoAntonio doc;
     private Map<String, Integer> frequenzeTesti;
-    public AnalisiRosa(Documento doc) {
+    public AnalisiRosa(DocumentoAntonio doc) {
         this.doc = doc;
         frequenzeTesti=new HashMap<>();
     }
 
-    public Documento getDocumento() {
+    public DocumentoAntonio getDocumento() {
         return doc;
     }
+
+    public Map<String, Integer> getFrequenzeTesti() {
+        return frequenzeTesti;
+    }
+
 
 
 }
