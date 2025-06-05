@@ -1,32 +1,30 @@
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.DAO;
-import it.unisa.diem.dao.interfacce.DocumentoDAO;
-import it.unisa.diem.model.gestione.analisi.Documento;
+import it.unisa.diem.model.gestione.sessione.Sessione;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class DocumentoDAOPostgres implements DAO<Documento> {
-
+public class SessioneDAOPostgres implements DAO<Sessione> {
     @Override
-    public Optional<Documento> selectById(long id) {
+    public Optional<Sessione> selectById(long id) {
         return Optional.empty();
     }
 
     @Override
-    public List<Documento> selectAll() {
+    public List<Sessione> selectAll() {
         return Collections.emptyList();
     }
 
     @Override
-    public void insert(Documento documento) {
+    public void insert(Sessione sessione) {
 
     }
 
     @Override
-    public void update(Documento documento) {
+    public void update(Sessione sessione) {
 
     }
 
@@ -34,5 +32,4 @@ public class DocumentoDAOPostgres implements DAO<Documento> {
     public void delete(long id) {
 
     }
-
 }

@@ -19,6 +19,17 @@ public class AnalisiRosa {
         return frequenzeTesti;
     }
 
+    public void caricaAnalisi(){
+
+    }
+
+    public Analisi leggiAnalisi(){
+        Analisi a = null;
+        return a;
+    }
+
+
+
 
 
 }

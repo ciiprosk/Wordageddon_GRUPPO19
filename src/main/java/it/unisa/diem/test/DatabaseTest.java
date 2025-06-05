@@ -1,5 +1,11 @@
 package it.unisa.diem.test;
 
+import it.unisa.diem.dao.interfacce.AnalisiDAO;
+import it.unisa.diem.dao.interfacce.DAO;
+import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
+import it.unisa.diem.model.gestione.analisi.Analisi;
+import it.unisa.diem.utility.PropertiesLoader;
+
 import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,24 +41,9 @@ public class DatabaseTest {
         }catch(Exception e) {
             e.printStackTrace();
         }*/
+        PropertiesLoader.init();
+        String url=PropertiesLoader.getProperty("database.url");
+        System.out.println("url:"+url);
 
-        try(InputStream is= DatabaseTest.class.getClassLoader().getResourceAsStream("config/config.properties")){
-            Properties prop = new Properties();
-            if(is == null)
-                throw new IOException();
-            prop.load(is);
-            String url=prop.getProperty("database.url");
-            String username=prop.getProperty("database.user");
-            String password=prop.getProperty("database.password");
-            System.out.println(url);
-            System.out.println(username);
-            System.out.println(password);
-
-            Connection conn = DriverManager.getConnection(url,username,password);
-            System.out.println("Connessione Database");
-            conn.close();
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
