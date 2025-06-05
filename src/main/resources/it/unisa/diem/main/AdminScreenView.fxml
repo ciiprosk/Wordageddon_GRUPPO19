@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.AdminScreenView">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="1200.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label text="Choose the text to import:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="60.0" prefWidth="800.0">
+               <children>
+                  <Region prefHeight="60.0" prefWidth="300.0" />
+                  <Button fx:id="importButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Label text="Stopwords list:">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="stopwordsArea" prefHeight="300.0" prefWidth="800.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextArea>
+            <Label text="Exclude also">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <CheckBox fx:id="checkArticles" mnemonicParsing="false" text="articles" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkPrepositions" mnemonicParsing="false" text="prepositions" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkToBe" mnemonicParsing="false" text="verb to be" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkToHave" mnemonicParsing="false" text="verb to have" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkCon" mnemonicParsing="false" text="connectives and conjunctions" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkPronouns" mnemonicParsing="false" text="pronouns" textFill="GOLD">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </CheckBox>
+         </children>
+         <padding>
+            <Insets left="200.0" right="200.0" top="60.0" />
+         </padding>
+      </VBox>
+      <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="60.0" text="i">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="715.0">
+         <children>
+            <Button fx:id="confirmButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Confirm">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

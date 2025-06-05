@@ -4,6 +4,9 @@ import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.time.LocalDateTime;
 
+//ciao
+
+
 public class Sessione {
 
     private static long id=0;

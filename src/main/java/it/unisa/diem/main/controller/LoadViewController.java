@@ -15,17 +15,17 @@ public class LoadViewController {
 
         // Imposta il testo in base alla difficoltà
         switch (difficulty.toLowerCase()) {
-            case "facile":
-                textLabel.setText("Hai scelto la via più facile.");
+            case "easy":
+                textLabel.setText("This is going to be easy :)");
                 break;
-            case "medio":
-                textLabel.setText("Puoi fare di più.");
+            case "normal":
+                textLabel.setText("Starting to sweat...");
                 break;
-            case "difficile":
-                textLabel.setText("Benvenuto all'inferno.");
+            case "hard":
+                textLabel.setText("THIS is gonna be a challenge.");
                 break;
             default:
-                textLabel.setText("Testo non disponibile.");
+                textLabel.setText("no text");
         }
     }
 }

@@ -8,62 +8,74 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.QuestionViewController" stylesheets="@style.css">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.QuestionViewController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="-1.0" prefHeight="400.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="-1.0" prefHeight="800.0" prefWidth="1200.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
+            <HBox alignment="CENTER" prefHeight="120.0" prefWidth="600.0">
                <children>
                   <Label text="Question: ">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="50.0" />
                      </font>
                   </Label>
                   <Label text="X">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="50.0" />
                      </font>
                   </Label>
                   <Label text=" of ">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="40.0" />
                      </font>
                   </Label>
                   <Label text="Y">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="50.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="71.0" prefWidth="600.0">
+            <HBox alignment="CENTER" prefHeight="140.0" prefWidth="600.0">
                <children>
                   <Label text="domanda">
                      <font>
-                        <Font size="17.0" />
+                        <Font size="34.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="420.0" text="Risposta1">
+            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta1">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="420.0" text="Risposta2">
+            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta2">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="420.0" text="Risposta3">
+            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta3">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="420.0" text="Risposta4">
+            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta4">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
          </children>
       </VBox>

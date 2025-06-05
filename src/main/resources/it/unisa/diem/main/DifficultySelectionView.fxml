@@ -8,38 +8,84 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.DifficultySelectionViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.DifficultySelectionViewController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="Seleziona la difficoltà" textAlignment="CENTER">
+            <Label text="Select Language">
                <font>
-                  <Font size="40.0" />
+                  <Font name="Arial Black" size="30.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="10.0" top="60.0" />
+                  <Insets bottom="5.0" top="60.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="facileButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="Facile">
+            <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="1200.0">
+               <children>
+                  <Button fx:id="engButton" mnemonicParsing="false" onAction="#handleEngButton" prefHeight="60.0" prefWidth="60.0" text="ENG">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="itButton" mnemonicParsing="false" onAction="#handleItButton" prefHeight="60.0" prefWidth="60.0" text="IT">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="SELECT GAME MODE" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial Black" size="63.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="facileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Easy">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button fx:id="medioButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="Medio">
+            <Button fx:id="medioButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Normal">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
             </Button>
-            <Button fx:id="difficileButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="Difficile">
+            <Button fx:id="difficileButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="800.0" text="Hard">
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#handlePlayButton" prefHeight="75.0" prefWidth="200.0" text="PLAY">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
             </Button>
          </children>
       </VBox>
-      <HBox prefHeight="30.0" prefWidth="600.0">
+      <HBox maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="30.0" prefWidth="30.0" text="i" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="60.0" text="i">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
          </children>
       </HBox>
    </children>
