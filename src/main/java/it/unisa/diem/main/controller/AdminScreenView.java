@@ -28,7 +28,7 @@ public class AdminScreenView {
     public void containsSpecialCharacters() {
         String text = stopwordsArea.getText();
         boolean areaIsFilled = !text.isEmpty();
-        boolean areaIsValid = text.matches("[a-zA-Z\\s]*");
+        boolean areaIsValid = text.matches("[a-zA-Z\\s,]*");
         boolean areaIsRegular = areaIsFilled && areaIsValid;
 
         confirmButton.setDisable(!areaIsRegular);
