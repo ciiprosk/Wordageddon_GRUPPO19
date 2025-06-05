@@ -15,7 +15,7 @@ public class Sessione {
     private final String modalita;      //tipo enum?????????????????????????????????
     private final LocalDateTime inizio;
     private int punteggio;
-    private LocalDateTime fine;   //giusto oppure creiamo la sessione passata??????
+    //private LocalDateTime fine;   //giusto oppure creiamo la sessione passata??????
     //documenti e domande????
 
     public Sessione(Utente utente, String modalita, LocalDateTime inizio) {
@@ -23,7 +23,7 @@ public class Sessione {
         this.utente = utente;
         this.modalita = modalita;
         this.inizio = inizio;
-        this.fine=null;
+        //this.fine=null;
         this.punteggio = 0;
         this.completato = false;
         id++;
@@ -58,8 +58,8 @@ public class Sessione {
     public void setCompletato(boolean completato) {
         this.completato = completato;
 
-        if (completato)
-            this.fine=LocalDateTime.now();
+        //if (completato)
+           // this.fine=LocalDateTime.now();
     }
 
 
