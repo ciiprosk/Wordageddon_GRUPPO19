@@ -81,7 +81,7 @@
       </VBox>
       <HBox maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="60.0" text="i">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="60.0">
                <font>
                   <Font size="25.0" />
                </font>
