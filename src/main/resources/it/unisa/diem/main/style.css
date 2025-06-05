@@ -27,11 +27,16 @@
 }
 
 .selected-button {
-    -fx-border-color: rgb(0,255,200);
+    -fx-border-color: rgb(200, 200, 200);
     -fx-border-radius: 5px;
     -fx-border-width: 5px;
-    -fx-background-color: #222222;
-    -fx-text-fill: rgb(0,255,200);
+    -fx-background-color: rgb(190, 20, 0);
+    -fx-text-fill: rgb(200, 200, 200);
+}
+
+.selected-button:hover {
+    -fx-background-color: #8a0000;
+    -fx-border-width: 5px;
 }
 
 .table-view {
