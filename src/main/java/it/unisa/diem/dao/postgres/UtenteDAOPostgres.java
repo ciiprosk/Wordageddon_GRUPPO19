@@ -21,6 +21,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     @Override
     public void insert(Utente utente) {
+        //inserisci il nuovo utente con insert
+        //prima bisogna fare hasing della password inserita
+        // da dove prendo i dati???? me lo passa utente
 
     }
 

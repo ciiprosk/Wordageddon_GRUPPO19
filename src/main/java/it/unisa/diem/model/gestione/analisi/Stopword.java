@@ -1,9 +1,12 @@
 package it.unisa.diem.model.gestione.analisi;
 
-public class Stopword {
-    private final String parola;        //oppure un insieme di parole?????????
+import java.util.ArrayList;
+import java.util.List;
 
-    public Stopword(String parola) {
-        this.parola = parola;
+public class Stopword {
+    private final List<String> parole;        //oppure un insieme di parole?????????
+//array d default --> preposizioni, articoli, pronomi, verbi essere e avere, connettivi e congiunzioni
+    public Stopword() {
+        parole=new ArrayList<>();
     }
 }

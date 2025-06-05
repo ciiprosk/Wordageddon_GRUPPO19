@@ -1,11 +1,11 @@
 package it.unisa.diem.model.gestione.utenti;
 
 public class Utente {
-
+//is admin va nel costruttore.--> final , lo prendi dal db
     private String username;
     private String email;
     private String password;
-    private final boolean isAdmin;
+    private boolean isAdmin;
 
 
     public Utente(String username, String email, String password) {
@@ -42,8 +42,8 @@ public class Utente {
         if (o.getClass() != Utente.class) return false;
 
         Utente temp = (Utente) o;
-        return true;
-       // return this.getId() == temp.getId();
+
+        return temp.username.equals(this.username);
     }
 
 }
