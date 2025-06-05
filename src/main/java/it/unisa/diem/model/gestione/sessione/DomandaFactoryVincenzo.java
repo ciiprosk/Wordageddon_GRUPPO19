@@ -11,6 +11,12 @@ public class DomandaFactoryVincenzo {
     List<Domanda> listaDomande;
     List<AnalisiRosa> listaAnalisi; //lista di documenti scelti da controller
 
+    // Lista fittizia di parole "dizionario" da cui attingere
+    List<String> dizionario = Arrays.asList(
+            "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
+            "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"
+    );
+
     public DomandaFactoryVincenzo(List <AnalisiRosa> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
         listaDomande = new ArrayList<>();
@@ -54,7 +60,7 @@ public class DomandaFactoryVincenzo {
             //uso questa variabile per creare risposte sbagliate ma vicine e plausibili alla risposta corretta
             int variazione = random.nextInt(5) + 1; // variazione da 1 a 5
             int alternativa = frequenzaCorretta + (random.nextBoolean() ? variazione : -variazione);
-            if (alternativa >= 0) {
+            if (alternativa >= 1) {
                 opzioniNumeriche.add(alternativa);
             }
         }
@@ -71,7 +77,7 @@ public class DomandaFactoryVincenzo {
         // Usa il titolo del documento per costruire la domanda
         String titoloDocumento = analisiScelta.getDocumento().getTitolo(); // oppure toString()
         String testoDomanda = String.format(
-                "Quante volte compare la parola \"%s\" nel documento \"%s\"?",
+                "How many times does the word \"%s\" appear in the document \"%s\"?",
                 parolaScelta, titoloDocumento
         );
 
@@ -80,7 +86,136 @@ public class DomandaFactoryVincenzo {
     }
 
 
-    private Domanda generaDomandaConfronto() { return null;}
-    private Domanda generaDomandaAssociazione() { return null;}
-    private Domanda generaDomandaAssenza() { return null;}
+    private Domanda generaDomandaConfronto() {
+        Random random = new Random();
+        Map<String, Integer> frequenzeGlobali = new HashMap<>();
+
+        // sommo le frequenze di tutte le analisi
+        for (AnalisiRosa analisi : listaAnalisi) {
+            Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
+            for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
+                String parola = entry.getKey();
+                int count = entry.getValue();
+                if (parola != null && !parola.trim().isEmpty()) {
+                    frequenzeGlobali.put(parola, frequenzeGlobali.getOrDefault(parola, 0) + count);
+                }
+            }
+        }
+
+        // Se ci sono meno di 4 parole, non possiamo creare la domanda
+        if (frequenzeGlobali.size() < 4) {
+            throw new IllegalStateException("Non ci sono abbastanza parole per creare la domanda di confronto.");
+        }
+
+        // Seleziono 4 parole diverse casuali dalla mappa
+        List<String> tutteLeParole = new ArrayList<>(frequenzeGlobali.keySet());
+        Collections.shuffle(tutteLeParole);
+        List<String> paroleSelezionate = tutteLeParole.subList(0, 4);
+
+        String rispostaCorretta = paroleSelezionate.get(0);
+        int maxFrequenza = frequenzeGlobali.get(rispostaCorretta);
+
+        for (String parola : paroleSelezionate) {
+            int freq = frequenzeGlobali.get(parola);
+            if (freq > maxFrequenza) {
+                rispostaCorretta = parola;
+                maxFrequenza = freq;
+            }
+        }
+
+        List<String> opzioni = new ArrayList<>(paroleSelezionate);
+        Collections.shuffle(opzioni);
+
+        String testoDomanda = "Which of the following words appears most frequently across all documents?";
+
+        return new Domanda(testoDomanda, TipoDomanda.CONFRONTO, opzioni, rispostaCorretta);
+    }
+
+    private Domanda generaDomandaAssociazione() {
+        Random random = new Random();
+        AnalisiRosa analisi = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
+        Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
+
+        if (frequenze.size() < 4) {
+            throw new IllegalStateException("Il documento non contiene abbastanza parole per creare la domanda.");
+        }
+
+        // Trovo la parola con frequenza massima
+        String parolaMax = null;
+        int maxFreq = -1;
+        for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
+            if (entry.getValue() > maxFreq) {
+                parolaMax = entry.getKey();
+                maxFreq = entry.getValue();
+            }
+        }
+
+        // distrattori: parole diverse da quella corretta
+        List<String> distrattori = new ArrayList<>(frequenze.keySet());
+        distrattori.remove(parolaMax);
+        Collections.shuffle(distrattori);
+
+        List<String> opzioni = new ArrayList<>();
+        opzioni.add(parolaMax);
+        for (int i = 0; i < 3 && i < distrattori.size(); i++) {
+            opzioni.add(distrattori.get(i));
+        }
+
+        // Se non abbiamo abbastanza opzioni, la domanda non è valida
+        if (opzioni.size() < 4) {
+            throw new IllegalStateException("Non ci sono abbastanza parole diverse per generare la domanda.");
+        }
+
+        Collections.shuffle(opzioni);
+
+        String titoloDoc = analisi.getDocumento().getTitolo(); // o toString()
+        String testoDomanda = String.format(
+                "Which word appears most frequently in the document \"%s\"?",
+                titoloDoc
+        );
+
+        // Crea la domanda
+        return new Domanda(testoDomanda, TipoDomanda.ASSOCIAZIONE, opzioni, parolaMax);
+    }
+
+    private Domanda generaDomandaAssenza() {
+        Random random = new Random();
+        Set<String> parolePresenti = new HashSet<>();
+        for (AnalisiRosa analisi : listaAnalisi) {
+            parolePresenti.addAll(analisi.getFrequenzeTesti().keySet());
+        }
+
+        // Trova parole che non compaiono nei documenti (presenti nel dizionario ma non nei testi)
+        List<String> paroleAssenti = new ArrayList<>();
+        for (String parola : dizionario) {
+            if (!parolePresenti.contains(parola)) {
+                paroleAssenti.add(parola);
+            }
+        }
+
+        if (paroleAssenti.isEmpty()) {
+            throw new IllegalStateException("Nessuna parola assente trovata tra quelle disponibili.");
+        }
+
+        String parolaCorretta = paroleAssenti.get(random.nextInt(paroleAssenti.size()));
+
+        List<String> parolePresentiLista = new ArrayList<>(parolePresenti);
+        Collections.shuffle(parolePresentiLista);
+
+        List<String> opzioni = new ArrayList<>();
+        opzioni.add(parolaCorretta);
+        for (int i = 0; i < 3 && i < parolePresentiLista.size(); i++) {
+            opzioni.add(parolePresentiLista.get(i));
+        }
+
+        if (opzioni.size() < 4) {
+            throw new IllegalStateException("Non ci sono abbastanza parole presenti per generare distrattori.");
+        }
+
+        Collections.shuffle(opzioni);
+
+        String testoDomanda = "Which of the following words never appears in any of the documents?";
+
+        return new Domanda(testoDomanda, TipoDomanda.ASSENZA, opzioni, parolaCorretta);
+    }
 }
