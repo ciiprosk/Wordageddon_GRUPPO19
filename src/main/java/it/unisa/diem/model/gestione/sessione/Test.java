@@ -1,7 +1,7 @@
 package it.unisa.diem.model.gestione.sessione;
 
 import it.unisa.diem.model.gestione.analisi.Analisi;
-import it.unisa.diem.model.gestione.analisi.Difficoltà;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 
@@ -17,7 +17,7 @@ public class Test {
 
         try {
             // Step 2: Carica i documenti dalla cartella dei testi facili
-            List<Documento> documenti = Documento.caricaDocumenti(Difficoltà.DIFFICILE, Lingua.ITA, 2);
+            List<Documento> documenti = Documento.caricaDocumenti(Difficolta.DIFFICILE, Lingua.ITA, 2);
 
             // Step 3: Calcola le frequenze parola per documento
             Map<String, Map<String, Integer>> frequenze = Analisi.calcolaFrequenze(documenti, stopwords);
