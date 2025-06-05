@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 //ciao
 
@@ -54,6 +55,7 @@ public class Documento {
         Collections.shuffle(tutti);
         return tutti.subList(0, quanti);
     }
+
 
 }
 

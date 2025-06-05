@@ -1,6 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
 import java.io.*;
+import java.util.stream.Stream;
 
 public class DocumentoAntonio implements Serializable {
 
@@ -16,16 +17,34 @@ public class DocumentoAntonio implements Serializable {
         this.stopword = stopword;
     }
 
-    public String getTitolo() { return titolo;}
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public Lingua getLingua() {
+        return lingua;
+    }
+
+    public Stopword getStopword() {
+        return stopword;
+    }
+
+    public void setStopword(Stopword stopword) {
+        this.stopword = stopword;
+    }
+
+    public Difficolta getDifficolta() {
+        return difficolta;
+    }
 
     /*public Analisi analisiDocumento() {
         if()
     }*/
 
-    public DocumentoAntonio leggiDocumento(String filename) {
-        DocumentoAntonio da=null;
+    public static DocumentoAntonio leggiDocumento(String filename) {
+        DocumentoAntonio da = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            da=(DocumentoAntonio) ois.readObject();
+            da = (DocumentoAntonio) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -33,7 +52,7 @@ public class DocumentoAntonio implements Serializable {
     }
 
     public void scriviDocumento(String filename) {
-        try(ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(filename))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(this);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -41,4 +60,6 @@ public class DocumentoAntonio implements Serializable {
             e.printStackTrace();
         }
     }
+
+
 }

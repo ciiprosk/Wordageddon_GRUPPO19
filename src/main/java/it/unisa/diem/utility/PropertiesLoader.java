@@ -2,6 +2,7 @@ package it.unisa.diem.utility;
 
 import java.io.IOException;
 import java.io.InputStream;
+//import java.net.URL;
 import java.util.Properties;
 
 public class PropertiesLoader {
@@ -11,6 +12,7 @@ public class PropertiesLoader {
         if(prop == null){
             prop = new Properties();
         }
+        //URL g=PropertiesLoader.class.getClassLoader().getResource("database.properties");
         try(InputStream is = PropertiesLoader.class.getClassLoader().getResourceAsStream("config/config.properties")){
             if(is == null){
                 System.out.println("Config file not found");
