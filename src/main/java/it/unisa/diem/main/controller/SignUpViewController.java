@@ -10,7 +10,7 @@ public class SignUpViewController {
     @FXML private TextField signUpUsernameField;
     @FXML private PasswordField signUpPasswordField;
     @FXML private PasswordField signUpConfirmField;
-    @FXML private Label passwordMismatchLabel, passwordTooShortLabel;
+    @FXML private Label passwordMismatchLabel, passwordValidationLabel;
     @FXML private Button signUpButton;
 
     @FXML
@@ -38,19 +38,26 @@ public class SignUpViewController {
 
         boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
         boolean passwordsMatch = password.equals(confirmPassword);
+
+        // Controlli sulla password
         boolean passwordLongEnough = password.length() >= 8;
+        boolean passwordHasSpecialChar = password.matches(".*[^a-zA-Z0-9 ].*");
+        boolean passwordHasSpace = password.contains(" ");
+
+        boolean passwordValid = passwordLongEnough && passwordHasSpecialChar && !passwordHasSpace;
+
+        boolean showInvalidPassword = !passwordValid && !password.isEmpty();
+        passwordValidationLabel.setVisible(showInvalidPassword);
+        passwordValidationLabel.setManaged(showInvalidPassword);
 
         boolean showMismatch = !passwordsMatch && !confirmPassword.isEmpty();
         passwordMismatchLabel.setVisible(showMismatch);
         passwordMismatchLabel.setManaged(showMismatch);
 
-        boolean showTooShort = !passwordLongEnough && !password.isEmpty();
-        passwordTooShortLabel.setVisible(showTooShort);
-        passwordTooShortLabel.setManaged(showTooShort);
-
-        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordLongEnough;
+        boolean isValid = fieldsFilled && emailValid && passwordsMatch && passwordValid;
         signUpButton.setDisable(!isValid);
     }
+
 
     @FXML
     private void goToLogin() {

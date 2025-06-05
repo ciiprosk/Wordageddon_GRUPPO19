@@ -50,7 +50,7 @@
             <Font size="25.0" />
          </font></PasswordField>
    
-       <Label fx:id="passwordTooShortLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="The password has to have at least 8 characters" visible="false">
+       <Label fx:id="passwordValidationLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="The password has to have at least 8 characters, 1 special character and no space" visible="false">
          <font>
             <Font size="20.0" />
          </font></Label>
