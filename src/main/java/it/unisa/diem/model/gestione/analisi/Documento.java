@@ -27,7 +27,7 @@ public class Documento {
         return contenuto;
     }
 
-    public static List<Documento> caricaDocumenti(Difficoltà livelloDifficolta, Lingua lingua, int quanti) throws IOException {
+    public static List<Documento> caricaDocumenti(Difficolta livelloDifficolta, Lingua lingua, int quanti) throws IOException {
         String cartella;
 
         String difficolta = livelloDifficolta.toString().toLowerCase();
