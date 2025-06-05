@@ -1,23 +1,23 @@
 package it.unisa.diem.model.gestione.sessione;
 
 import it.unisa.diem.model.gestione.analisi.Analisi;
+import it.unisa.diem.model.gestione.analisi.Difficoltà;
 import it.unisa.diem.model.gestione.analisi.Documento;
-import it.unisa.diem.model.gestione.sessione.Domanda;
-import it.unisa.diem.model.gestione.sessione.DomandaFactory;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 
 import java.io.IOException;
 import java.util.*;
 
 //ciao
 
-public class Main {
+public class Test {
     public static void main(String[] args) {
         // Step 1: Definizione delle stopword a mano
         List<String> stopwords = Arrays.asList("il", "lo", "la", "i", "gli", "le", "e", "a", "di", "da", "in", "che", "un", "una");
 
         try {
             // Step 2: Carica i documenti dalla cartella dei testi facili
-            List<Documento> documenti = Documento.caricaDocumenti("medio", 2);
+            List<Documento> documenti = Documento.caricaDocumenti(Difficoltà.DIFFICILE, Lingua.ITA, 2);
 
             // Step 3: Calcola le frequenze parola per documento
             Map<String, Map<String, Integer>> frequenze = Analisi.calcolaFrequenze(documenti, stopwords);
