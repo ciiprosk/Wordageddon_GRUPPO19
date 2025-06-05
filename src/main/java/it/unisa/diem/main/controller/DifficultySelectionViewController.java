@@ -1,5 +1,6 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.main.Main;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class DifficultySelectionViewController {
@@ -22,6 +25,18 @@ public class DifficultySelectionViewController {
 
     @FXML
     public void initialize() {
+        Image it = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/it.png"));
+        ImageView itView = new ImageView(it);
+        itView.setFitWidth(20);
+        itView.setFitHeight(20);
+        itButton.setGraphic(itView);
+
+        Image eng = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/eng.png"));
+        ImageView engView = new ImageView(eng);
+        engView.setFitWidth(20);
+        engView.setFitHeight(20);
+        engButton.setGraphic(engView);
+
         facileButton.setOnAction(e -> {
             selectedDifficulty = "Easy";
             highlightSelectedButton(facileButton);

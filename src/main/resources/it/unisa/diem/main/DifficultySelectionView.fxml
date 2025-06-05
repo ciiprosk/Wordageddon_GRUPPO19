@@ -22,12 +22,12 @@
             </Label>
             <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="1200.0">
                <children>
-                  <Button fx:id="engButton" mnemonicParsing="false" onAction="#handleEngButton" prefHeight="60.0" prefWidth="60.0" text="ENG">
+                  <Button fx:id="engButton" maxHeight="60.0" maxWidth="60.0" mnemonicParsing="false" onAction="#handleEngButton" prefHeight="60.0" prefWidth="60.0">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="itButton" mnemonicParsing="false" onAction="#handleItButton" prefHeight="60.0" prefWidth="60.0" text="IT">
+                  <Button fx:id="itButton" maxHeight="60.0" maxWidth="60.0" mnemonicParsing="false" onAction="#handleItButton" prefHeight="60.0" prefWidth="60.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
