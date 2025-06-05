@@ -9,7 +9,7 @@ import java.util.*;
 
 public class DomandaFactoryVincenzo {
     List<Domanda> listaDomande;
-    List<AnalisiRosa> listaAnalisi;
+    List<AnalisiRosa> listaAnalisi; //lista di documenti scelti da controller
 
     public DomandaFactoryVincenzo(List <AnalisiRosa> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
