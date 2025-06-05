@@ -1,5 +1,7 @@
 package it.unisa.diem.model.gestione.sessione;
 
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.time.LocalDateTime;
@@ -12,22 +14,21 @@ public class Sessione {
     private static long id=0;
     private final Utente utente;
     private boolean completato;
-    private final String modalita;      //tipo enum?????????????????????????????????
+    private Difficolta difficolta;    //tipo enum?????????????????????????????????
+    private Lingua lingua;
     private final LocalDateTime inizio;
     private int punteggio;
     //private LocalDateTime fine;   //giusto oppure creiamo la sessione passata??????
     //documenti e domande????
 
-    public Sessione(Utente utente, String modalita, LocalDateTime inizio) {
+    public Sessione(Utente utente, Difficolta difficolta, LocalDateTime inizio) {
 
         this.utente = utente;
-        this.modalita = modalita;
+        this.difficolta = difficolta;
         this.inizio = inizio;
         //this.fine=null;
         this.punteggio = 0;
         this.completato = false;
-        id++;
-        this.id = id;
 
     }
 
@@ -35,9 +36,7 @@ public class Sessione {
         return utente;
     }
 
-    public String getModalita() {
-        return modalita;
-    }
+
 
     public LocalDateTime getInizio() {
         return inizio;

@@ -9,7 +9,7 @@ import it.unisa.diem.utility.TipoDomanda;
 
 public class DomandaFactory {
 
-    private List<String> stopwords;
+    private List<String> stopwords;//da cambiare
 
     public DomandaFactory(List<String> stopwords) {
         this.stopwords = stopwords;

@@ -34,7 +34,6 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     @Override
     public void delete(long id) {
-
     }
 
 }

@@ -34,6 +34,9 @@ rectangle "Sessione di Gioco" {
   termini una partita
   end note
 
+  sospensione .> sessione : extend
+  sospensione .> sessione_sospesa : extend
+
   (Visualizza Statistiche Post-Game) as post
 
   sessione <. termina : include
@@ -68,7 +71,7 @@ User --> sessione_sospesa
 User --> sessione_abbandonata
 User --> leaderboard
 User --> storico
-User --> sospensione
+
 
 Admin --> documents
 Admin --> stopwords
