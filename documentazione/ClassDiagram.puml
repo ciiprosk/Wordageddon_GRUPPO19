@@ -1,0 +1,54 @@
+@startuml
+skinparam packageStyle frame
+package it.unisa.diem.dao as dao{
+package interfacce {
+interface DAO{}
+interface AnalisiDAO{}
+interface DocumentoDAO{}
+interface DomandaDAO{}
+interface StopwordDAO{}
+interface UtenteDAO{}
+}
+package postgres{
+class AnalisiDAOPostgres{}
+class DocumentoDAOPostgres{}
+class DomandaDAOPostgres{}
+class StopwordDAOPostgres{}
+class UtenteDAOPostgres{}
+}
+}
+
+package it.unisa.diem.main as main{
+class Main{}
+package controller{
+class SignUpViewController{}
+class LogInViewController{}
+class LoadViewController{}
+class DifficultySelectionViewController{}
+class HistoryViewController{}
+class HomeMenuViewController{}
+class ResultsViewController{}
+class QuestionViewController{}
+class LeaderBoardViewController{}
+}
+}
+package it.unisa.diem.model.gestione as gestione{
+package analisi{
+class Analisi{}
+class Domanda{}
+class StopWord{}
+}
+package sessione{
+class Domanda{}
+class Sessione{}
+}
+package utenti{
+class User{}
+class Admin{}
+}
+}
+
+package it.unisa.diem.utility as utility{
+class SceneLoader{}
+}
+@enduml

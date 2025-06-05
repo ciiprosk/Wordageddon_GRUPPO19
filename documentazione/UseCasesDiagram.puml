@@ -1,0 +1,81 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #FAFAFA
+  BorderColor Black
+  ArrowColor Black
+}
+
+actor Guest
+actor User
+actor Admin
+
+rectangle "Funzionalità Base" {
+  (Registrazione) as reg
+  (Login) as login
+  (Logout) as logout
+  note right of login
+  Questo caso d'uso è associato a Guest in quanto
+  finché l''utente non inserisce le credenziali
+  non può accedere alla home
+  end note
+}
+
+rectangle "Sessione di Gioco" {
+  (Partecipazione alla sessione di Gioco) as sessione
+  (Riprende una partita sospesa) as sessione_sospesa
+  (Abbandona una partita sospesa) as sessione_abbandonata
+  (Sospende una partita) as sospensione
+  (Termina una partita) as termina
+  note right of termina
+  Questo caso d'uso non è strettamente collegato
+  all'utente poiché è solo un caso in cui l'utente
+  termini una partita
+  end note
+
+  (Visualizza Statistiche Post-Game) as post
+
+  sessione <. termina : include
+  termina <. post :include
+
+  (Selezione difficoltà) as diff
+  (Selezione lingua) as ling
+  sessione ..> diff: include
+  sessione ..> ling: include
+  }
+
+rectangle "Statistiche" {
+  (Visualizza Leaderboard) as leaderboard
+  (Visualizza Storico) as storico
+}
+
+rectangle "Gestione Amministrativa" {
+  (Caricamento Documenti) as documents
+  (Testo non valido) as error_testo
+  (Gestione Stopwords) as stopwords
+
+}
+
+Guest -> reg
+login .> reg : include
+Guest -> login
+
+
+User --> logout
+User --> sessione
+User --> sessione_sospesa
+User --> sessione_abbandonata
+User --> leaderboard
+User --> storico
+User --> sospensione
+
+Admin --> documents
+Admin --> stopwords
+
+documents <.. error_testo : extends
+stopwords .> documents : include
+
+Guest <|- User
+User <|- Admin
+@enduml
