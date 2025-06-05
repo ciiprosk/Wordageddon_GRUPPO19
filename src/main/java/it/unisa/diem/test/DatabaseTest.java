@@ -17,7 +17,7 @@ Caricare classi e risorse in memoria.*/
 
 public class DatabaseTest {
     public static void main(String[] args) {
-        try(InputStream fis = DatabaseTest.class.getClassLoader().getResourceAsStream("config/config.properties");) {
+        try(InputStream fis = DatabaseTest.class.getClassLoader().getResourceAsStream("config/config.properties")) {
             Properties prop = new Properties();
 
             prop.load(fis);
