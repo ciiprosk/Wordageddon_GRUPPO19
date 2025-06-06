@@ -106,15 +106,16 @@
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="inputField" promptText="Aggiungi elemento..." />
-                  <Button onAction="#handleAdd" text="Aggiungi" />
-                  <Button text="Rimuovi" onAction="#handleRemove" />
+                  <TextField fx:id="inputField" promptText="Add element..." />
+                  <Button onAction="#handleAdd" prefWidth="80.0" text=" Add " />
+                  <Button onAction="#handleRemove" prefWidth="80.0" text="Remove" />
    </children>
             </HBox>
             <ListView fx:id="stopwordsListView" prefHeight="169.0" prefWidth="1000.0" />
+            <Label fx:id="wordHereALreadyLabel" text="This word is already here"  style="-fx-text-fill: red"/>
             <Label text="Exclude also:">
                <font>
-                  <Font size="30.0" />
+                  <Font size="25.0" />
                </font>
             </Label>
             <GridPane hgap="5.0" vgap="5.0">

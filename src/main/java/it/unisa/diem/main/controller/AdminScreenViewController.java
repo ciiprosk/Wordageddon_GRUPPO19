@@ -33,6 +33,7 @@ public class AdminScreenViewController {
     @FXML private CheckBox checkEasy;
     @FXML private CheckBox checkNormal;
     @FXML private CheckBox checkHard;
+    @FXML private Label wordHereALreadyLabel;
 
     private StopwordITA stopwordIt;
     private ObservableList<String> observableList;
@@ -42,10 +43,10 @@ public class AdminScreenViewController {
     public void initialize() {
 
         stopwordIt = new StopwordITA(true, true, true, true, true);
-        stopwordIt.aggiungi("Guarda");
-        stopwordIt.aggiungi("Antonio");
-        stopwordIt.aggiungi("Funziona");
-        stopwordIt.aggiungi("!!!!!");
+        stopwordIt.aggiungi("esempio");
+
+        wordHereALreadyLabel.setVisible(false);
+        wordHereALreadyLabel.setManaged(false);
 
         observableList = FXCollections.observableArrayList(stopwordIt.getParole());
         stopwordsListView.setItems(observableList);
@@ -77,10 +78,16 @@ public class AdminScreenViewController {
 
     @FXML
     private void handleAdd() {
+        wordHereALreadyLabel.setVisible(false);
+        wordHereALreadyLabel.setManaged(false);
         String text = inputField.getText().trim();
-        if (!text.isEmpty()) {
+        if (!text.isEmpty() && !stopwordsListView.getItems().contains(text)) {
             stopwordsListView.getItems().add(text);
             inputField.clear();
+        } else if (stopwordsListView.getItems().contains(text)){
+            wordHereALreadyLabel.setVisible(true);
+            wordHereALreadyLabel.setManaged(true);
+            System.out.println("la parola " + text + " è già presente");
         }
     }
 
