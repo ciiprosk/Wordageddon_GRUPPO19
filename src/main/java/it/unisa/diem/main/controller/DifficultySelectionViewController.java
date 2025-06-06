@@ -25,6 +25,12 @@ public class DifficultySelectionViewController {
 
     @FXML
     public void initialize() {
+        Image back= new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(30);
+        backView.setFitHeight(30);
+        backButton.setGraphic(backView);
+
         Image it = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/it.png"));
         ImageView itView = new ImageView(it);
         itView.setFitWidth(20);
