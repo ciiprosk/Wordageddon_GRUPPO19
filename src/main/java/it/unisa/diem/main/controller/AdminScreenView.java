@@ -1,11 +1,14 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.main.Main;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class AdminScreenView {
 
@@ -22,6 +25,12 @@ public class AdminScreenView {
 
     @FXML
     public void initialize() {
+        Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(30);
+        backView.setFitHeight(30);
+        backButton.setGraphic(backView);
+
         stopwordsArea.textProperty().addListener((obs, oldVal, newVal) -> containsSpecialCharacters());
     }
 
