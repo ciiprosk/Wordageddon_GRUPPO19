@@ -11,12 +11,6 @@ public class DomandaFactoryVincenzo {
     List<Domanda> listaDomande;
     List<AnalisiRosa> listaAnalisi; //lista di documenti scelti da controller
 
-    // Lista fittizia di parole "dizionario" da cui attingere
-    List<String> dizionario = Arrays.asList(
-            "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
-            "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"
-    );
-
     public DomandaFactoryVincenzo(List <AnalisiRosa> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
         listaDomande = new ArrayList<>();
@@ -184,6 +178,12 @@ public class DomandaFactoryVincenzo {
         for (AnalisiRosa analisi : listaAnalisi) {
             parolePresenti.addAll(analisi.getFrequenzeTesti().keySet());
         }
+
+        // Lista fittizia di parole "dizionario" da cui attingere
+        List<String> dizionario = Arrays.asList(
+                "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
+                "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"
+        );
 
         // Trova parole che non compaiono nei documenti (presenti nel dizionario ma non nei testi)
         List<String> paroleAssenti = new ArrayList<>();
