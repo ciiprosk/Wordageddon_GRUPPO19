@@ -37,7 +37,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <ProgressBar prefHeight="30.0" prefWidth="840.0" progress="0.0">
+            <ProgressBar fx:id="progressBar" prefHeight="30.0" prefWidth="840.0" progress="0.0">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>

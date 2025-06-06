@@ -97,6 +97,11 @@
     -fx-border-radius: 5px;
 }
 
+.progress-bar {
+    -fx-accent: #ffd700;
+    -fx-control-inner-background: #2e2e2e;
+    -fx-border-color: #ffd700;
+}
 
 
 

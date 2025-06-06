@@ -19,7 +19,7 @@
                         <Font size="50.0" />
                      </font>
                   </Label>
-                  <Label text="X">
+                  <Label fx:id="questionAskedNumberLabel" text="X">
                      <font>
                         <Font size="50.0" />
                      </font>
@@ -29,7 +29,7 @@
                         <Font size="40.0" />
                      </font>
                   </Label>
-                  <Label text="Y">
+                  <Label fx:id="totQuestionsNumberLabel" text="Y">
                      <font>
                         <Font size="50.0" />
                      </font>
@@ -38,14 +38,14 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="140.0" prefWidth="600.0">
                <children>
-                  <Label text="domanda">
+                  <Label fx:id="questionLabel" text="domanda">
                      <font>
                         <Font size="34.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta1">
+            <Button fx:id="answerButton1" maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta1">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -53,7 +53,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta2">
+            <Button fx:id="answerButton2" maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta2">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -61,7 +61,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta3">
+            <Button fx:id="answerButton3" maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta3">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
@@ -69,7 +69,7 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta4">
+            <Button fx:id="answerButton4" maxHeight="80.0" maxWidth="840.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="840.0" text="Risposta4">
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>

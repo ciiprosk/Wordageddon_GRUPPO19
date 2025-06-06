@@ -35,7 +35,7 @@
                         </Label>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label text="difficulty: ">
+                              <Label text="difficolta: ">
                                  <font>
                                     <Font name="Arial Black" size="30.0" />
                                  </font>
