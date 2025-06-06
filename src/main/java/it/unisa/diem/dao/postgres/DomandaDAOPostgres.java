@@ -31,7 +31,7 @@ public class DomandaDAOPostgres implements DAO<Domanda> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Domanda domanda) {
 
     }
 

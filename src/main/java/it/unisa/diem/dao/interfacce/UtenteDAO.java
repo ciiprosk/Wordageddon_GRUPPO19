@@ -6,4 +6,7 @@ public interface UtenteDAO extends DAO<Utente> {
 
 
 
+    void update(String oldUsername, Utente utente);
+    void delete(Utente utente);
+
 }
