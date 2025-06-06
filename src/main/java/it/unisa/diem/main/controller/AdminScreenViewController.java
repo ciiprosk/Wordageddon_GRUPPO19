@@ -12,11 +12,9 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import javax.swing.*;
-
 //Da implementare una lista dei documenti che tiene traccia dei tioli dei documenti
 
-public class AdminScreenView {
+public class AdminScreenViewController {
 
     @FXML private Button importButton;
     @FXML private Button backButton;
@@ -36,16 +34,22 @@ public class AdminScreenView {
     @FXML private CheckBox checkNormal;
     @FXML private CheckBox checkHard;
 
-    private StopwordITA stopwordIt = new StopwordITA(true, true, true, true, true);
-    //stopwordIt.aggiungi("s");
-    ObservableList<String> observableList = FXCollections.observableArrayList(stopwordIt.getParole());
-    ListView<String> stopWordsListView = new ListView<>(observableList);
-
-
+    private StopwordITA stopwordIt;
+    private ObservableList<String> observableList;
 
 
     @FXML
     public void initialize() {
+
+        stopwordIt = new StopwordITA(true, true, true, true, true);
+        stopwordIt.aggiungi("Guarda");
+        stopwordIt.aggiungi("Antonio");
+        stopwordIt.aggiungi("Funziona");
+        stopwordIt.aggiungi("!!!!!");
+
+        observableList = FXCollections.observableArrayList(stopwordIt.getParole());
+        stopwordsListView.setItems(observableList);
+
         Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
         backView.setFitWidth(30);
