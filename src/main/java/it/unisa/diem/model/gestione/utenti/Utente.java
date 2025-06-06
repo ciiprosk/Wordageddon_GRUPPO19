@@ -4,15 +4,17 @@ public class Utente {
 //is admin va nel costruttore.--> final , lo prendi dal db
     private String username;
     private String email;
-    private String password;
-    private boolean isAdmin;
+    private String hashedPassword;
+    private Ruolo ruolo;
+    private final byte[] salt = SicurezzaPassword.generaSalt();
+
 
 
     public Utente(String username, String email, String password) {
         this.username = username;
         this.email = email;
-        this.password = password;
-        this.isAdmin = false;
+        this.hashedPassword = SicurezzaPassword.hashPassword(password, salt);
+        this.ruolo = Ruolo.USER;
 
     }
 
@@ -28,12 +30,20 @@ public class Utente {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
+    public Ruolo getRuolo() {
+        return ruolo;
+    }
 
-    public boolean equals(Utente o) {
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
 
         if (o == null)  return false;
 
@@ -45,5 +55,12 @@ public class Utente {
 
         return temp.username.equals(this.username);
     }
+
+    /*
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    MANCA UN METODO PER VERIFICARE CHE LA PASSWORD INSERITA SIA CORRETTA
+    CREDO ANDREBBE CREATA UN'ALTRA CLASSE PER FARE QUESTA COSA
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     */
 
 }
