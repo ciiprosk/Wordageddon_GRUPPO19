@@ -15,6 +15,7 @@ public class LoadViewController {
     @FXML private ProgressBar progressBar;
 
     private String difficolta;
+    private String lingua;
 
     public void setDifficolta(String difficolta) {
         this.difficolta = difficolta;
@@ -42,7 +43,7 @@ public class LoadViewController {
             @Override
             protected void succeeded() {
                 super.succeeded();
-                goToQuestionView(); // Quando il task termina, cambia scena
+                goToTextView(); // Quando il task termina, cambia scena
             }
         };
 
@@ -52,19 +53,24 @@ public class LoadViewController {
         new Thread(task).start();
     }
 
+    public void setLingua(String lingua) {
+        this.lingua = lingua;
+    }
 
-    private void goToQuestionView() {
+
+    private void goToTextView() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/QuestionView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ReadTextView.fxml"));
             Parent root = loader.load();
 
-            // Passa la difficoltà al controller di QuestionView
-            QuestionViewController controller = loader.getController();
-            controller.setDifficulty(difficolta);
+            // Passa la difficoltà al controller di ReadTextView
+            ReadTextViewController controller = loader.getController();
+            controller.setDifficolta(difficolta);
+            controller.setLingua(lingua);
 
             Stage stage = (Stage) difficultyLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Domande");
+            stage.setTitle("Leggi il Testo");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -72,12 +72,13 @@ public class DifficultySelectionViewController {
     }
 
 
-    private void goToLoadView(String difficolta, Button sourceButton) {
+    private void goToLoadView(String difficolta, String lingua, Button sourceButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LoadView.fxml"));
             Parent root = loader.load();
             LoadViewController controller = loader.getController();
             controller.setDifficolta(difficolta);
+            controller.setLingua(lingua);
 
 
             Stage stage = (Stage) sourceButton.getScene().getWindow();
@@ -96,7 +97,7 @@ public class DifficultySelectionViewController {
     @FXML
     private void handlePlayButton() {
         if (selectedDifficolta != null && selectedLanguage != null) {
-            goToLoadView(selectedDifficolta, playButton);
+            goToLoadView(selectedDifficolta, selectedLanguage, playButton);
         } else {
             if (selectedDifficolta == null && selectedLanguage == null) {
                 System.out.println("Seleziona una difficoltà e una lingua prima di continuare.");
@@ -111,26 +112,25 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleItButton() {
+        selectedLanguage = "IT";
         System.out.println("hai clickato it");
+
         engButton.getStyleClass().remove("selected-button");
 
         if (!itButton.getStyleClass().contains("selected-button")) {
             itButton.getStyleClass().add("selected-button");
         }
-
-        selectedLanguage = "IT";
     }
 
     @FXML
     private void handleEngButton() {
+        selectedLanguage = "ENG";
         System.out.println("hai clickato eng");
         itButton.getStyleClass().remove("selected-button");
 
         if (!engButton.getStyleClass().contains("selected-button")) {
             engButton.getStyleClass().add("selected-button");
         }
-
-        selectedLanguage = "ENG";
     }
 
 }

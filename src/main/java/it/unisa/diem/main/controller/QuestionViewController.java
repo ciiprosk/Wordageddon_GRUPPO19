@@ -99,7 +99,5 @@ public class QuestionViewController {
         answerButton4.setDisable(true);
     }
 
-    public void setDifficulty(String difficolta) {
-        System.out.println("Difficoltà ricevuta: " + difficolta);
-    }
+
 }

@@ -1,7 +1,10 @@
 package it.unisa.diem.main.controller;
 
 import it.unisa.diem.main.Main;
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.utility.SceneLoader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,7 +20,7 @@ public class AdminScreenView {
 
     @FXML private Button importButton;
     @FXML private Button backButton;
-    @FXML private ListView<String> stopwordsListView = new ListView<>();
+    @FXML private ListView<String> stopwordsListView;
     @FXML private TextField inputField;
     @FXML private CheckBox checkArticles;
     @FXML private CheckBox checkPrepositions;
@@ -33,6 +36,13 @@ public class AdminScreenView {
     @FXML private CheckBox checkNormal;
     @FXML private CheckBox checkHard;
 
+    private StopwordITA stopwordIt = new StopwordITA(true, true, true, true, true);
+    //stopwordIt.aggiungi("s");
+    ObservableList<String> observableList = FXCollections.observableArrayList(stopwordIt.getParole());
+    ListView<String> stopWordsListView = new ListView<>(observableList);
+
+
+
 
     @FXML
     public void initialize() {
@@ -42,7 +52,6 @@ public class AdminScreenView {
         backView.setFitHeight(30);
         backButton.setGraphic(backView);
 
-        stopwordsListView.getItems().addAll("Apple", "Banana", "Cherry");
         stopwordsListView.setEditable(true);
 
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());

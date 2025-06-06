@@ -103,5 +103,51 @@
     -fx-border-color: #ffd700;
 }
 
+.scroll-content {
+    -fx-background-color: #2e2e2e;
+}
 
+.scroll-pane {
+    -fx-background-color: #ffd700;
+    -fx-background-radius: 5px;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #1b1b1b;
+    -fx-background-radius: 5px;
+}
+
+/* ScrollBar generale */
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent; /* sfondo della barra */
+    -fx-background-radius: 5px;
+}
+
+/* Thumb: la parte mobile */
+.scroll-bar .thumb {
+    -fx-background-color: #ffa600;
+    -fx-background-radius: 5px;
+}
+
+/* Track: la pista */
+.scroll-bar .track {
+    -fx-background-color: #1b1b1b;
+    -fx-background-radius: 5px;
+}
+
+/* Optional: hover effect */
+.scroll-bar .thumb:hover {
+    -fx-background-color: #c36200;
+}
+
+.scroll-bar .increment-button > .increment-arrow,
+.scroll-bar .decrement-button > .decrement-arrow {
+    -fx-background-color: #1b1b1b;
+}
+
+.scroll-bar .increment-button:hover,
+.scroll-bar .decrement-button:hover {
+    -fx-background-radius: 5px;
+    -fx-background-color: #ffa600;
+}
 
