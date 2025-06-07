@@ -1,21 +1,35 @@
 package it.unisa.diem.model.gestione.utenti;
 
+import static it.unisa.diem.model.gestione.utenti.SicurezzaPassword.*;
+
 public class Utente {
 //is admin va nel costruttore.--> final , lo prendi dal db
     private String username;
     private String email;
     private String hashedPassword;
     private Ruolo ruolo;
-    private final byte[] salt = SicurezzaPassword.generaSalt();
+    private final byte[] salt;
 
 
 
     public Utente(String username, String email, String password) {
+        //Costruttore utilizzato nella registrazione di un nuovo utente
+        //password da hashare, salt da generare, ruolo di default USER
         this.username = username;
         this.email = email;
-        this.hashedPassword = SicurezzaPassword.hashPassword(password, salt);
+        this.salt = generaSalt();
+        this.hashedPassword = hashPassword(password, salt);
         this.ruolo = Ruolo.USER;
+    }
 
+    public Utente(String username, String email, String hashedPassword, byte[] salt, Ruolo ruolo) {
+        //Costruttore utilizzato per recuperare un utente da DB
+        //password già hashata, salt già generato
+        this.username = username;
+        this.email = email;
+        this.hashedPassword = hashedPassword;
+        this.salt = salt;
+        this.ruolo = ruolo;
     }
 
     public String getUsername() {

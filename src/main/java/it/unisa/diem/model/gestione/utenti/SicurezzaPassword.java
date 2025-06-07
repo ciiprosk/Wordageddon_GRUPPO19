@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-public class SicurezzaPassword {
+public final class SicurezzaPassword {
 
     private static final int ITERATION_COUNT = 65536;       //numero di cicli eseguiti per calcolare la passowrd hashata
     private static final int KEY_LENGTH = 256;      //lunghezza in bit della password hashata
