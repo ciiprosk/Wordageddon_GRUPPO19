@@ -48,4 +48,6 @@ public class StopwordITA extends StopwordManager {
             "anche", "sebbene", "poiché", "affinché", "mentre", "nonostante", "anzi", "ovvero", "neanche", "neppure", "inoltre", "comunque",
             "pertanto", "tuttavia", "siccome", "quando", "dopo che", "prima che", "cosicché", "finché", "purché", "quantunque", "benchè", "anzi", "anzi che"
     }; }
+
+
 }

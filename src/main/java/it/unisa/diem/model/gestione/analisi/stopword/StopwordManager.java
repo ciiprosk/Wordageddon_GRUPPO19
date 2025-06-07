@@ -41,6 +41,8 @@ public abstract class StopwordManager {
         if (verbiAvere) aggiungiArray(getVerbiAvere());
         if (verbiEssere) aggiungiArray(getVerbiEssere());
         if (connettiviCongiunzioni) aggiungiArray(getConnettiviCongiunzioni());
+        aggiungiArray(getPunteggiatura());
+
     }
 
     private void aggiungiArray(String[] array) {
@@ -50,15 +52,29 @@ public abstract class StopwordManager {
     }
 
     protected abstract String[] getArticoli();
+
     protected abstract String[] getPreposizioni();
+
     protected abstract String[] getPronomi();
+
     protected abstract String[] getVerbiAvere();
+
     protected abstract String[] getVerbiEssere();
+
     protected abstract String[] getConnettiviCongiunzioni();
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" + "parole=" + parole + '}';
+    protected String[] getPunteggiatura() {
+        return new String[]{
+                ".", ",", ";", ":", "!", "?", "...", "-", "_", "(", ")", "[", "]",
+                "{", "}", ";", "\"", "'", "<", ">", "«", "»", "·", "/", "|", "\\",
+                "*", "@", "#", "&"
+
+        };
     }
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "{" + "parole=" + parole + '}';
+        }
+
 }
 
