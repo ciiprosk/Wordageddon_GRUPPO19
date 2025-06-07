@@ -6,5 +6,7 @@ public class DBException extends RuntimeException {
 
         super(message);
 
+        cause.printStackTrace();
+
     }
 }

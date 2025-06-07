@@ -4,7 +4,6 @@ import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.utenti.Ruolo;
 import it.unisa.diem.model.gestione.utenti.Utente;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
                         result = Optional.ofNullable(utente);
 
         } catch (SQLException e) {
-                 throw new DBException("Errore select utente",e);     //la creiamo?
+
+            throw new DBException("ERRORE: Impossibile recuperare info sull'utente " + username, e);
+
         }
 
         return result;
@@ -70,7 +71,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
                         }
 
         } catch (SQLException e) {
-                 throw new DBException("Errore select utente",e);     //la creiamo?
+
+                 throw new DBException("ERRPRE: Impossibile selezionare gli utenti",e);
         }
 
         return utenti;
@@ -79,7 +81,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     @Override
     public void insert(Utente utente) {
 
-        String query = "INSERT INTO Utente (username,email,password,salt,ruolo) " +
+        String query = "INSERT INTO utente (username,email,password,salt,ruolo) " +
                 "VALUES (?,?,?,?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -91,14 +93,16 @@ public class UtenteDAOPostgres implements UtenteDAO {
                         cmd.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DBException("Errore insert utente",e);     //la creiamo?
+
+            throw new DBException("ERRORE: Impossibile inserire l'utente " + utente.getUsername(), e);
+
         }
     }
 
     @Override
     public void update(Utente utente) {     //NON PREVEDE l'aggiornamento di username
 
-        String query = "UPDATE Utente " +
+        String query = "UPDATE utente " +
                 "SET email=?, password=?, ruolo=? " +
                 "WHERE username = ?";
 
@@ -111,7 +115,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
                 cmd.executeUpdate();
 
             } catch (SQLException e) {
-                     throw new DBException("Errore update utente",e);     //la creiamo?
+
+                throw new DBException("ERRORE: Modifiche non riuscite all'utente " + utente.getUsername(), e);
+
             }
 
     }
@@ -119,7 +125,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     @Override
     public void update(String oldUsername, Utente utente) {     //PREVEDE aggiornamento username
 
-        String query = "UPDATE Utente " +
+        String query = "UPDATE utente " +
                 "SET username=?, email=?, password=?, ruolo=? " +
                 "WHERE username = ?";
 
@@ -133,7 +139,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
             cmd.executeUpdate();
 
         } catch (SQLException e) {
-                 throw new DBException("Errore update utente",e);     //la creiamo?
+
+            throw new DBException("ERRORE: Modifiche non riuscite all'utente " + utente.getUsername(), e);
+
         }
 
     }
@@ -141,19 +149,18 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     public void delete(Utente utente) {
 
-        String query = "DELETE FROM Utente WHERE username = ?";
+        String query = "DELETE FROM utente WHERE username = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
-            PreparedStatement cmd = connection.prepareStatement
-                (query) ){
+            PreparedStatement cmd = connection.prepareStatement (query) ){
 
             setUserForDelete(cmd, utente);
 
             cmd.executeUpdate();
 
         } catch (SQLException e) {
-                 throw new DBException("Errore delete utente",e);     //la creiamo?
+                 throw new DBException("ERRORE: Impossibile cancellare l'utente " + utente.getUsername(), e);
         }
 
     }
@@ -175,33 +182,28 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     private void setUserForInsert(PreparedStatement cmd, Utente utente) throws SQLException {
-
         cmd.setString(1, utente.getUsername());
-        cmd.setString(2,utente.getEmail());
-        cmd.setString(3,utente.getHashedPassword());
-        cmd.setBytes(4,utente.getSalt());
-        cmd.setObject(5,utente.getRuolo());
-
+        cmd.setString(2, utente.getEmail());
+        cmd.setString(3, utente.getHashedPassword());
+        cmd.setBytes(4, utente.getSalt());
+        cmd.setObject(5, utente.getRuolo().name(), java.sql.Types.OTHER);
     }
 
     private void setUserForUpdate(PreparedStatement cmd, Utente utente) throws SQLException {
-
-        cmd.setString(1,utente.getEmail());
-        cmd.setString(2,utente.getHashedPassword());
-        cmd.setObject(3, utente.getRuolo());
+        cmd.setString(1, utente.getEmail());
+        cmd.setString(2, utente.getHashedPassword());
+        cmd.setObject(3, utente.getRuolo().name(), java.sql.Types.OTHER);
         cmd.setString(4, utente.getUsername());
-
     }
 
     private void setUserForUpdate(PreparedStatement cmd, String oldUsername, Utente utente) throws SQLException {
-
         cmd.setString(1, utente.getUsername());
-        cmd.setString(2,utente.getEmail());
-        cmd.setString(3,utente.getHashedPassword());
-        cmd.setObject(4, utente.getRuolo());
+        cmd.setString(2, utente.getEmail());
+        cmd.setString(3, utente.getHashedPassword());
+        cmd.setObject(4, utente.getRuolo().name(), java.sql.Types.OTHER);
         cmd.setString(5, oldUsername);
-
     }
+
 
     private void setUserForDelete(PreparedStatement cmd, Utente utente) throws SQLException {
         cmd.setString(1, utente.getUsername());
