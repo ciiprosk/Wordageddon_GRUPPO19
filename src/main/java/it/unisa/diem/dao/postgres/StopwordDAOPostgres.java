@@ -30,7 +30,7 @@ public class StopwordDAOPostgres implements StopwordDAO {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Stopword stopword) {
 
     }
 

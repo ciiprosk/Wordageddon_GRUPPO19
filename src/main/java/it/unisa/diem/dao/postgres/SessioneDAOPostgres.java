@@ -29,7 +29,7 @@ public class SessioneDAOPostgres implements DAO<Sessione> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Sessione sessione) {
 
     }
 }

@@ -12,44 +12,37 @@ import java.time.LocalDateTime;
 public class Sessione {
 
     private static long id=0;
-    private final Utente utente;
+    private Utente utente;
     private boolean completato;
     private Difficolta difficolta;    //tipo enum?????????????????????????????????
     private Lingua lingua;
-    private final LocalDateTime inizio;
+    private LocalDateTime inizio;
     private int punteggio;
-    //private LocalDateTime fine;   //giusto oppure creiamo la sessione passata??????
+    private LocalDateTime fine;
     //documenti e domande????
 
-    public Sessione(Utente utente, Difficolta difficolta, LocalDateTime inizio) {
+    public Sessione(Utente utente, Difficolta difficolta, LocalDateTime inizio, LocalDateTime fine) {
 
         this.utente = utente;
         this.difficolta = difficolta;
         this.inizio = inizio;
-        //this.fine=null;
+        this.fine=null;
         this.punteggio = 0;
         this.completato = false;
 
     }
 
-    public Utente getUtente() {
-        return utente;
-    }
-
-
-
-    public LocalDateTime getInizio() {
-        return inizio;
-    }
-
-    public int getPunteggio() {
-        return punteggio;
-    }
-
-    public void setPunteggio(int punteggio) {
-        this.punteggio = punteggio;
-    }
-
+    //getter e setter
+    public Utente getUtente() {return utente;}
+    public void setUtente(Utente utente) {this.utente = utente;}
+    public Difficolta getDifficolta() {return difficolta;}
+    public void setDifficolta(Difficolta difficolta) {this.difficolta = difficolta;}
+    public LocalDateTime getInizio() {return inizio;}
+    public void setInizio(LocalDateTime inizio) {this.inizio=LocalDateTime.now();}
+    public LocalDateTime getFine() {return fine;}
+    public void setFine(LocalDateTime fine) {this.fine = fine;}
+    public int getPunteggio() {return punteggio;}
+    public void setPunteggio(int punteggio) {this.punteggio = punteggio;}
     public boolean isCompletato() {
         return completato;
     }
@@ -57,8 +50,8 @@ public class Sessione {
     public void setCompletato(boolean completato) {
         this.completato = completato;
 
-        //if (completato)
-           // this.fine=LocalDateTime.now();
+        if (completato)
+           this.fine=LocalDateTime.now();
     }
 
 

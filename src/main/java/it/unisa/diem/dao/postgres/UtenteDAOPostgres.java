@@ -37,27 +37,84 @@ public class UtenteDAOPostgres implements UtenteDAO {
         //prima bisogna fare hasing della password inserita
         // da dove prendo i dati???? me lo passa utente
         try (Connection connection = DriverManager.getConnection(URL);
-             PreparedStatement cmd=connection.prepareStatement("INSERT INTO Utente VALUES (?,?,?)");){
+
+             PreparedStatement cmd=connection.prepareStatement
+                     ("INSERT INTO Utente VALUES (?,?,?,?)");){
                 cmd.setString(1, utente.getUsername());
                 cmd.setString(2,utente.getEmail());
                 cmd.setString(3,utente.getHashedPassword());
-                /*  da decidere, ma nel caso in cui salviamo anche il salt
-                    cmd.setString(4,utente.getSalt().toString());
-                 */
+                cmd.setBytes(4,utente.getSalt());
+
                 cmd.executeUpdate();
 
         } catch (SQLException e) {
-       //     throw new DBException("Errore insert",e);     //la creiamo?
+       //     throw new DBException("Errore insert utente",e);     //la creiamo?
         }
     }
 
-        @Override
-    public void update(Utente utente) {
+    @Override
+    public void update(Utente utente) {     //NON PREVEDE l'aggiornamento di username
+
+            try (Connection connection = DriverManager.getConnection(URL);
+
+                 PreparedStatement cmd=connection.prepareStatement
+                         ("UPDATE Utente " +
+                                 "SET email=?, password=?, ruolo=? " +
+                                 "WHERE username = ?");){
+
+                cmd.setString(1,utente.getEmail());
+                cmd.setString(2,utente.getHashedPassword());
+                cmd.setObject(3, utente.getRuolo());
+                cmd.setString(4, utente.getUsername());
+
+                cmd.executeUpdate();
+
+            } catch (SQLException e) {
+                //     throw new DBException("Errore insert utente",e);     //la creiamo?
+            }
 
     }
 
     @Override
-    public void delete(long id) {
+    public void update(String oldUsername, Utente utente) {     //PREVEDE aggiornamento username
+
+        try (Connection connection = DriverManager.getConnection(URL);
+
+             PreparedStatement cmd=connection.prepareStatement
+                     ("UPDATE Utente " +
+                             "SET username=?, email=?, password=?, ruolo=? " +
+                             "WHERE username = ?");){
+
+            cmd.setString(1,utente.getUsername());
+            cmd.setString(2,utente.getEmail());
+            cmd.setString(3,utente.getHashedPassword());
+            cmd.setObject(4, utente.getRuolo());
+            cmd.setString(5, oldUsername);
+
+            cmd.executeUpdate();
+
+        } catch (SQLException e) {
+            //     throw new DBException("Errore insert utente",e);     //la creiamo?
+        }
+
+    }
+
+
+    public void delete(Utente utente) {
+
+        try (Connection connection = DriverManager.getConnection(URL);
+
+             PreparedStatement cmd = connection.prepareStatement
+                     ("DELETE FROM Utente WHERE username = ?");){
+
+            cmd.setString(1, utente.getUsername());
+
+            cmd.executeUpdate();
+
+        } catch (SQLException e) {
+            //     throw new DBException("Errore insert utente",e);     //la creiamo?
+        }
+
     }
 
 }

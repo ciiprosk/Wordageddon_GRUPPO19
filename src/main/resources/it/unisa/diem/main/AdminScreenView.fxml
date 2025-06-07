@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.AdminScreenView">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.AdminScreenViewController">
    <children>
       <VBox prefHeight="800.0" prefWidth="1200.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -17,9 +17,21 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <HBox prefHeight="60.0" prefWidth="800.0">
+            <VBox prefHeight="85.0" prefWidth="1000.0">
                <children>
-                  <Region prefHeight="60.0" prefWidth="300.0" />
+                  <Label text="Title:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="titleField" promptText="Text Title" />
+               </children>
+               <padding>
+                  <Insets left="100.0" right="100.0" />
+               </padding>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="800.0">
+               <children>
                   <Button fx:id="importButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
                      <font>
                         <Font size="25.0" />
@@ -30,27 +42,80 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <Label text="Stopwords list:">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <TextArea fx:id="stopwordsArea" prefHeight="300.0" prefWidth="800.0">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </TextArea>
-            <Label style="-fx-text-fill: red" text="Words have to be divided by a comma and there can't be any other special character">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
+            <HBox alignment="CENTER" prefHeight="74.0" prefWidth="1000.0">
+               <children>
+                  <VBox prefHeight="85.0" prefWidth="300.0" spacing="5.0">
+                     <children>
+                        <Label text="Mode:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <CheckBox fx:id="checkEasy" mnemonicParsing="false" text="easy" textFill="GOLD">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox fx:id="checkNormal" mnemonicParsing="false" text="normal" textFill="GOLD">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox fx:id="checkHard" mnemonicParsing="false" text="hard" textFill="GOLD">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </CheckBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Region prefHeight="74.0" prefWidth="137.0" />
+                  <VBox prefHeight="74.0" prefWidth="300.0" spacing="5.0">
+                     <children>
+                        <Label text="Language:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <CheckBox fx:id="checkEng" mnemonicParsing="false" text="eng" textFill="GOLD">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox fx:id="checkIt" mnemonicParsing="false" text="it" textFill="GOLD">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </CheckBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+   <children>
+                  <Label text="Stopwords list:">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="inputField" promptText="Add element..." />
+                  <Button onAction="#handleAdd" prefWidth="80.0" text=" Add " />
+                  <Button onAction="#handleRemove" prefWidth="80.0" text="Remove" />
+   </children>
+            </HBox>
+            <ListView fx:id="stopwordsListView" prefHeight="169.0" prefWidth="1000.0" />
+            <Label fx:id="wordHereALreadyLabel" text="This word is already here"  style="-fx-text-fill: red"/>
             <Label text="Exclude also:">
                <font>
-                  <Font size="30.0" />
+                  <Font size="25.0" />
                </font>
             </Label>
             <GridPane hgap="5.0" vgap="5.0">
@@ -98,7 +163,7 @@
             </GridPane>
          </children>
          <padding>
-            <Insets left="200.0" right="200.0" top="60.0" />
+            <Insets left="100.0" right="100.0" top="60.0" />
          </padding>
       </VBox>
       <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">

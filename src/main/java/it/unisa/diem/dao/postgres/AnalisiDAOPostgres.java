@@ -40,7 +40,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Analisi analisi) {
 
     }
 }
