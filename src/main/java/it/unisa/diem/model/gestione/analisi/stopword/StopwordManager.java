@@ -63,7 +63,7 @@ public abstract class StopwordManager {
 
     protected abstract String[] getConnettiviCongiunzioni();
 
-    protected String[] getPunteggiatura() {
+    public String[] getPunteggiatura() {
         return new String[]{
                 ".", ",", ";", ":", "!", "?", "...", "-", "_", "(", ")", "[", "]",
                 "{", "}", ";", "\"", "'", "<", ">", "«", "»", "·", "/", "|", "\\",

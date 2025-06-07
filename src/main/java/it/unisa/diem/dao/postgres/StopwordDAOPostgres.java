@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class StopwordDAOPostgres implements StopwordDAO {
 
-    @Override
+
     public Optional<Stopword> selectById(long id) {
         return Optional.empty();
     }

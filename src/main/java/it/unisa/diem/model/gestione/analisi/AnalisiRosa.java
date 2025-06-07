@@ -52,6 +52,11 @@ public class AnalisiRosa {
     // Applica il filtro stopword solo se stopwordAnalisi non è null
     if (stopwordAnalisi != null) {
         parole = parole.stream()
+                .map(word -> {
+                    for(String punt: stopwordAnalisi.getPunteggiatura())
+                        word=word.replace(punt, "");
+                    return word.trim();
+                }).filter(word -> !word.isEmpty())
                 .filter(word -> !stopwordAnalisi.getParole().contains(word))
                 .collect(Collectors.toList());
     }
@@ -62,6 +67,8 @@ public class AnalisiRosa {
 
     public Map<String, Integer> getFrequenzeTestiRosa() throws IOException, ClassNotFoundException {
         List<String> parole=getWordsDocument();
+        frequenzeTesti = new HashMap<>();
+
         for(String parola : parole){
             if(frequenzeTesti.containsKey(parola)){
                 frequenzeTesti.put(parola, frequenzeTesti.get(parola)+1);
@@ -81,6 +88,11 @@ public class AnalisiRosa {
 
         AnalisiRosa a = null;
         return a;
+    }
+
+    @Override
+    public String toString(){
+        return frequenzeTesti.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).collect(Collectors.joining("\n"));
     }
 
 }

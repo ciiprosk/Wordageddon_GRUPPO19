@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class DomandaDAOPostgres implements DAO<Domanda> {
 
-    @Override
+
     public Optional<Domanda> selectById(long id) {
         return Optional.empty();
     }
