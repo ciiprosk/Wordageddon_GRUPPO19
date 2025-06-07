@@ -115,7 +115,7 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin></ListView>
-            <Label fx:id="wordHereALreadyLabel" style="-fx-text-fill: red" text="This word is already here" />
+            <Label fx:id="alertLabel" style="-fx-text-fill: red" text="This word is already here" />
             <Label text="Exclude also:">
                <font>
                   <Font size="25.0" />

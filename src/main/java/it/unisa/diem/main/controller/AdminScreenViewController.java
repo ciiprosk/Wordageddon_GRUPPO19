@@ -21,9 +21,6 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
-
-//Da implementare una lista dei documenti che tiene traccia dei tioli dei documenti
 
 public class AdminScreenViewController {
 
@@ -44,7 +41,7 @@ public class AdminScreenViewController {
     @FXML private CheckBox checkEasy;
     @FXML private CheckBox checkNormal;
     @FXML private CheckBox checkHard;
-    @FXML private Label wordHereALreadyLabel;
+    @FXML private Label alertLabel;
 
     private StopwordManager stopword;
     private ObservableList<String> observableList;
@@ -62,8 +59,8 @@ public class AdminScreenViewController {
         /*temporaneo*/
 
         /*disabilita il messaggio di errore*/
-        wordHereALreadyLabel.setVisible(false);
-        wordHereALreadyLabel.setManaged(false);
+        alertLabel.setVisible(false);
+        alertLabel.setManaged(false);
 
         /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopwordITA.getParole());
@@ -75,7 +72,14 @@ public class AdminScreenViewController {
         stopwordsListView.setOnEditCommit(event -> {
             int index = event.getIndex();
             String newValue = event.getNewValue();
-            stopwordsListView.getItems().set(index, newValue);
+            if (newValue.contains(" ")) {
+                alertLabel.setText("Le parole non possono contenere spazi.");
+                alertLabel.setVisible(true);
+                alertLabel.setManaged(true);
+                return;
+            } else {
+                stopwordsListView.getItems().set(index, newValue);
+            }
         });
 
         /*imposta l'immagine del tasto indietro*/
@@ -99,8 +103,8 @@ public class AdminScreenViewController {
 
 
         /*disabilita il messaggio di errore*/
-        wordHereALreadyLabel.setVisible(false);
-        wordHereALreadyLabel.setManaged(false);
+        alertLabel.setVisible(false);
+        alertLabel.setManaged(false);
 
         /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopword.getParole());
@@ -123,8 +127,8 @@ public class AdminScreenViewController {
         /*temporaneo*/
 
         /*disabilita il messaggio di errore*/
-        wordHereALreadyLabel.setVisible(false);
-        wordHereALreadyLabel.setManaged(false);
+        alertLabel.setVisible(false);
+        alertLabel.setManaged(false);
 
         /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopword.getParole());
@@ -198,25 +202,34 @@ public class AdminScreenViewController {
     //ListView
     @FXML
     private void handleAdd() {
-        wordHereALreadyLabel.setVisible(false);
-        wordHereALreadyLabel.setManaged(false);
+        alertLabel.setVisible(false);
+        alertLabel.setManaged(false);
         String text = inputField.getText().trim();
+
+        if (text.contains(" ")) {
+            alertLabel.setText("Le parole non possono contenere spazi.");
+            alertLabel.setVisible(true);
+            alertLabel.setManaged(true);
+            return;
+        }
+
         if (!text.isEmpty() && !stopwordsListView.getItems().contains(text)) {
             stopwordsListView.getItems().add(text);
             inputField.clear();
-        } else if (stopwordsListView.getItems().contains(text)){
-            wordHereALreadyLabel.setVisible(true);
-            wordHereALreadyLabel.setManaged(true);
-            System.out.println("la parola " + text + " è già presente");
+        } else if (stopwordsListView.getItems().contains(text)) {
+            alertLabel.setText("La parola è già presente.");
+            alertLabel.setVisible(true);
+            alertLabel.setManaged(true);
+            System.out.println("La parola " + text + " è già presente");
         }
     }
 
     public void handleRemove(ActionEvent actionEvent) {
-        wordHereALreadyLabel.setVisible(false);
-        wordHereALreadyLabel.setManaged(false);
+        alertLabel.setVisible(false);
+        alertLabel.setManaged(false);
         String text = inputField.getText().trim();
         if (!text.isEmpty()) {
-            stopwordsListView.getItems().remove(text);  // Rimuove solo se esiste un elemento con quel testo
+            stopwordsListView.getItems().remove(text);
             inputField.clear();
         }
     }
@@ -247,6 +260,16 @@ public class AdminScreenViewController {
 
     public void handleConfirm(ActionEvent actionEvent) {
         titolo = titleField.getText().trim();
+
+
+        stopword.getParole().clear(); //senza questo potrebbe riapparire una parola modificata manualmente dall'utente (credo)
+        for (String parola : stopwordsListView.getItems()) {
+            stopword.aggiungi(parola);
+        }
+
+
+        stopword.caricaStopword(checkArticles.isSelected(), checkPrepositions.isSelected(), checkPronouns.isSelected(), checkToHave.isSelected(), checkToBe.isSelected(), checkCon.isSelected());
+        System.out.println(stopword.getParole());
         DocumentoRosa documento = new DocumentoRosa(titolo, lingua, difficolta, stopword);
 
         try {
