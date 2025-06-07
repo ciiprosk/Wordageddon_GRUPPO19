@@ -2,8 +2,11 @@ package it.unisa.diem.test;
 
 import it.unisa.diem.dao.interfacce.AnalisiDAO;
 import it.unisa.diem.dao.interfacce.DAO;
+import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
+import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
 import it.unisa.diem.model.gestione.analisi.Analisi;
+import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.PropertiesLoader;
 
 import javax.xml.crypto.Data;
@@ -44,6 +47,17 @@ public class DatabaseTest {
         PropertiesLoader.init();
         String url=PropertiesLoader.getProperty("database.url");
         System.out.println("url:"+url);
+        String user=PropertiesLoader.getProperty("database.user");
+        System.out.println("user:"+user);
+        String password=PropertiesLoader.getProperty("database.password");
+        System.out.println("password:"+password);
+
+        try{
+            Connection co=DriverManager.getConnection(url, user, password);
+            System.out.println("okay");
+        } catch (SQLException e) {
+            System.out.println("porcodio");
+        }
 
     }
 }

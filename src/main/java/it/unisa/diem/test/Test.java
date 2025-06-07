@@ -1,6 +1,5 @@
-package it.unisa.diem.model.gestione.sessione;
+package it.unisa.diem.test;
 
-import it.unisa.diem.model.gestione.analisi.AnalisiRosa;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.DocumentoRosa;
 import it.unisa.diem.model.gestione.analisi.Lingua;
@@ -8,8 +7,6 @@ import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Map;
 
 public class Test {
     public static void main(String[] args)throws Exception{
