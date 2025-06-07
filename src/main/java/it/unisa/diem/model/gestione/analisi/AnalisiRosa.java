@@ -1,6 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,26 +9,28 @@ import java.util.List;
 import java.util.Map;
 
 public class AnalisiRosa {
-    private final DocumentoAntonio doc;
+    private final DocumentoRosa doc;
     private Map<String, Integer> frequenzeTesti;
     private Lingua linguaAnalisi;
     private Difficolta difficoltaAnalisi;
     private String titolo;
     private Stopword stopwordAnalisi;
-    public AnalisiRosa(DocumentoAntonio doc) {
-        this.doc = doc;
-        frequenzeTesti=new HashMap<>();
-        recuperaDatiFromDocumentoAntonio();
 
+    public AnalisiRosa(String path) throws IOException, ClassNotFoundException {
+        //path si riferisce al documento da analizzare
+        frequenzeTesti=new HashMap<>();
+        doc= DocumentoRosa.leggiDocumento(path);
+        recuperaDatiFromDocumentoRosa();
     }
 
-    private void recuperaDatiFromDocumentoAntonio(){
+    private void recuperaDatiFromDocumentoRosa(){
         linguaAnalisi=doc.getLingua();
         difficoltaAnalisi=doc.getDifficolta();
         titolo=doc.getTitolo();
         stopwordAnalisi=doc.getStopword();
     }
-    public DocumentoAntonio getDocumento() {
+
+    public DocumentoRosa getDocumento() {
         return doc;
     }
 
@@ -35,11 +38,12 @@ public class AnalisiRosa {
         return frequenzeTesti;
     }
 
-    public List<String> getWordsDocument(){
-        List<String> wordsDocument=new ArrayList<>();
-        DocumentoAntonio prova = doc.leggiDocumento(linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo);
-        System.out.println("Prova: " +prova);
-        return wordsDocument;
+    private List<String> getWordsDocument() throws IOException, ClassNotFoundException {
+        //devo recuperare tutte le parole del documento letto
+        //il documento mi deve passare il filename in cui si trova
+        DocumentoRosa dr= DocumentoRosa.leggiDocumento("data/ITA/facile/crypto.bin");
+        List<String> parole=doc.getParole();
+        return parole;
     }
 
     public void caricaAnalisi(){
@@ -53,8 +57,20 @@ public class AnalisiRosa {
         return a;
     }
 
-    private void countWords(){}
-    private void words(){}
+    public HashMap<String, Integer> getFrequenzeTestiRosa() throws IOException, ClassNotFoundException {
+        List<String> parole=getWordsDocument();
+        HashMap<String, Integer> frequenze=new HashMap<>();
+        for(String parola : parole){
+            if(frequenze.containsKey(parola)){
+                frequenze.put(parola, frequenze.get(parola)+1);
+            }else{
+                frequenze.put(parola, 1);
+            }
+        }
+        return frequenze;
+    }
+
+
 
 
 

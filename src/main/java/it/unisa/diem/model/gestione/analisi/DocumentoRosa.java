@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DocumentoRosa {
@@ -14,6 +15,7 @@ public class DocumentoRosa {
     private Lingua lingua;
     private Difficolta difficolta;
     private Stopword stopword;
+    private String path ;
     private List<String> parole;
 
     public DocumentoRosa(String titolo, Lingua lingua, Difficolta difficolta, Stopword stopword) {
@@ -40,6 +42,7 @@ public class DocumentoRosa {
         this.stopword = stopword;
     }
 
+
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }
@@ -52,6 +55,13 @@ public class DocumentoRosa {
         this.difficolta = difficolta;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public Difficolta getDifficolta() {
         return difficolta;
@@ -61,9 +71,15 @@ public class DocumentoRosa {
         if()
     }*/
 
+   public List<String> getParole() throws IOException, ClassNotFoundException {
+       return parole.stream().flatMap(line->{
+           return Arrays.stream(line.split("[ ,]"));
+       }).map(word-> word.toLowerCase()).collect(Collectors.toList());
+   }
 
     public void convertiTxtToBin(File inputFile) throws IOException {
         File outputFile = new File("data" +"/"+ lingua + "/" + difficolta + "/" + titolo + ".bin");
+        this.path=outputFile.toString();
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
              DataOutputStream dos = new DataOutputStream(new   BufferedOutputStream(new FileOutputStream(outputFile)))) {
 
@@ -112,15 +128,15 @@ public class DocumentoRosa {
         dr.titolo=split[split.length-2];
         dr.difficolta=Difficolta.valueOf(split[split.length-3].toUpperCase());
         dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
-
+        dr.path=filename;
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(String s:parole)
-            sb.append(s);
+        for (String s : parole) {
+            sb.append(s).append("\n");
+        }
         return sb.toString();
     }
 }
-
-
