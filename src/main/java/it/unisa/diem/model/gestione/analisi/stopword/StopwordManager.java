@@ -8,15 +8,9 @@ import java.util.Set;
 public abstract class StopwordManager {
 
     protected final Set<String> parole;
-    protected boolean articoliBool, preposizioniBool, pronomiBool, verbiEssereAvereBool, connettiviCongiunzioniBool;
 
-    public StopwordManager(boolean articoli, boolean preposizioni, boolean pronomi, boolean verbiEssereAvere, boolean connettiviCongiunzioni) {
+    public StopwordManager() {
         this.parole = new HashSet<>();
-        this.articoliBool = articoli;
-        this.preposizioniBool = preposizioni;
-        this.pronomiBool = pronomi;
-        this.verbiEssereAvereBool = verbiEssereAvere;
-        this.connettiviCongiunzioniBool = connettiviCongiunzioni;
     }
 
     public void aggiungi(String parola) {
@@ -40,12 +34,13 @@ public abstract class StopwordManager {
         }
     }
 
-    public void caricaStopword() {
-        if (articoliBool) aggiungiArray(getArticoli());
-        if (preposizioniBool) aggiungiArray(getPreposizioni());
-        if (pronomiBool) aggiungiArray(getPronomi());
-        if (verbiEssereAvereBool) aggiungiArray(getVerbiEssereAvere());
-        if (connettiviCongiunzioniBool) aggiungiArray(getConnettiviCongiunzioni());
+    public void caricaStopword(boolean articoli, boolean preposizioni, boolean pronomi, boolean verbiAvere, boolean verbiEssere, boolean connettiviCongiunzioni) {
+        if (articoli) aggiungiArray(getArticoli());
+        if (preposizioni) aggiungiArray(getPreposizioni());
+        if (pronomi) aggiungiArray(getPronomi());
+        if (verbiAvere) aggiungiArray(getVerbiAvere());
+        if (verbiEssere) aggiungiArray(getVerbiEssere());
+        if (connettiviCongiunzioni) aggiungiArray(getConnettiviCongiunzioni());
     }
 
     private void aggiungiArray(String[] array) {
@@ -57,7 +52,8 @@ public abstract class StopwordManager {
     protected abstract String[] getArticoli();
     protected abstract String[] getPreposizioni();
     protected abstract String[] getPronomi();
-    protected abstract String[] getVerbiEssereAvere();
+    protected abstract String[] getVerbiAvere();
+    protected abstract String[] getVerbiEssere();
     protected abstract String[] getConnettiviCongiunzioni();
 
     @Override

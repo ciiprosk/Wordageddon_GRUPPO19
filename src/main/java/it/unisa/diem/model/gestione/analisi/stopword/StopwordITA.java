@@ -2,8 +2,8 @@ package it.unisa.diem.model.gestione.analisi.stopword;
 
 public class StopwordITA extends StopwordManager {
 
-    public StopwordITA(boolean articoli, boolean preposizioni, boolean pronomi, boolean verbiEssereAvere, boolean connettiviCongiunzioni) {
-        super(articoli, preposizioni, pronomi, verbiEssereAvere, connettiviCongiunzioni);
+    public StopwordITA() {
+        super();
     }
 
     @Override protected String[] getArticoli() { return new String[]{
@@ -30,15 +30,18 @@ public class StopwordITA extends StopwordManager {
             "mi", "ti", "si", "ci", "vi", "lo", "la", "li", "le", "gli", "ne"
     }; }
 
-    @Override protected String[] getVerbiEssereAvere() { return new String[]{
-            // essere
-            "essere", "sono", "sei", "è", "siamo", "siete", "erano", "ero", "eri", "era", "fui", "fosti", "fu", "fummo", "foste", "furono",
-            "sarò", "sarai", "sarà", "saremo", "sarete", "saranno", "sarei", "saresti", "sarebbe", "saremmo", "sareste", "sarebbero",
+    @Override protected String[] getVerbiAvere() { return new String[]{
             // avere
             "avere", "ho", "hai", "ha", "abbiamo", "avete", "hanno", "avevo", "avevi", "aveva", "avevamo", "avevate", "avevano",
             "ebbi", "avesti", "ebbe", "avemmo", "aveste", "ebbero", "avrò", "avrai", "avrà", "avremo", "avrete", "avranno",
             "avrei", "avresti", "avrebbe", "avremmo", "avreste", "avrebbero"
     }; }
+
+    @Override protected String[] getVerbiEssere() { return new String[]{
+            // essere
+            "essere", "sono", "sei", "è", "siamo", "siete", "erano", "ero", "eri", "era", "fui", "fosti", "fu", "fummo", "foste", "furono",
+            "sarò", "sarai", "sarà", "saremo", "sarete", "saranno", "sarei", "saresti", "sarebbe", "saremmo", "sareste", "sarebbero",
+    };}
 
     @Override protected String[] getConnettiviCongiunzioni() { return new String[]{
             "e", "ma", "però", "oppure", "infatti", "perché", "quindi", "dunque", "cioè",

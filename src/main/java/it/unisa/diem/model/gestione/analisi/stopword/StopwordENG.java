@@ -2,8 +2,8 @@ package it.unisa.diem.model.gestione.analisi.stopword;
 
 public class StopwordENG extends StopwordManager {
 
-    public StopwordENG(boolean articoli, boolean preposizioni, boolean pronomi, boolean verbiEssereAvere, boolean connettiviCongiunzioni) {
-        super(articoli, preposizioni, pronomi, verbiEssereAvere, connettiviCongiunzioni);
+    public StopwordENG() {
+        super();
     }
 
     @Override protected String[] getArticoli() { return new String[]{
@@ -33,12 +33,15 @@ public class StopwordENG extends StopwordManager {
             "myself", "yourself", "himself", "herself", "itself", "ourselves", "yourselves", "themselves"
     }; }
 
-    @Override protected String[] getVerbiEssereAvere() { return new String[]{
-            // to be
-            "be", "am", "is", "are", "was", "were", "being", "been",
+    @Override protected String[] getVerbiAvere() { return new String[]{
             // to have
             "have", "has", "had", "having"
     }; }
+
+    @Override protected String[] getVerbiEssere() { return new String[]{
+            // to be
+            "be", "am", "is", "are", "was", "were", "being", "been",
+    };}
 
     @Override protected String[] getConnettiviCongiunzioni() { return new String[]{
             "and", "but", "or", "so", "for", "nor", "yet", "although", "though", "even though", "because",

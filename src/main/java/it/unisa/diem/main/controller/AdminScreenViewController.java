@@ -42,7 +42,7 @@ public class AdminScreenViewController {
     @FXML
     public void initialize() {
 
-        stopwordIt = new StopwordITA(true, true, true, true, true);
+        stopwordIt = new StopwordITA();
         stopwordIt.aggiungi("esempio");
 
         wordHereALreadyLabel.setVisible(false);
