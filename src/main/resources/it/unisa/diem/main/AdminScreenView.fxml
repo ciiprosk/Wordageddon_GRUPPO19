@@ -32,7 +32,7 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="800.0">
                <children>
-                  <Button fx:id="importButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
+                  <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
                      <font>
                         <Font size="25.0" />
                      </font>
@@ -53,17 +53,17 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <CheckBox fx:id="checkEasy" mnemonicParsing="false" text="easy" textFill="GOLD">
+                              <CheckBox fx:id="checkEasy" mnemonicParsing="false" onAction="#handleDifficultySelection" text="easy" textFill="GOLD">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </CheckBox>
-                              <CheckBox fx:id="checkNormal" mnemonicParsing="false" text="normal" textFill="GOLD">
+                              <CheckBox fx:id="checkNormal" mnemonicParsing="false" onAction="#handleDifficultySelection" text="normal" textFill="GOLD">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </CheckBox>
-                              <CheckBox fx:id="checkHard" mnemonicParsing="false" text="hard" textFill="GOLD">
+                              <CheckBox fx:id="checkHard" mnemonicParsing="false" onAction="#handleDifficultySelection" text="hard" textFill="GOLD">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -82,12 +82,12 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <CheckBox fx:id="checkEng" mnemonicParsing="false" text="eng" textFill="GOLD">
+                              <CheckBox fx:id="checkEng" mnemonicParsing="false" onAction="#handleLanguageSelection" text="eng" textFill="GOLD">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </CheckBox>
-                              <CheckBox fx:id="checkIt" mnemonicParsing="false" text="it" textFill="GOLD">
+                              <CheckBox fx:id="checkIt" mnemonicParsing="false" onAction="#handleLanguageSelection" text="it" textFill="GOLD">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -111,8 +111,11 @@
                   <Button onAction="#handleRemove" prefWidth="80.0" text="Remove" />
    </children>
             </HBox>
-            <ListView fx:id="stopwordsListView" prefHeight="169.0" prefWidth="1000.0" />
-            <Label fx:id="wordHereALreadyLabel" text="This word is already here"  style="-fx-text-fill: red"/>
+            <ListView fx:id="stopwordsListView" prefHeight="170.0" prefWidth="1000.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></ListView>
+            <Label fx:id="wordHereALreadyLabel" style="-fx-text-fill: red" text="This word is already here" />
             <Label text="Exclude also:">
                <font>
                   <Font size="25.0" />
@@ -175,9 +178,9 @@
             </Button>
          </children>
       </HBox>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="715.0">
+      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="715.0">
          <children>
-            <Button fx:id="confirmButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" text="Confirm">
+            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleConfirm" prefHeight="60.0" prefWidth="200.0" text="Confirm">
                <font>
                   <Font size="25.0" />
                </font>
