@@ -3,10 +3,8 @@ package it.unisa.diem.model.gestione.analisi;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AnalisiRosa {
     private final DocumentoRosa doc;
@@ -15,6 +13,7 @@ public class AnalisiRosa {
     private Difficolta difficoltaAnalisi;
     private String titolo;
     private Stopword stopwordAnalisi;
+    private List<String> testo;
 
     public AnalisiRosa(String path) throws IOException, ClassNotFoundException {
         //path si riferisce al documento da analizzare
@@ -28,6 +27,8 @@ public class AnalisiRosa {
         difficoltaAnalisi=doc.getDifficolta();
         titolo=doc.getTitolo();
         stopwordAnalisi=doc.getStopword();
+        testo=doc.getTesto().stream().collect(Collectors.toList()); //il testo è su "una sola" linea non so se ha senso
+
     }
 
     public DocumentoRosa getDocumento() {
@@ -40,10 +41,10 @@ public class AnalisiRosa {
 
     private List<String> getWordsDocument() throws IOException, ClassNotFoundException {
         //devo recuperare tutte le parole del documento letto
-        //il documento mi deve passare il filename in cui si trova
+        //il documento mi deve passare il filename in cui si trova--> cosrtruttore
         DocumentoRosa dr= DocumentoRosa.leggiDocumento("data/ITA/facile/crypto.bin");
-        List<String> parole=doc.getParole();
-        return parole;
+        //List<String> parole=doc.getTesto().stream().flatMap(line-> Arrays.stream());
+        return null;
     }
 
     public void caricaAnalisi(){

@@ -4,10 +4,8 @@ import it.unisa.diem.utility.CryptoAlphabet;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 public class DocumentoRosa {
 
@@ -16,14 +14,14 @@ public class DocumentoRosa {
     private Difficolta difficolta;
     private Stopword stopword;
     private String path ;
-    private List<String> parole;
+    private List<String> testo;
 
     public DocumentoRosa(String titolo, Lingua lingua, Difficolta difficolta, Stopword stopword) {
         this.titolo = titolo;
         this.lingua = lingua;
         this.difficolta = difficolta;
         this.stopword = stopword;
-        parole=new ArrayList<>();
+        testo=new ArrayList<>();
     }
 
     public String getTitolo() {
@@ -38,22 +36,6 @@ public class DocumentoRosa {
         return stopword;
     }
 
-    public void setStopword(Stopword stopword) {
-        this.stopword = stopword;
-    }
-
-
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
-    }
-
-    public void setLingua(Lingua lingua) {
-        this.lingua = lingua;
-    }
-
-    public void setDifficolta(Difficolta difficolta) {
-        this.difficolta = difficolta;
-    }
 
     public String getPath() {
         return path;
@@ -67,14 +49,14 @@ public class DocumentoRosa {
         return difficolta;
     }
 
-    /*public Analisi analisiDocumento() {
-        if()
-    }*/
+    public AnalisiRosa analisiDocumento() throws IOException, ClassNotFoundException {
+       AnalisiRosa a=new AnalisiRosa(getPath());
+       a.getFrequenzeTestiRosa();
+       return a;
+    }
 
-   public List<String> getParole() throws IOException, ClassNotFoundException {
-       return parole.stream().flatMap(line->{
-           return Arrays.stream(line.split("[ ,]"));
-       }).map(word-> word.toLowerCase()).collect(Collectors.toList());
+   public List<String> getTesto() {
+       return new ArrayList<>(testo);
    }
 
     public void convertiTxtToBin(File inputFile) throws IOException {
@@ -112,7 +94,7 @@ public class DocumentoRosa {
            try {
                while (true) {
                    line = br.readUTF();
-                   dr.parole.add(CryptoAlphabet.decripta(line));
+                   dr.testo.add(CryptoAlphabet.decripta(line));
                }
            }catch(EOFException e){
                return dr;
@@ -131,10 +113,11 @@ public class DocumentoRosa {
         dr.path=filename;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (String s : parole) {
+        for (String s : testo) {
             sb.append(s).append("\n");
         }
         return sb.toString();
