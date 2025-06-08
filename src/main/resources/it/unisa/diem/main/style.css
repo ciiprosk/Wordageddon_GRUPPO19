@@ -24,6 +24,7 @@
 .button:hover {
     -fx-background-color: #636363;
     -fx-border-width: 3px;
+    -fx-cursor: hand;
 }
 
 .selected-button {
@@ -150,4 +151,7 @@
     -fx-background-radius: 5px;
     -fx-background-color: #ffa600;
 }
-
+#goToRegisterLabel:hover, #goToLoginLabel:hover {
+    -fx-text-fill: #ffd700;
+    -fx-cursor: hand;
+}
