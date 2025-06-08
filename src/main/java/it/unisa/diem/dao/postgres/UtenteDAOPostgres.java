@@ -142,7 +142,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
         } catch (SQLException e) {
 
-                 throw new DBException("ERRPRE: Impossibile selezionare gli utenti",e);
+                 throw new DBException("ERRORE: Impossibile selezionare gli utenti",e);
         }
 
         return utenti;
@@ -167,6 +167,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
             throw new DBException("ERRORE: Impossibile inserire l'utente " + utente.getUsername(), e);
 
         }
+
     }
 
     @Override

@@ -9,4 +9,8 @@ public class DBException extends RuntimeException {
         cause.printStackTrace();
 
     }
+
+    public DBException(String message) {
+        super(message);
+    }
 }
