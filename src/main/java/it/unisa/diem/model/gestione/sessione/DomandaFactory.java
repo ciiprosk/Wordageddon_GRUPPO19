@@ -6,11 +6,11 @@ import it.unisa.diem.utility.TipoDomanda;
 
 import java.util.*;
 
-public class DomandaFactoryVincenzo {
+public class DomandaFactory {
     List<Domanda> listaDomande;
     List<Analisi> listaAnalisi; //lista di documenti scelti da controller
 
-    public DomandaFactoryVincenzo(List <Analisi> listaAnalisi) {
+    public DomandaFactory(List <Analisi> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
         listaDomande = new ArrayList<>();
     }
