@@ -23,20 +23,6 @@ public class SignUpViewController {
 
     @FXML
     public void initialize() {
-
-        PropertiesLoader.init();
-        String url=PropertiesLoader.getProperty("database.url");
-        String user=PropertiesLoader.getProperty("database.user");
-        String password=PropertiesLoader.getProperty("database.password");
-
-        try{
-            Connection co= DriverManager.getConnection(url, user, password);
-            System.out.println("Connessione al database riuscita!");
-        } catch (SQLException e) {
-            System.out.println("Connessione al database fallita!"); //probabilmente da sostituire con un alert e
-        }
-
-
         signUpEmailField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
         signUpUsernameField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
         signUpPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
@@ -52,6 +38,7 @@ public class SignUpViewController {
         String password = signUpPasswordField.getText();
 
         usernameInUseLabel.setVisible(false);
+        usernameInUseLabel.setManaged(false);
 
         UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
 
@@ -59,6 +46,7 @@ public class SignUpViewController {
 
         if (optionalUser.isPresent()) {
             usernameInUseLabel.setVisible(true);
+            usernameInUseLabel.setManaged(true);
             return;
         }
 

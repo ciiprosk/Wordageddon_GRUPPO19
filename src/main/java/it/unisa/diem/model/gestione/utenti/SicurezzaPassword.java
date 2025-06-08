@@ -45,11 +45,10 @@ public final class SicurezzaPassword {
 
     }
 
-    /*
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    MANCA UN METODO PER VERIFICARE CHE LA PASSWORD INSERITA SIA CORRETTA
-    CREDO ANDREBBE CREATA UN'ALTRA CLASSE PER FARE QUESTA COSA
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     */
+    public static boolean verificaPassword(String passwordInserita, String passwordHashata, byte[] salt) {
+        String hashed = hashPassword(passwordInserita, salt);
+        return hashed.equals(passwordHashata);
+    }
+
 
 }

@@ -14,7 +14,7 @@ public class Main extends Application {
 
         primaryStage.getIcons().add(icon);
 
-        Parent root = FXMLLoader.load(getClass().getResource("HomeMenuView.fxml")); // o LoginView.fxml
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml")); // o LoginView.fxml
         primaryStage.setTitle("La mia App");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
