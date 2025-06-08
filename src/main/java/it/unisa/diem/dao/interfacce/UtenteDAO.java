@@ -6,6 +6,10 @@ import java.util.Optional;
 
 public interface UtenteDAO extends DAO<Utente> {
 
+    boolean emailAlreadyExists(String email);
+
+    boolean usernameAlreadyExists(String username);
+
     Optional<Utente> selectByUsername(String username);
 
     void update(String oldUsername, Utente utente);
