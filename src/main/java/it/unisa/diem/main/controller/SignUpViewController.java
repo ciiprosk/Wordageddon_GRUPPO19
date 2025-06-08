@@ -1,8 +1,16 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
+import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.PropertiesLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import it.unisa.diem.utility.SceneLoader;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Optional;
 
 public class SignUpViewController {
 
@@ -10,7 +18,7 @@ public class SignUpViewController {
     @FXML private TextField signUpUsernameField;
     @FXML private PasswordField signUpPasswordField;
     @FXML private PasswordField signUpConfirmField;
-    @FXML private Label passwordMismatchLabel, passwordValidationLabel;
+    @FXML private Label passwordMismatchLabel, passwordValidationLabel, mailInUseLabel, usernameInUseLabel;
     @FXML private Button signUpButton;
 
     @FXML
@@ -22,10 +30,34 @@ public class SignUpViewController {
         validateSignUpForm();
     }
 
+    //IMPORTANTE: BISOGNA EFFETTUARE IL CONTROLLO SU PASSWORD
     @FXML
     private void handleSignUp() {
-        System.out.println("Registrazione premuta");
+        String email = signUpEmailField.getText().trim();
+        String username = signUpUsernameField.getText().trim();
+        String password = signUpPasswordField.getText();
+
+        usernameInUseLabel.setVisible(false);
+        usernameInUseLabel.setManaged(false);
+
+        UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
+
+        Optional<Utente> optionalUser = utentePostgres.selectByUsername(username);
+
+        if (optionalUser.isPresent()) {
+            usernameInUseLabel.setVisible(true);
+            usernameInUseLabel.setManaged(true);
+            return;
+        }
+
+
+        utentePostgres.insert(new Utente(username, email, password));
+
+        mostraAlert(Alert.AlertType.INFORMATION, "Successo", null, "Registrazione avvenuta con successo.");
+
+        goToLogin();
     }
+
 
     private void validateSignUpForm() {
         String email = signUpEmailField.getText();
@@ -36,7 +68,7 @@ public class SignUpViewController {
         boolean fieldsFilled = !email.isEmpty() && !username.isEmpty()
                 && !password.isEmpty() && !confirmPassword.isEmpty();
 
-        boolean emailValid = email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$");
+        boolean emailValid = isEmailValida(email);
         boolean passwordsMatch = password.equals(confirmPassword);
 
         // Controlli sulla password
@@ -58,9 +90,50 @@ public class SignUpViewController {
         signUpButton.setDisable(!isValid);
     }
 
+    private boolean isEmailValida(String email) {
+        boolean sintassiValida = email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+        if (!sintassiValida) return false;
+
+        String[] parti = email.split("@");
+        if (parti.length != 2) return false;
+
+        String dominio = parti[1].toLowerCase();
+        String[] dominioValido = {
+                "gmail.com",
+                "outlook.com",
+                "hotmail.com",
+                "yahoo.com",
+                "icloud.com",
+                "aol.com",
+                "zoho.com",
+                "protonmail.com",
+                "gmx.com",
+                "mail.com",
+                "studenti.unisa.it",
+                "unisa.it"
+        };
+
+        for (String d : dominioValido) {
+            if (dominio.equals(d)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     @FXML
     private void goToLogin() {
         SceneLoader.load("LoginView.fxml", signUpButton);
     }
+
+    private static void mostraAlert(Alert.AlertType tipo, String titolo, String header, String contenuto) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titolo);
+        alert.setHeaderText(header);
+        alert.setContentText(contenuto);
+        alert.showAndWait();
+    }
 }
+

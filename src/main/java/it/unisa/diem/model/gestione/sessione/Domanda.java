@@ -7,13 +7,17 @@ import it.unisa.diem.utility.TipoDomanda;
 
 
 public class Domanda {
+
+    private final Sessione sessione;
     private String testoDomanda;
     private TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta
     private String rispostaCorretta;
     private int tempoLimiteSecondi;
 
-    public Domanda(String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+    public Domanda(Sessione sessione, String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+
+        this.sessione = sessione;
         this.testoDomanda = testoDomanda;
         this.tipo = tipo;
         this.opzioni = opzioni;

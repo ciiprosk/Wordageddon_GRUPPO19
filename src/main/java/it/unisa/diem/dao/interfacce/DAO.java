@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface DAO<T> {
 
+
+
     List<T> selectAll();
 
     void insert(T t);

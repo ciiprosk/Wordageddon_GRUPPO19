@@ -21,12 +21,11 @@ public class Sessione {
     private LocalDateTime fine;
     //documenti e domande????
 
-    public Sessione(Utente utente, Difficolta difficolta, LocalDateTime inizio, LocalDateTime fine) {
+    public Sessione(Utente utente, Difficolta difficolta, LocalDateTime inizio) {
 
         this.utente = utente;
         this.difficolta = difficolta;
         this.inizio = inizio;
-        this.fine=null;
         this.punteggio = 0;
         this.completato = false;
 

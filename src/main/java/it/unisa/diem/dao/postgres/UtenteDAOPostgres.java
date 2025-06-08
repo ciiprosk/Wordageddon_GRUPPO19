@@ -22,6 +22,76 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
+    public boolean emailAlreadyExists(String email) {
+
+        String query = "SELECT COUNT(*) FROM utente WHERE email = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd = connection.prepareStatement (query) ){
+
+            cmd.setString(1, email);
+
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+
+                int count = rs.getInt(1);
+
+                if (count > 0) {
+
+                    return true;
+
+                }
+                else return false;
+
+            } else return false;
+
+
+        } catch (SQLException e) {
+
+            throw new DBException("ERRORE: Impossibile recuperare info sull'email " + email, e);
+
+        }
+
+    }
+
+    @Override
+    public boolean usernameAlreadyExists(String username) {
+
+        String query = "SELECT COUNT(*) FROM utente WHERE username = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd = connection.prepareStatement (query) ){
+
+            cmd.setString(1, username);
+
+            ResultSet rs = cmd.executeQuery();
+
+            if (rs.next()) {
+
+                int count = rs.getInt(1);
+
+                if (count > 0) {
+
+                    return true;
+
+                }
+                else return false;
+
+            } else return false;
+
+
+        } catch (SQLException e) {
+
+            throw new DBException("ERRORE: Impossibile recuperare info sull'username " + username, e);
+
+        }
+
+    }
+
+    @Override
     public Optional<Utente> selectByUsername(String username) {
 
         Optional<Utente> result = Optional.empty();
