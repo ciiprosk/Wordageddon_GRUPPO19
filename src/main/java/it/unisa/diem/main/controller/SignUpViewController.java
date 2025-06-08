@@ -30,26 +30,30 @@ public class SignUpViewController {
         validateSignUpForm();
     }
 
-    //IMPORTANTE: BISOGNA EFFETTUARE IL CONTROLLO SU PASSWORD
     @FXML
     private void handleSignUp() {
         String email = signUpEmailField.getText().trim();
         String username = signUpUsernameField.getText().trim();
         String password = signUpPasswordField.getText();
-
-        usernameInUseLabel.setVisible(false);
-        usernameInUseLabel.setManaged(false);
+        boolean errore = false;
 
         UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
 
-        Optional<Utente> optionalUser = utentePostgres.selectByUsername(username);
-
-        if (optionalUser.isPresent()) {
-            usernameInUseLabel.setVisible(true);
-            usernameInUseLabel.setManaged(true);
-            return;
+        if (utentePostgres.emailAlreadyExists(email)) {
+            mailInUseLabel.setVisible(true);
+            mailInUseLabel.setManaged(true);
+            errore = true;
         }
 
+        if (utentePostgres.usernameAlreadyExists(username)) {
+            usernameInUseLabel.setVisible(true);
+            usernameInUseLabel.setManaged(true);
+            errore = true;
+        }
+
+        if (errore) {
+            return;
+        }
 
         utentePostgres.insert(new Utente(username, email, password));
 
@@ -64,6 +68,10 @@ public class SignUpViewController {
         String username = signUpUsernameField.getText();
         String password = signUpPasswordField.getText();
         String confirmPassword = signUpConfirmField.getText();
+        usernameInUseLabel.setVisible(false);
+        usernameInUseLabel.setManaged(false);
+        mailInUseLabel.setVisible(false);
+        mailInUseLabel.setManaged(false);
 
         boolean fieldsFilled = !email.isEmpty() && !username.isEmpty()
                 && !password.isEmpty() && !confirmPassword.isEmpty();
