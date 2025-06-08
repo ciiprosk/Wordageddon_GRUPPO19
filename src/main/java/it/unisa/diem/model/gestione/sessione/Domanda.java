@@ -8,7 +8,7 @@ import it.unisa.diem.utility.TipoDomanda;
 
 public class Domanda {
 
-    private final Sessione sessione;
+    private Sessione sessione;
     private String testoDomanda;
     private TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta

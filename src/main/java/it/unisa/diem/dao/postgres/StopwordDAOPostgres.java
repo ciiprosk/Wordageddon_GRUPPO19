@@ -8,8 +8,23 @@ import java.util.List;
 import java.util.Optional;
 
 public class StopwordDAOPostgres implements StopwordDAO {
+    private final String url;
+    private final String user;
+    private final String pass;
 
-
+    /**
+     * Costruttore della classe che recupera la stringa di connessione del db, user, pass.
+     * @param url Parametro fondamentale per la connessione al database, è una stringa contenente il database .
+     * @param user
+     * @param pass
+     */
+    public StopwordDAOPostgres(String url, String user, String pass) {
+        this.url=url;
+        this.user=user;
+        this.pass=pass;
+    }
+    //stopword ha id di documento--> come lo posso ricavare?al nome del documento immagio
+    //faccio una query che mi restituisce l'id della query
     public Optional<StopwordManager> selectById(long id) {
         return Optional.empty();
     }
