@@ -11,22 +11,9 @@ import java.util.stream.Collectors;
 public class DocumentoAnalisiTest {
     public static void main(String[] args) {
 
-/*
-        try{
-            DocumentoRosa dr=new DocumentoRosa("crypto", Lingua.ITA, Difficolta.FACILE, null);
-            dr.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try{
-        System.out.println(DocumentoRosa.leggiDocumento("data/ITA/facile/crypto.bin"));
-    }catch(IOException | ClassNotFoundException e)
-        {e.printStackTrace();}
-
- */
 
         try {
-            DocumentoRosa dr=DocumentoRosa.leggiDocumento("data/ITA/facile/crypto.bin");
+            Documento dr=Documento.leggiDocumento("data/ITA/facile/crypto.bin");
             //dr.getParole().forEach(System.out::println);
             System.out.println(dr.getTesto());
 

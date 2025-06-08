@@ -1,23 +1,10 @@
 package it.unisa.diem.test;
 
-import it.unisa.diem.dao.interfacce.AnalisiDAO;
-import it.unisa.diem.dao.interfacce.DAO;
-import it.unisa.diem.dao.interfacce.UtenteDAO;
-import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
-import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
-import it.unisa.diem.model.gestione.analisi.Analisi;
-import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.PropertiesLoader;
 
-import javax.xml.crypto.Data;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /*Java cerca i file nelle seguenti posizioni:
 

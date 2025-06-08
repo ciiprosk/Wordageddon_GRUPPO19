@@ -1,7 +1,8 @@
 package it.unisa.diem.test;
 
+import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
-import it.unisa.diem.model.gestione.analisi.DocumentoRosa;
+import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
@@ -16,9 +17,11 @@ public class Test {
             StopwordManager s=new StopwordITA();
             s.caricaStopword(false, false, false, false, false, false);
 
-            DocumentoRosa dr = new DocumentoRosa("testo_prova", Lingua.ITA, Difficolta.FACILE, s);
+            Documento dr = new Documento("testo_prova", Lingua.ITA, Difficolta.FACILE, s);
             dr.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
-        System.out.println(dr.analisiDocumento());
+
+
+
 
 
            // System.out.println(a.getFrequenzeTestiRosa());

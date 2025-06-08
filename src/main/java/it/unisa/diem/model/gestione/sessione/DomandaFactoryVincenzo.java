@@ -1,7 +1,6 @@
 package it.unisa.diem.model.gestione.sessione;
 
 import it.unisa.diem.model.gestione.analisi.Analisi;
-import it.unisa.diem.model.gestione.analisi.AnalisiRosa;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.utility.TipoDomanda;
 
@@ -9,9 +8,9 @@ import java.util.*;
 
 public class DomandaFactoryVincenzo {
     List<Domanda> listaDomande;
-    List<AnalisiRosa> listaAnalisi; //lista di documenti scelti da controller
+    List<Analisi> listaAnalisi; //lista di documenti scelti da controller
 
-    public DomandaFactoryVincenzo(List <AnalisiRosa> listaAnalisi) {
+    public DomandaFactoryVincenzo(List <Analisi> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
         listaDomande = new ArrayList<>();
     }
@@ -36,7 +35,7 @@ public class DomandaFactoryVincenzo {
         Random random = new Random();
 
         // Selezione casuale di un'analisi
-        AnalisiRosa analisiScelta = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
+        Analisi analisiScelta = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
 
         Map<String, Integer> frequenze = analisiScelta.getFrequenzeTesti();
 
@@ -85,7 +84,7 @@ public class DomandaFactoryVincenzo {
         Map<String, Integer> frequenzeGlobali = new HashMap<>();
 
         // sommo le frequenze di tutte le analisi
-        for (AnalisiRosa analisi : listaAnalisi) {
+        for (Analisi analisi : listaAnalisi) {
             Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
             for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
                 String parola = entry.getKey();
@@ -127,7 +126,7 @@ public class DomandaFactoryVincenzo {
 
     private Domanda generaDomandaAssociazione() {
         Random random = new Random();
-        AnalisiRosa analisi = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
+        Analisi analisi = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
         Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
 
         if (frequenze.size() < 4) {
@@ -175,7 +174,7 @@ public class DomandaFactoryVincenzo {
     private Domanda generaDomandaAssenza() {
         Random random = new Random();
         Set<String> parolePresenti = new HashSet<>();
-        for (AnalisiRosa analisi : listaAnalisi) {
+        for (Analisi analisi : listaAnalisi) {
             parolePresenti.addAll(analisi.getFrequenzeTesti().keySet());
         }
 

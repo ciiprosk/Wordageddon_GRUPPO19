@@ -1,6 +1,5 @@
 package it.unisa.diem.dao.postgres;
 
-import it.unisa.diem.dao.interfacce.AnalisiDAO;
 import it.unisa.diem.dao.interfacce.DAO;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 

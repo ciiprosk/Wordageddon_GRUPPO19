@@ -1,7 +1,6 @@
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.DAO;
-import it.unisa.diem.dao.interfacce.DocumentoDAO;
 import it.unisa.diem.model.gestione.analisi.Documento;
 
 import java.util.Collections;

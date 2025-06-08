@@ -1,61 +1,131 @@
 package it.unisa.diem.model.gestione.analisi;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.Stream;
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
+import it.unisa.diem.utility.CryptoAlphabet;
 
-//ciao
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Documento {
-    private String nome;
-    private String contenuto;
 
-    public Documento(String nome, String contenuto) {
-        this.nome = nome;
-        this.contenuto = contenuto;
+    private String titolo;
+    private Lingua lingua;
+    private Difficolta difficolta;
+    private StopwordManager stopword;
+    private String path ;
+    private List<String> testo;
+
+    public Documento(String titolo, Lingua lingua, Difficolta difficolta, StopwordManager stopword) {
+        this.titolo = titolo;
+        this.lingua = lingua;
+        this.difficolta = difficolta;
+        this.stopword = stopword;
+        testo=new ArrayList<>();
+        path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
+    }
+    public Documento(String titolo, Lingua lingua, Difficolta difficolta) {
+        this.titolo = titolo;
+        this.lingua = lingua;
+        this.difficolta = difficolta;
+        testo=new ArrayList<>();
+        //path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
     }
 
-    public String getNome() {
-
-        return nome;
+    public String getTitolo() {
+        return titolo;
     }
 
-    public String getContenuto() {
-
-        return contenuto;
+    public Lingua getLingua() {
+        return lingua;
     }
 
-    public static List<Documento> caricaDocumenti(Difficolta livelloDifficolta, Lingua lingua, int quanti) throws IOException {
-        String cartella;
+    public StopwordManager getStopword() {
+        return stopword;
+    }
 
-        String difficolta = livelloDifficolta.toString().toLowerCase();
 
-        String l = lingua.toString().toUpperCase();
+    public String getPath() {
+        return path;
+    }
 
-        cartella = "data/" + l + "/" + difficolta;
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-        List<Documento> tutti = new ArrayList<>();
-        Path dir = Paths.get(cartella);
+    public Difficolta getDifficolta() {
+        return difficolta;
+    }
+    /*
+    public Analisi analisiDocumento() throws IOException, ClassNotFoundException {
+       Analisi a=new Analisi(this);
+       a.getFrequenzeTestiRosa();
+       return a;
+    }*/
 
-        DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.txt");
-        for (Path file : stream) {
-            byte[] bytes = Files.readAllBytes(file);
-            String contenuto = new String(bytes, StandardCharsets.UTF_8);
-            tutti.add(new Documento(file.getFileName().toString(), contenuto));
+   public List<String> getTesto() {
+       return new ArrayList<>(testo); // non ritornare mai il dato effettivo
+   }
+
+    public void convertiTxtToBin(File inputFile) throws IOException {
+        File outputFile= new File(path);
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             DataOutputStream dos = new DataOutputStream(new   BufferedOutputStream(new FileOutputStream(outputFile)))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                testo.add(line);
+                dos.writeUTF(CryptoAlphabet.cripta(line));
+            }
+        }
+    }
+
+    public static Documento leggiDocumento(String filename) throws IOException, ClassNotFoundException {
+        Documento dr = null;
+        List<String> parole=new ArrayList<>();
+        /*
+        COSA FARE SECONDO ROSA
+        1. in input ho il nome del file da leggere, quindi ho il file e lo devo legggere dalla directory esatta
+        2. quando lo leggo per mostrarlo devo decriptarlo
+
+         */
+        //lingua e difficolta dipendono dalla cartella in cui si trovano
+        dr=new Documento(null, null, null); //non mi servono le stopword perché è una lettura
+        getAttributes(filename, dr);
+        try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){//devo aggiungere utf
+           String line;
+           try {
+               while (true) {
+                   line = br.readUTF();
+                   parole.add(CryptoAlphabet.decripta(line));
+               }
+           }catch(EOFException e){
+               dr.testo=parole;
+               return dr;
+           }
+
+
         }
 
-        if (tutti.size() < quanti) {
-            throw new IllegalStateException("Non ci sono abbastanza documenti per il livello di difficoltà: " + livelloDifficolta);
-        }
+    }
 
-        // Mischia e seleziona i primi N
-        Collections.shuffle(tutti);
-        return tutti.subList(0, quanti);
+    private static void getAttributes(String filename, Documento dr){ // ricavo gli attributi dalla cartella in cui si trova
+        String[] split= filename.split("[/.]");
+        dr.titolo=split[split.length-2];
+        dr.difficolta=Difficolta.valueOf(split[split.length-3].toUpperCase());
+        dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
+        dr.path=filename;
+
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (String s : testo) {
+            sb.append(s).append("\n");
+        }
+        return sb.toString();
+    }
 }
-
