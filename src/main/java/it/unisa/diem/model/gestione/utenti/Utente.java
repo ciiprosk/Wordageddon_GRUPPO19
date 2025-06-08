@@ -3,7 +3,7 @@ package it.unisa.diem.model.gestione.utenti;
 import static it.unisa.diem.model.gestione.utenti.SicurezzaPassword.*;
 
 public class Utente {
-//is admin va nel costruttore.--> final , lo prendi dal db
+
     private String username;
     private String email;
     private String hashedPassword;
@@ -40,6 +40,19 @@ public class Utente {
         this.username = username;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public void setRuolo(Ruolo ruolo) {
+        this.ruolo = ruolo;
+    }
+
+
     public String getEmail() {
         return email;
     }
@@ -55,6 +68,8 @@ public class Utente {
     public byte[] getSalt() {
         return salt;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

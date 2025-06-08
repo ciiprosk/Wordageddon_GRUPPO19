@@ -11,13 +11,15 @@ public class Domanda {
     private TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta
     private String rispostaCorretta;
-    private int tempoLimiteSecondi = 15;
+    private int tempoLimiteSecondi;
 
     public Domanda(String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
         this.testoDomanda = testoDomanda;
         this.tipo = tipo;
         this.opzioni = opzioni;
         this.rispostaCorretta = rispostaCorretta;
+        this.tempoLimiteSecondi = 15;
+
     }
 
     // Getter
