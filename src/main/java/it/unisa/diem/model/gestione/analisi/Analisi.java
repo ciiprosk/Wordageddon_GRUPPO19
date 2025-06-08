@@ -1,5 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.utility.CryptoAlphabet;
 
@@ -7,69 +9,116 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * La classe Analisi rappresenta l'analisi di un documento, inclusa lingua, difficoltà, titolo, escludendo le stopword.
+ * L'analisi prevede il conteggio delle parole e la frequenza con cui esse compaiono nel documento.
+ * Fornisce inoltre metodi che permettono il salvataggio su file e lettura dell'analisi.
+ */
 public class Analisi {
-    private Documento documento;
+    private final Documento documento;
     private Map<String, Integer> frequenzeTesto;
-    private Lingua linguaAnalisi;
-    private Difficolta difficoltaAnalisi;
-    private String titolo;
-    private StopwordManager stopwordAnalisi;
-    private List<String> testo;
+    private final Lingua linguaAnalisi;
+    private final Difficolta difficoltaAnalisi;
+    private final String titolo;
+    private final StopwordManager stopwordAnalisi;
+    private final String pathAnalisi;
+
+    /**
+     * Costruisce un oggetto Analisi basato sul documento fornito.
+     * Inizializza i campi come attributi linguistici, livello di difficoltà,
+     * stopword e altri dati correlati estraendoli dal documento fornito.
+     *
+     * @param documento l'istanza di Documento su cui verrà effettuata l'analisi.
+     *                 Fornisce gli attributi necessari come lingua, difficoltà,
+     *                 stopword e contenuto testuale rilevante per l'analisi.
+     */
 
     public Analisi(Documento documento){
         //dal documento posso ricavare la difficoltà, lingua, stopword...
         frequenzeTesto=new HashMap<>();
         this.documento= documento;
-        recuperaDatiFromDocumento();
-    }
-
-    public Analisi() throws IOException, ClassNotFoundException {
-        frequenzeTesto=new HashMap<>();
-    }
-
-
-    private void recuperaDatiFromDocumento(){
         linguaAnalisi=documento.getLingua();
         difficoltaAnalisi=documento.getDifficolta();
         titolo=documento.getTitolo();
-        stopwordAnalisi=documento.getStopword(); //vale solo se le stopword ci sono --> quando utente inseriesce un nuovo doc---> non alla lwttura
-        testo=documento.getTesto();
+        pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
+        stopwordAnalisi=documento.getStopword(); //vale solo se le stopword ci sono --> quando utente inseriesce un nuovo doc---> non alla lwttura        
     }
+    
 
+
+    /**
+     * Restituisce il documento associato a questa analisi.
+     *
+     * @return il documento oggetto dell'analisi
+     */
     public Documento getDocumento() {
         return documento;
     }
 
+    /**
+     * Restituisce la mappa delle frequenze delle parole nel testo.
+     *
+     * @return mappa contenente le parole come chiavi e il numero di occorrenze come valori
+     */
     public Map<String, Integer> getFrequenzeTesto() {
-
         return frequenzeTesto;
     }
 
+    /**
+     * Elabora il documento per estrarre tutte le parole presenti nel testo.
+     * Il metodo esegue le seguenti operazioni:
+     * - Rimuove la punteggiatura in base alla lingua del documento
+     * - Converte tutte le parole in minuscolo
+     * - Rimuove le stopword se configurate
+     * - Mantiene i duplicati delle parole
+     *
+     * @return lista di tutte le parole presenti nel testo
+     */
+
+    //il metodo prevede la divisione del testo in parole(con duplicati se presenti) -> ritorna la lista di tutte le parole presenti nel testo
     private List<String> getWordsDocument() {
+        List<String> testo=documento.getTesto();
+        List<String> punteggiatura= switch(documento.getLingua().toString()){
+            case "ITA" -> Arrays.stream(new StopwordITA().getPunteggiatura()).collect(Collectors.toList());
+            case "ENG" -> Arrays.stream(new StopwordENG().getPunteggiatura()).collect(Collectors.toList());
+            default -> throw new IllegalStateException("Unexpected value: " + documento.getLingua().toString());
+        };
+        //tolgo la punteggiatura a prescindere dalle stopword
         List<String> parole = testo.stream()
-            .flatMap(line -> Arrays.stream(line.split(" ")))
+            .flatMap(line -> Arrays.stream(line.split(" "))).map(word-> {
+                for(String punt: punteggiatura)
+                    word=word.replace(punt, "");
+                return word;
+                })
             .filter(word -> !word.trim().isEmpty())
             .map(String::toLowerCase)
             .collect(Collectors.toList());
     
-    // Applica il filtro stopword solo se stopwordAnalisi non è null
+    // nel caso in cui stopwrod analisi non sia null
     if (stopwordAnalisi != null) {
         parole = parole.stream()
-                .map(word -> {
-                    for(String punt: stopwordAnalisi.getPunteggiatura())
-                        word=word.replace(punt, "");
-                    return word.trim();
-                }).filter(word -> !word.isEmpty())
-                .filter(word -> !stopwordAnalisi.getParole().contains(word))
+                .filter(word -> !word.isEmpty())
+                .filter(word -> !stopwordAnalisi.getParole().contains(word)) //esclude le stopword
                 .collect(Collectors.toList());
     }
     
     return parole;
 }
 
+    /**
+     * Calcola la frequenza di ogni parola nel documento.
+     * Utilizza il metodo getWordsDocument() per ottenere la lista delle parole
+     * e costruisce una mappa dove ogni chiave è una parola e il valore è il numero
+     * di volte che essa appare nel testo.
+     *
+     * @return mappa delle frequenze delle parole
+     * @throws IOException se si verifica un errore durante l'elaborazione
+     * @throws ClassNotFoundException se si verifica un errore durante il caricamento delle classi
+     */
 
-    public Map<String, Integer> getFrequenzeTestiRosa() throws IOException, ClassNotFoundException {
-        List<String> parole=getWordsDocument();
+    public Map<String, Integer> frequenzeDocumento() throws IOException, ClassNotFoundException {
+        List<String> parole=getWordsDocument(); // mi prendo le parole del documento
+
         frequenzeTesto = new HashMap<>();
 
         for(String parola : parole){
@@ -79,62 +128,71 @@ public class Analisi {
                 frequenzeTesto.put(parola, 1);
             }
         }
+        //caricaAnalisi();
         return frequenzeTesto;
     }
 
-    public Map<String, Integer> getFrequenza(){
-        return frequenzeTesto;
-    }
-    public void caricaAnalisi() throws IOException, ClassNotFoundException {
-        //devo scrivere su file frequenze testi così com'è
-        File file=new File("analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo+".bin");
+    /**
+     * Salva l'analisi delle frequenze su file.
+     * Le parole e le loro frequenze vengono crittografate prima del salvataggio.
+     *
+     * @throws ClassNotFoundException se si verifica un errore durante la crittografia
+     * @throws IOException se si verifica un errore durante la scrittura su file
+     */
+
+    public void caricaAnalisi() throws ClassNotFoundException,IOException  {
+        //devo scrivere su file frequenze testi così com'è-> ma devo crittografare le parole
+        File file=new File(pathAnalisi);
         try(DataOutputStream dos=new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))){
-            //devo convertire la mappa in una lista formata da key e value, prima una striga e poi un numero
-            frequenzeTesto.entrySet().stream().forEach(linea->{
-                try {
-                    dos.writeUTF(CryptoAlphabet.cripta(linea.getKey()));
-                    dos.writeInt(linea.getValue());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
-        }catch(IOException e){
-            e.printStackTrace();
+        for(Map.Entry<String, Integer> parola : frequenzeTesto.entrySet()) {
+            dos.writeUTF(CryptoAlphabet.cripta(parola.getKey()));
+            String frequenza = Integer.toString(parola.getValue());
+            dos.writeUTF(CryptoAlphabet.cripta(frequenza));
+        }
         }
 
     }
+    /**
+     * Carica un'analisi precedentemente salvata per un documento specifico.
+     * Decrittografa le parole e le frequenze dal file salvato.
+     *
+     * @param doc il documento di cui caricare l'analisi
+     * @return una nuova istanza di Analisi con i dati caricati
+     * @throws IOException se si verifica un errore durante la lettura del file
+     */
 
-    public Analisi leggiAnalisi(Documento doc){
+    public static Analisi leggiAnalisi(Documento doc) throws IOException {
         Analisi a = null;
-        try(DataInputStream dis=new DataInputStream(new BufferedInputStream(new FileInputStream(doc.getPath())))){
-            a=new Analisi();
-            getAttributes(doc.getPath(), a);
-            while(true){
-                try{
-                    String parola=CryptoAlphabet.decripta(dis.readUTF());
-                    int frequenza=dis.readInt();
-                    a.frequenzeTesto.put(parola, frequenza);
-                }catch(EOFException e){
-                    return a;
-                }
+        String path= recuperaAnalisiPath(doc);
+        Map<String, Integer> frequenze=new HashMap<>();
+        try(DataInputStream dis= new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
+            a = new Analisi(doc);
+            while (dis.available() > 0) {
+                String parola = CryptoAlphabet.decripta(dis.readUTF());
+                int frequenza = Integer.parseInt(CryptoAlphabet.decripta(dis.readUTF()));
+                frequenze.put(parola, frequenza);
             }
-
-        }catch(IOException | ClassNotFoundException e){
-            e.printStackTrace();
         }
+        a.frequenzeTesto=new HashMap<>(frequenze);
         return a;
     }
-    private static void getAttributes(String filename, Analisi a){
-        String[] split= filename.split("[/.]");
-        a.titolo=split[split.length-2];
-        a.difficoltaAnalisi=Difficolta.valueOf(split[split.length-3].toUpperCase());
-        a.linguaAnalisi=Lingua.valueOf(split[split.length-4].toUpperCase());
+
+    /**
+     * Genera il percorso del file dove viene salvata l'analisi.
+     *
+     * @param doc il documento per cui generare il percorso
+     * @return il percorso completo del file di analisi
+     */
+
+    private static String recuperaAnalisiPath(Documento doc){
+       String path="analysis/"+ doc.getLingua().toString()+"/"+doc.getDifficolta().toString()+"/"+doc.getTitolo()+"_analysis.bin";
+
+       return path;
     }
 
     @Override
     public String toString(){
-        return frequenzeTesto.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).collect(Collectors.joining("\n"));
+        return frequenzeTesto.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).toString();
     }
 
 }

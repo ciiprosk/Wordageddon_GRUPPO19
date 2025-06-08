@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * La classe Documento rappresenta un documento inserito dall'utente autorizzato (Admin).
+ * La classe dispone di attributi quali: titolo, lingua, difficoltà, possibili stopword, e il testo del documento.
+ * 
+ */
 public class Documento {
 
     private String titolo;
@@ -17,6 +22,14 @@ public class Documento {
     private String path ;
     private List<String> testo;
 
+    /**
+     * Costruttore della classe Docuemento.
+     * @param titolo rappresenta il titolo del documento.
+     * @param lingua rappresenta in che lingua si presenta il documento.
+     * @param difficolta rappresenta la difficoltà del documento fornito.
+     * @param stopword rappresenta le parole che non dovranno essere presenti nell'analisi.
+     * Crea inoltre una nuova lista per contenere il testo del documento.
+     */
     public Documento(String titolo, Lingua lingua, Difficolta difficolta, StopwordManager stopword) {
         this.titolo = titolo;
         this.lingua = lingua;
@@ -25,53 +38,78 @@ public class Documento {
         testo=new ArrayList<>();
         path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
     }
-    public Documento(String titolo, Lingua lingua, Difficolta difficolta) {
-        this.titolo = titolo;
-        this.lingua = lingua;
-        this.difficolta = difficolta;
-        testo=new ArrayList<>();
-        //path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
-    }
+
+    /**
+     * Costruttore predefinito che inizializza un nuovo documento vuoto.
+     * Crea una nuova lista vuota per contenere il testo del documento.
+     */
     public Documento() {
         testo=new ArrayList<>();
     }
 
-
+    /**
+     * Restituisce il titolo del documento.
+     * @return il titolo del documento
+     */
     public String getTitolo() {
         return titolo;
     }
 
+    /**
+     * Restituisce la lingua del documento.
+     * @return la lingua del documento
+     */
     public Lingua getLingua() {
         return lingua;
     }
 
+    /**
+     * Restituisce il gestore delle stopword associate al documento.
+     * @return il gestore delle stopword
+     */
     public StopwordManager getStopword() {
         return stopword;
     }
 
-
+    /**
+     * Restituisce il percorso del file del documento.
+     * @return il percorso del file
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Imposta il percorso del file del documento.
+     * @param path il nuovo percorso da impostare
+     */
     public void setPath(String path) {
         this.path = path;
     }
 
+    /**
+     * Restituisce il livello di difficoltà del documento.
+     * @return il livello di difficoltà
+     */
     public Difficolta getDifficolta() {
         return difficolta;
     }
-    /*
-    public Analisi analisiDocumento() throws IOException, ClassNotFoundException {
-       Analisi a=new Analisi(this);
-       a.getFrequenzeTestiRosa();
-       return a;
-    }*/
 
+    /**
+     * Restituisce una copia del testo del documento.
+     * @return una nuova lista contenente il testo del documento
+     */
    public List<String> getTesto() {
        return new ArrayList<>(testo); // non ritornare mai il dato effettivo
    }
 
+    /**
+     * Converte un file di testo in formato binario, crittografando il contenuto.
+     * Legge il file di input riga per riga, aggiunge il testo al documento e lo salva in formato binario crittografato.
+     *
+     * @param inputFile il file di testo da convertire
+     * @throws IOException se si verificano errori durante la lettura o scrittura dei file
+     */
     public void convertiTxtToBin(File inputFile) throws IOException {
         File outputFile= new File(path);
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -85,6 +123,15 @@ public class Documento {
         }
     }
 
+    /**
+     * Legge un documento da un file binario crittografato.
+     * Estrae gli attributi dal percorso del file e decrittografa il contenuto.
+     *
+     * @param filename il percorso del file da leggere
+     * @return il documento letto dal file
+     * @throws IOException se si verificano errori durante la lettura del file
+     * @throws ClassNotFoundException se si verificano errori durante la decrittografia
+     */
     public static Documento leggiDocumento(String filename) throws IOException, ClassNotFoundException {
         Documento dr = null;
         List<String> parole=new ArrayList<>();
@@ -96,7 +143,7 @@ public class Documento {
         //lingua e difficolta dipendono dalla cartella in cui si trovano--> dove finiscono le stopword?? sul db per ora
         dr=new Documento();
         getAttributes(filename, dr);
-        try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){//devo aggiungere utf
+        try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){
            String line;
            try {
                while (true) {
@@ -113,6 +160,13 @@ public class Documento {
 
     }
 
+    /**
+     * Estrae gli attributi del documento dal percorso del file.
+     * Analizza il percorso per determinare titolo, difficoltà e lingua del documento.
+     *
+     * @param filename il percorso del file
+     * @param dr il documento da popolare con gli attributi estratti
+     */
     private static void getAttributes(String filename, Documento dr){ // ricavo gli attributi dalla cartella in cui si trova
         String[] split= filename.split("[/.]");
         dr.titolo=split[split.length-2];
@@ -121,7 +175,12 @@ public class Documento {
         dr.path=filename;
     }
 
-
+    /**
+     * Restituisce una rappresentazione testuale del documento.
+     * Concatena tutte le righe del testo con dei caratteri di nuova riga.
+     *
+     * @return il contenuto del documento come stringa
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
