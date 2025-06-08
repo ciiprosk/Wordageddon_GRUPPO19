@@ -2,7 +2,7 @@ package it.unisa.diem.main.controller;
 
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
-import it.unisa.diem.model.gestione.analisi.DocumentoRosa;
+import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
@@ -270,7 +270,7 @@ public class AdminScreenViewController {
 
         stopword.caricaStopword(checkArticles.isSelected(), checkPrepositions.isSelected(), checkPronouns.isSelected(), checkToHave.isSelected(), checkToBe.isSelected(), checkCon.isSelected());
         System.out.println(stopword.getParole());
-        DocumentoRosa documento = new DocumentoRosa(titolo, lingua, difficolta, stopword);
+        Documento documento = new Documento(titolo, lingua, difficolta, stopword);
 
         try {
             documento.convertiTxtToBin(fileImportato);

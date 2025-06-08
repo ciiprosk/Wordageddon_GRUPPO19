@@ -1,6 +1,8 @@
 package it.unisa.diem.test;
 
 import it.unisa.diem.model.gestione.analisi.*;
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
+import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,19 +12,31 @@ import java.util.stream.Collectors;
 
 public class DocumentoAnalisiTest {
     public static void main(String[] args) {
-
-
+        /*
+        //1 carico il doc ma prima le stopword
+        StopwordManager s=new StopwordITA();
+        s.caricaStopword(true, false, false, false, false, false);
+        Documento d= new Documento("ciao", Lingua.ITA, Difficolta.FACILE, s);
+        //converto il documento dato in input da file choooser quindi è un file
         try {
-            Documento dr=Documento.leggiDocumento("data/ITA/facile/crypto.bin");
-            //dr.getParole().forEach(System.out::println);
-            System.out.println(dr.getTesto());
-
-
+            d.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //vediamo se ha inzializzato testo--> lo ha fatto
+        System.out.println(d.getTesto());
+        //primo test completato
+        */
+        //2 vediamo la letura se va bene---> perfetto funziona
+        try {
+            Documento doc = Documento.leggiDocumento("data/ITA/facile/ciao.bin");
+            System.out.println(doc.getTesto());
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
     }
 
 

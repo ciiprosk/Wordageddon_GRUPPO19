@@ -9,40 +9,40 @@ import java.util.stream.Collectors;
 
 public class Analisi {
     private Documento documento;
-    private Map<String, Integer> frequenzeTesti;
+    private Map<String, Integer> frequenzeTesto;
     private Lingua linguaAnalisi;
     private Difficolta difficoltaAnalisi;
     private String titolo;
     private StopwordManager stopwordAnalisi;
     private List<String> testo;
 
-    public Analisi(Documento documento) throws IOException, ClassNotFoundException {
+    public Analisi(Documento documento){
         //dal documento posso ricavare la difficoltà, lingua, stopword...
-        frequenzeTesti=new HashMap<>();
+        frequenzeTesto=new HashMap<>();
         this.documento= documento;
-        recuperaDatiFromDocumentoRosa();
+        recuperaDatiFromDocumento();
     }
+
     public Analisi() throws IOException, ClassNotFoundException {
-        frequenzeTesti=new HashMap<>();
+        frequenzeTesto=new HashMap<>();
     }
 
 
-    private void recuperaDatiFromDocumentoRosa() throws IOException, ClassNotFoundException {
+    private void recuperaDatiFromDocumento(){
         linguaAnalisi=documento.getLingua();
         difficoltaAnalisi=documento.getDifficolta();
         titolo=documento.getTitolo();
-        stopwordAnalisi=documento.getStopword();
-        Documento doc= Documento.leggiDocumento(documento.getPath());
-        testo=doc.getTesto();
+        stopwordAnalisi=documento.getStopword(); //vale solo se le stopword ci sono --> quando utente inseriesce un nuovo doc---> non alla lwttura
+        testo=documento.getTesto();
     }
 
     public Documento getDocumento() {
         return documento;
     }
 
-    public Map<String, Integer> getFrequenzeTesti() {
+    public Map<String, Integer> getFrequenzeTesto() {
 
-        return frequenzeTesti;
+        return frequenzeTesto;
     }
 
     private List<String> getWordsDocument() {
@@ -70,27 +70,27 @@ public class Analisi {
 
     public Map<String, Integer> getFrequenzeTestiRosa() throws IOException, ClassNotFoundException {
         List<String> parole=getWordsDocument();
-        frequenzeTesti = new HashMap<>();
+        frequenzeTesto = new HashMap<>();
 
         for(String parola : parole){
-            if(frequenzeTesti.containsKey(parola)){
-                frequenzeTesti.put(parola, frequenzeTesti.get(parola)+1);
+            if(frequenzeTesto.containsKey(parola)){
+                frequenzeTesto.put(parola, frequenzeTesto.get(parola)+1);
             }else{
-                frequenzeTesti.put(parola, 1);
+                frequenzeTesto.put(parola, 1);
             }
         }
-        return frequenzeTesti;
+        return frequenzeTesto;
     }
 
     public Map<String, Integer> getFrequenza(){
-        return frequenzeTesti;
+        return frequenzeTesto;
     }
     public void caricaAnalisi() throws IOException, ClassNotFoundException {
         //devo scrivere su file frequenze testi così com'è
         File file=new File("analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo+".bin");
         try(DataOutputStream dos=new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))){
             //devo convertire la mappa in una lista formata da key e value, prima una striga e poi un numero
-            frequenzeTesti.entrySet().stream().forEach(linea->{
+            frequenzeTesto.entrySet().stream().forEach(linea->{
                 try {
                     dos.writeUTF(CryptoAlphabet.cripta(linea.getKey()));
                     dos.writeInt(linea.getValue());
@@ -114,7 +114,7 @@ public class Analisi {
                 try{
                     String parola=CryptoAlphabet.decripta(dis.readUTF());
                     int frequenza=dis.readInt();
-                    a.frequenzeTesti.put(parola, frequenza);
+                    a.frequenzeTesto.put(parola, frequenza);
                 }catch(EOFException e){
                     return a;
                 }
@@ -134,7 +134,7 @@ public class Analisi {
 
     @Override
     public String toString(){
-        return frequenzeTesti.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).collect(Collectors.joining("\n"));
+        return frequenzeTesto.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).collect(Collectors.joining("\n"));
     }
 
 }

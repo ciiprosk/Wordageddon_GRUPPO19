@@ -37,7 +37,7 @@ public class DomandaFactoryVincenzo {
         // Selezione casuale di un'analisi
         Analisi analisiScelta = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
 
-        Map<String, Integer> frequenze = analisiScelta.getFrequenzeTesti();
+        Map<String, Integer> frequenze = analisiScelta.getFrequenzeTesto();
 
         // Scelgo una parola a caso
         List<String> parole = new ArrayList<>(frequenze.keySet());
@@ -85,7 +85,7 @@ public class DomandaFactoryVincenzo {
 
         // sommo le frequenze di tutte le analisi
         for (Analisi analisi : listaAnalisi) {
-            Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
+            Map<String, Integer> frequenze = analisi.getFrequenzeTesto();
             for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
                 String parola = entry.getKey();
                 int count = entry.getValue();
@@ -127,7 +127,7 @@ public class DomandaFactoryVincenzo {
     private Domanda generaDomandaAssociazione() {
         Random random = new Random();
         Analisi analisi = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
-        Map<String, Integer> frequenze = analisi.getFrequenzeTesti();
+        Map<String, Integer> frequenze = analisi.getFrequenzeTesto();
 
         if (frequenze.size() < 4) {
             throw new IllegalStateException("Il documento non contiene abbastanza parole per creare la domanda.");
@@ -175,7 +175,7 @@ public class DomandaFactoryVincenzo {
         Random random = new Random();
         Set<String> parolePresenti = new HashSet<>();
         for (Analisi analisi : listaAnalisi) {
-            parolePresenti.addAll(analisi.getFrequenzeTesti().keySet());
+            parolePresenti.addAll(analisi.getFrequenzeTesto().keySet());
         }
 
         // Lista fittizia di parole "dizionario" da cui attingere

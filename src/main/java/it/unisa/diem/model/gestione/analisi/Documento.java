@@ -32,6 +32,10 @@ public class Documento {
         testo=new ArrayList<>();
         //path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
     }
+    public Documento() {
+        testo=new ArrayList<>();
+    }
+
 
     public String getTitolo() {
         return titolo;
@@ -88,10 +92,9 @@ public class Documento {
         COSA FARE SECONDO ROSA
         1. in input ho il nome del file da leggere, quindi ho il file e lo devo legggere dalla directory esatta
         2. quando lo leggo per mostrarlo devo decriptarlo
-
          */
-        //lingua e difficolta dipendono dalla cartella in cui si trovano
-        dr=new Documento(null, null, null); //non mi servono le stopword perché è una lettura
+        //lingua e difficolta dipendono dalla cartella in cui si trovano--> dove finiscono le stopword?? sul db per ora
+        dr=new Documento();
         getAttributes(filename, dr);
         try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){//devo aggiungere utf
            String line;
@@ -116,7 +119,6 @@ public class Documento {
         dr.difficolta=Difficolta.valueOf(split[split.length-3].toUpperCase());
         dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
         dr.path=filename;
-
     }
 
 
