@@ -25,6 +25,12 @@ public class Domanda {
         this.tempoLimiteSecondi = 15;
 
     }
+    public Domanda(String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+        this.testoDomanda = testoDomanda;
+        this.tipo = tipo;
+        this.opzioni = opzioni;
+        this.rispostaCorretta = rispostaCorretta;
+    }
 
     // Getter
     public String getTestoDomanda() {
