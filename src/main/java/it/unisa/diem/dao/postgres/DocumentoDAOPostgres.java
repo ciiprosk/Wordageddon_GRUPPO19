@@ -38,7 +38,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
             Documento d = null;
 
             if (rs.next()) {
-                d = getDocument(rs);
+               // d = getDocument(rs);
             }
 
             result = Optional.ofNullable(d);
@@ -84,7 +84,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     public void delete(Documento documento) {
 
     }
-
+/*
     private Utente getDocument(ResultSet rs) throws SQLException {
 
         Documento documento = null;
@@ -95,10 +95,12 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
         byte[] salt = rs.getBytes("salt");
         Ruolo ruolo = Ruolo.valueOf(rs.getString("ruolo"));
 
-        utente = new Utente(username, email, password, salt, ruolo);
+        //utente = new Utente(username, email, password, salt, ruolo);
 
         return utente;
 
     }
+
+ */
 
 }
