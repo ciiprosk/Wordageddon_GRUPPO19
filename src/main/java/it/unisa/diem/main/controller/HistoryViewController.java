@@ -46,11 +46,10 @@ public class HistoryViewController {
         leaderView.setFitHeight(30);
         leaderboardButton.setGraphic(leaderView);
 
-        // Inizializza colonne della tabella per StoricoSessione
+
         dateColumn.setCellValueFactory(cellData -> {
-            // Otteniamo la data di fine sessione e la convertiamo in stringa
             LocalDateTime dataFine = cellData.getValue().getDataFine();
-            String formattedDate = dataFine != null ? dataFine.toString() : "";
+            String formattedDate = dataFine.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             return new SimpleStringProperty(formattedDate);
         });
 
@@ -69,7 +68,9 @@ public class HistoryViewController {
             throw new RuntimeException(e);
         }
         ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList(storicoSessioni);
-        System.out.println("yo");
+        for (StoricoSessione sessione : observableSessioni) {
+            System.out.println(sessione.toString());
+        }
         tableView.setItems(observableSessioni);
     }
 
