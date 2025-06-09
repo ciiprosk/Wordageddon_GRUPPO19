@@ -1,7 +1,10 @@
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.DocumentoDAO;
+import it.unisa.diem.exceptions.DBException;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.utenti.Ruolo;
 import it.unisa.diem.model.gestione.utenti.Utente;
 
@@ -22,7 +25,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public Optional<Documento> selectByName(String documento) throws SQLException {
+    public Optional<Documento> selectByTitle(String documento) throws SQLException {
 
         Optional<Documento> result = Optional.empty();
 
@@ -43,6 +46,8 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
             result = Optional.ofNullable(d);
 
+        }  catch (SQLException e) {
+            throw new DBException("ERRORE: documento " + documento + " non trovato!",e);
         }
 
         return result;
@@ -85,19 +90,19 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
     }
 
-    private Utente getDocument(ResultSet rs) throws SQLException {
+    private Documento getDocument(ResultSet rs) throws SQLException {
 
         Documento documento = null;
 
-        String nome = rs.getString("nome");
-        String email = rs.getString("email");
-        String password = rs.getString("password");
-        byte[] salt = rs.getBytes("salt");
-        Ruolo ruolo = Ruolo.valueOf(rs.getString("ruolo"));
+        String titolo = rs.getString("nome");
+        Lingua lingua = Lingua.valueOf(rs.getString("lingua"));
+        Difficolta difficolta = Difficolta.valueOf(rs.getString("difficolta"));
+        String path = rs.getString("percorso");
 
-        utente = new Utente(username, email, password, salt, ruolo);
 
-        return utente;
+        documento = new Documento(titolo, lingua, difficolta, path);
+
+        return documento;
 
     }
 

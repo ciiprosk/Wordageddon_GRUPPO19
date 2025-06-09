@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DocumentoDAO extends DAO<Documento> {
 
-    Optional<Documento> selectByName(String nome) throws SQLException;
+    Optional<Documento> selectByTitle(String titolo) throws SQLException;
 
 }

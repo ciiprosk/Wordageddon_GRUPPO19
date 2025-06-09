@@ -36,6 +36,16 @@ public class Documento {
         path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
     }
 
+    public Documento(String titolo, Lingua lingua, Difficolta difficolta, String path) {
+
+        this.titolo = titolo;
+        this.lingua = lingua;
+        this.difficolta = difficolta;
+        this.path = path;
+        testo=new ArrayList<>();
+
+    }
+
     /**
      * Costruttore predefinito che inizializza un nuovo documento vuoto.
      * Crea una nuova lista vuota per contenere il testo del documento.
