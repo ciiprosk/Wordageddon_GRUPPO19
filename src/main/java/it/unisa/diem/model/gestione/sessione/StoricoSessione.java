@@ -1,24 +1,23 @@
 package it.unisa.diem.model.gestione.sessione;
 
+import it.unisa.diem.model.gestione.utenti.Utente;
+
 import java.time.LocalDateTime;
 
-public class StoricoSessione {
+public class StoricoSessione extends Sessione{
 
-    private final Sessione sessione;
     private final LocalDateTime dataFine;
 
-    public StoricoSessione(Sessione sessione) {
-        this.sessione = sessione;
+    public StoricoSessione(long id, Utente utente, LocalDateTime inizio, int punteggio) {
+
+        super(id, utente, inizio, punteggio, true);
         this.dataFine = LocalDateTime.now();
+
     }
 
-    public StoricoSessione(Sessione sessione, LocalDateTime dataFine) {
-        this.sessione = sessione;
+    public StoricoSessione(long id, Utente utente, LocalDateTime inizio, int punteggio, LocalDateTime dataFine) {
+        super(id, utente, inizio, punteggio, true);
         this.dataFine = dataFine;
-    }
-
-    public Sessione getSessione() {
-        return sessione;
     }
 
     public LocalDateTime getDataFine() {
@@ -36,12 +35,12 @@ public class StoricoSessione {
 
         StoricoSessione s = (StoricoSessione) o;
 
-        return this.sessione.equals(s.sessione);
+        return this.getId() == s.getId();
     }
 
     @Override
     public int hashCode() {
-        return sessione.hashCode();
+        return Long.hashCode(this.getId());
     }
 
 }

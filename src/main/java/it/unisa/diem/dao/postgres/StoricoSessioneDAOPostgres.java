@@ -148,9 +148,17 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
         Sessione sessione = getSession(idSessione);
 
+        long id = sessione.getId();
+
+        Utente utente = sessione.getUtente();
+
+        LocalDateTime dataInizio = sessione.getInizio();
+
+        int punteggio = sessione.getPunteggio();
+
         LocalDateTime dataFine = rs.getTimestamp("dataFine").toLocalDateTime();
 
-        storicoSessione = new StoricoSessione(sessione, dataFine);
+        storicoSessione = new StoricoSessione(id, utente, dataInizio, punteggio, dataFine);
 
         return storicoSessione;
 
