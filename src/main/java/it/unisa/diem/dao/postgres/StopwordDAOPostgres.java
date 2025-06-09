@@ -41,7 +41,7 @@ public class StopwordDAOPostgres implements StopwordDAO {
     public void insert(StopwordManager stopword) {
         //1. preparo la query
         //1.1. la query deve prima restituirmi l'id del documento che mi serve per cui ho bisogno di usare documento
-        String query = "SELECT id FROM documento WHERE titolo = ?";
+        // devo ricavarmi un documento
         //utilizzo una prepared statement
     }
 
