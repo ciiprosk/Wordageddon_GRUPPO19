@@ -6,8 +6,12 @@ import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import it.unisa.diem.utility.SceneLoader;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,30 +22,32 @@ import static it.unisa.diem.model.gestione.utenti.SicurezzaPassword.verificaPass
 
 public class LoginViewController {
 
-    @FXML private TextField loginUsernameField;
-    @FXML private PasswordField loginPasswordField;
-    @FXML private Button loginButton;
-    @FXML private Label incorrectLabel;
+    @FXML
+    private TextField loginUsernameField;
+    @FXML
+    private PasswordField loginPasswordField;
+    @FXML
+    private Button loginButton;
+    @FXML
+    private Label incorrectLabel;
 
     private String url;
     private String user;
     private String pass;
+
+    private Utente utenteToPass;
 
     @FXML
     public void initialize() {
 
         PropertiesLoader.init();
 
-        String url = PropertiesLoader.getProperty("database.url");
-        String user = PropertiesLoader.getProperty("database.user");
-        String pass = PropertiesLoader.getProperty("database.password");
+        this.url = PropertiesLoader.getProperty("database.url");
+        this.user = PropertiesLoader.getProperty("database.user");
+        this.pass = PropertiesLoader.getProperty("database.password");
 
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-
-        try{
-            Connection co= DriverManager.getConnection(url, user, pass);
+        try {
+            Connection co = DriverManager.getConnection(url, user, pass);
             System.out.println("Connessione al database riuscita!");
         } catch (SQLException e) {
             System.out.println("Connessione al database fallita!"); //probabilmente da sostituire con un alert e
@@ -79,6 +85,8 @@ public class LoginViewController {
             return;
         }
 
+        utenteToPass = utente;
+
         // Login avvenuto con successo
         goToHomeMenu();
     }
@@ -88,9 +96,9 @@ public class LoginViewController {
         String username = loginUsernameField.getText();
         String password = loginPasswordField.getText();
         boolean isValid = !username.isEmpty() &&
-                            password.length() >= 8 &&
-                                password.matches(".*[^a-zA-Z0-9 ].*") &&
-                                    !password.contains(" ");
+                password.length() >= 8 &&
+                password.matches(".*[^a-zA-Z0-9 ].*") &&
+                !password.contains(" ");
         loginButton.setDisable(!isValid);
         incorrectLabel.setVisible(false);
     }
@@ -102,7 +110,18 @@ public class LoginViewController {
 
     @FXML
     private void goToHomeMenu() {
-        SceneLoader.load("HomeMenuView.fxml", loginButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
-
 }
+
+

@@ -1,9 +1,14 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 
 public class HomeMenuViewController {
@@ -13,6 +18,7 @@ public class HomeMenuViewController {
     @FXML private Button logOutButton;
     @FXML private Button adminButton;
 
+    private Utente utenteToPass;
     private boolean isAdmin = false; //da modificare
 
     @FXML
@@ -26,7 +32,17 @@ public class HomeMenuViewController {
     }
 
     public void goToLeaderboard(ActionEvent actionEvent) {
-        SceneLoader.load("LeaderboardView.fxml", leaderboardButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LeaderboardView.fxml"));
+            Parent root = loader.load();
+            LeaderboardViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) leaderboardButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void goToHistory(ActionEvent actionEvent) {
@@ -45,5 +61,9 @@ public class HomeMenuViewController {
         adminButton.setVisible(isAdmin);
         adminButton.setManaged(isAdmin);
         adminButton.setDisable(!isAdmin);
+    }
+
+    public void setUtente(Utente utente) {
+        utenteToPass = utente;
     }
 }
