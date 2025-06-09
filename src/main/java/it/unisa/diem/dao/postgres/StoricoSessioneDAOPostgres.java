@@ -30,13 +30,13 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public List<StoricoSessione> selectByUser(String username) {
+    public List<StoricoSessione> selectByUser(String username) throws SQLException {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
         String query = "SELECT storico.* " +
-                        "FROM STORICOSESSIONE storico JOIN SESSIONE s ON storico.id_sessione=s.id " +
-                            "WHERE s.utente = ?";
+                "FROM STORICOSESSIONE storico JOIN SESSIONE s ON storico.id_sessione=s.id " +
+                "WHERE s.utente = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -50,10 +50,6 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 sessioni.add ( getSessionHistory(rs) );
             }
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile selezionare le sessioni",e);
-
         }
 
         return sessioni;
@@ -61,7 +57,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public Optional<StoricoSessione> selectById(long id) {
+    public Optional<StoricoSessione> selectById(long id) throws SQLException {
 
         Optional<StoricoSessione> result = Optional.empty();
 
@@ -82,10 +78,6 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
             result = Optional.ofNullable(sessione);
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sulla sessione " + id, e);
-
         }
 
         return result;
@@ -93,7 +85,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public List<StoricoSessione> selectAll() {
+    public List<StoricoSessione> selectAll() throws SQLException {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
@@ -109,16 +101,13 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 sessioni.add ( getSessionHistory(rs) );
             }
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile selezionare le sessioni",e);
         }
 
         return sessioni;
 
     }
 
-    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) {
+    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) throws SQLException {
 
         Map<String, Integer> classifica = new LinkedHashMap<>();
 
@@ -143,9 +132,6 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
             }
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile generare la classifica",e);
         }
 
         return classifica;
@@ -171,7 +157,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
 
-    private Sessione getSession(long idSessione) {
+    private Sessione getSession(long idSessione) throws SQLException {
 
         Optional<Sessione> optionalSessione = sessioneDAO.selectById(idSessione);
 

@@ -32,7 +32,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectById(long id) {
+    public Optional<Sessione> selectById(long id) throws SQLException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -53,10 +53,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             result = Optional.ofNullable(sessione);
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sulla sessione " + id, e);
-
         }
 
         return result;
@@ -64,7 +60,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectByUser(String username) {
+    public Optional<Sessione> selectByUser(String username) throws SQLException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -85,10 +81,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             result = Optional.ofNullable(sessione);
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sulla sessione dell'utente " + username, e);
-
         }
 
         return result;
@@ -96,7 +88,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public List<Sessione> selectAll() {
+    public List<Sessione> selectAll() throws SQLException {
 
         List<Sessione> sessioni = new ArrayList<>();
 
@@ -112,9 +104,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 sessioni.add ( getSession(rs) );
             }
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile selezionare le sessioni",e);
         }
 
         return sessioni;
@@ -122,7 +111,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void insert(Sessione sessione) {
+    public void insert(Sessione sessione) throws SQLException {
 
         String query = "INSERT INTO sessione " +
                 "(utente, completato, dataInizio, punteggio) " +
@@ -143,16 +132,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 }
             }
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile inserire la sessione " + sessione.getId(), e);
-
         }
 
     }
 
     @Override
-    public void update(Sessione sessione) {
+    public void update(Sessione sessione) throws SQLException {
 
         String query = "UPDATE sessione " +
                 "SET completato = ?, punteggio = ? " +
@@ -166,16 +151,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             cmd.executeUpdate();
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Modifiche non riuscite alla sessione " + sessione.getId(), e);
-
         }
 
     }
 
     @Override
-    public void delete(Sessione sessione) {
+    public void delete(Sessione sessione) throws SQLException {
 
         String query = "DELETE FROM sessione WHERE id = ?";
 
@@ -187,8 +168,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             cmd.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new DBException("ERRORE: Impossibile cancellare la sessione " + sessione.getId(), e);
         }
 
     }
@@ -215,7 +194,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private Utente getUser(String username) {
+    private Utente getUser(String username) throws SQLException {
 
         Optional<Utente> optionalUtente = utenteDAO.selectByUsername(username);
 

@@ -18,7 +18,6 @@ public class Documento {
     private String titolo;
     private Lingua lingua;
     private Difficolta difficolta;
-    private StopwordManager stopword;
     private String path ;
     private List<String> testo;
 
@@ -60,7 +59,6 @@ public class Documento {
     public Lingua getLingua() {
         return lingua;
     }
-
 
     /**
      * Restituisce il percorso del file del documento.
