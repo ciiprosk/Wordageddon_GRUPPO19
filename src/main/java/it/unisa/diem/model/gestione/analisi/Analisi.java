@@ -6,6 +6,7 @@ import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.utility.CryptoAlphabet;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -157,6 +158,8 @@ public class Analisi {
             String frequenza = Integer.toString(parola.getValue());
             dos.writeUTF(CryptoAlphabet.cripta(frequenza));
         }
+        }catch(IOException e){
+            throw new IOException("Errore durante il salvataggio dell'analisi");
         }
 
     }
@@ -198,6 +201,20 @@ public class Analisi {
        return path;
     }
 
+    public void modificaNomeAnalisi(String nomeNuovoAnalisi, String vecchioNomeAnalisi){
+        //1. cerco file analisi con vecchio nome
+
+        //2. leggo il file e lo scrivo sul file con il nuovo nome
+    }
+    public void modificaNomeAnalisi(String nuovoNomeDoc){
+        //1. cerco file analisi con vecchio nome
+        //analisi.modificanome(nome)
+        String vecchioPath=this.pathAnalisi;
+        File vecchio=Path.of(vecchioPath).toFile();
+        vecchio.renameTo(new File(vecchio.getParentFile().getPath()+"/"+nuovoNomeDoc+"_analysis.bin"));
+        //2. leggo il file e lo scrivo sul file con il nuovo nome
+
+    }
     @Override
     public String toString(){
         return frequenzeTesto.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).toString();

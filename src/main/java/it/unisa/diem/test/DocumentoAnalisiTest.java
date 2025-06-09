@@ -11,49 +11,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DocumentoAnalisiTest {
-    public static void main(String[] args) {
-
-        //1 carico il doc ma prima le stopword
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        Documento dr = new Documento("testo_prova2", Lingua.ITA, Difficolta.FACILE);
+        dr.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
         StopwordManager s=new StopwordITA();
-        s.caricaStopword(true, false, false, false, false, false);
-        Documento d= new Documento("diocane", Lingua.ITA, Difficolta.FACILE);
-        //converto il documento dato in input da file choooser quindi è un file
-        try {
-            d.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //vediamo se ha inzializzato testo--> lo ha fatto
-        System.out.println(d.getTesto());
-        //primo test completato
+        s.caricaStopword(false, false, false, false, false, false);
+        s.aggiungi("dio");
+        s.aggiungi("volta");
 
-        /*
-        //2 vediamo la letura se va bene---> perfetto funziona
-        try {
-            Documento doc = Documento.leggiDocumento("data/ITA/facile/ciao.bin");
-            System.out.println(doc.getTesto());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        */
+        Analisi a=new Analisi(dr, s);
+        a.frequenzeDocumento();
+        a.caricaAnalisi();
 
-        //3 vediamo come funziona analisi con documento
-        Analisi a= new Analisi(d, null);
-        try {
-            a.frequenzeDocumento().entrySet().forEach(System.out::println);
-            a.caricaAnalisi();
-            System.out.println(Analisi.leggiAnalisi(d).getFrequenzeTesto().entrySet());
-                    } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
+       dr.cambiaNomeDocumento("ciaoRicchoni");
+        System.out.println(dr.getTitolo());
+       a.modificaNomeAnalisi(dr.getTitolo());
     }
-
-
-
 
 }

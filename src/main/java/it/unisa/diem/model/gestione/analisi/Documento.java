@@ -4,6 +4,7 @@ import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.utility.CryptoAlphabet;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,7 +174,14 @@ public class Documento {
         dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
         dr.path=filename;
     }
+    public void cambiaNomeDocumento(String nome){
+        String path=this.path;
+        getAttributes(path, this);
+        this.titolo=nome;
+        File vecchio=Path.of(path).toFile();
+        vecchio.renameTo(new File(this.path.replace(this.titolo, nome)));
 
+    }
     /**
      * Restituisce una rappresentazione testuale del documento.
      * Concatena tutte le righe del testo con dei caratteri di nuova riga.
