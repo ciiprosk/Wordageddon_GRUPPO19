@@ -1,17 +1,29 @@
 package it.unisa.diem.model.gestione.analisi.stopword;
 
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
+import it.unisa.diem.model.gestione.analisi.Documento;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public abstract class StopwordManager {
+    private Documento documento;
 
     protected final Set<String> parole;
 
     public StopwordManager() {
         this.parole = new HashSet<>();
     }
+    public StopwordManager(Documento documento) {
+        this.documento = documento;
+        this.parole = new HashSet<>();
+    }
+    public Documento getDocumento() {
+        return documento;
+    }
+
 
     public void aggiungi(String parola) {
         parole.add(parola.toLowerCase());
@@ -44,6 +56,7 @@ public abstract class StopwordManager {
         aggiungiArray(getPunteggiatura());
 
     }
+
 
     private void aggiungiArray(String[] array) {
         for (String parola : array) {

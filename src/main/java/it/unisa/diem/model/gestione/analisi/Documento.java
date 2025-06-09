@@ -27,14 +27,12 @@ public class Documento {
      * @param titolo rappresenta il titolo del documento.
      * @param lingua rappresenta in che lingua si presenta il documento.
      * @param difficolta rappresenta la difficoltà del documento fornito.
-     * @param stopword rappresenta le parole che non dovranno essere presenti nell'analisi.
      * Crea inoltre una nuova lista per contenere il testo del documento.
      */
-    public Documento(String titolo, Lingua lingua, Difficolta difficolta, StopwordManager stopword) {
+    public Documento(String titolo, Lingua lingua, Difficolta difficolta) {
         this.titolo = titolo;
         this.lingua = lingua;
         this.difficolta = difficolta;
-        this.stopword = stopword;
         testo=new ArrayList<>();
         path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
     }
@@ -63,13 +61,6 @@ public class Documento {
         return lingua;
     }
 
-    /**
-     * Restituisce il gestore delle stopword associate al documento.
-     * @return il gestore delle stopword
-     */
-    public StopwordManager getStopword() {
-        return stopword;
-    }
 
     /**
      * Restituisce il percorso del file del documento.

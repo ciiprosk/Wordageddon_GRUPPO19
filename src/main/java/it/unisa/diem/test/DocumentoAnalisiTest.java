@@ -16,7 +16,7 @@ public class DocumentoAnalisiTest {
         //1 carico il doc ma prima le stopword
         StopwordManager s=new StopwordITA();
         s.caricaStopword(true, false, false, false, false, false);
-        Documento d= new Documento("diocane", Lingua.ITA, Difficolta.FACILE, s);
+        Documento d= new Documento("diocane", Lingua.ITA, Difficolta.FACILE);
         //converto il documento dato in input da file choooser quindi è un file
         try {
             d.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
@@ -40,7 +40,7 @@ public class DocumentoAnalisiTest {
         */
 
         //3 vediamo come funziona analisi con documento
-        Analisi a= new Analisi(d);
+        Analisi a= new Analisi(d, null);
         try {
             a.frequenzeDocumento().entrySet().forEach(System.out::println);
             a.caricaAnalisi();

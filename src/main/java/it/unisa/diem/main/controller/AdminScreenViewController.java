@@ -270,7 +270,7 @@ public class AdminScreenViewController {
 
         stopword.caricaStopword(checkArticles.isSelected(), checkPrepositions.isSelected(), checkPronouns.isSelected(), checkToHave.isSelected(), checkToBe.isSelected(), checkCon.isSelected());
         System.out.println(stopword.getParole());
-        Documento documento = new Documento(titolo, lingua, difficolta, stopword);
+        Documento documento = new Documento(titolo, lingua, difficolta);
 
         try {
             documento.convertiTxtToBin(fileImportato);

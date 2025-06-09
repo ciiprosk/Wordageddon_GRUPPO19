@@ -20,7 +20,7 @@ public class Analisi {
     private final Lingua linguaAnalisi;
     private final Difficolta difficoltaAnalisi;
     private final String titolo;
-    private final StopwordManager stopwordAnalisi;
+    private StopwordManager stopwordAnalisi;
     private final String pathAnalisi;
 
     /**
@@ -33,7 +33,7 @@ public class Analisi {
      *                 stopword e contenuto testuale rilevante per l'analisi.
      */
 
-    public Analisi(Documento documento){
+    public Analisi(Documento documento, StopwordManager stopwordAnalisi){
         //dal documento posso ricavare la difficoltà, lingua, stopword...
         frequenzeTesto=new HashMap<>();
         this.documento= documento;
@@ -41,7 +41,9 @@ public class Analisi {
         difficoltaAnalisi=documento.getDifficolta();
         titolo=documento.getTitolo();
         pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
-        stopwordAnalisi=documento.getStopword(); //vale solo se le stopword ci sono --> quando utente inseriesce un nuovo doc---> non alla lwttura        
+        if(stopwordAnalisi != null){
+            this.stopwordAnalisi=stopwordAnalisi;
+        }
     }
     
 
@@ -166,7 +168,7 @@ public class Analisi {
         String path= recuperaAnalisiPath(doc);
         Map<String, Integer> frequenze=new HashMap<>();
         try(DataInputStream dis= new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
-            a = new Analisi(doc);
+            a = new Analisi(doc, null);
             while (dis.available() > 0) {
                 String parola = CryptoAlphabet.decripta(dis.readUTF());
                 int frequenza = Integer.parseInt(CryptoAlphabet.decripta(dis.readUTF()));

@@ -1,10 +1,13 @@
 package it.unisa.diem.model.gestione.analisi.stopword;
 
+import it.unisa.diem.model.gestione.analisi.Documento;
+
 public class StopwordENG extends StopwordManager {
 
     public StopwordENG() {
         super();
     }
+    public StopwordENG(Documento documento) {super( documento );}
 
     @Override protected String[] getArticoli() { return new String[]{
             "the", "a", "an"

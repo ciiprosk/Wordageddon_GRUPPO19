@@ -1,10 +1,13 @@
 package it.unisa.diem.model.gestione.analisi.stopword;
 
+import it.unisa.diem.model.gestione.analisi.Documento;
+
 public class StopwordITA extends StopwordManager {
 
     public StopwordITA() {
         super();
     }
+    public StopwordITA(Documento documento) {super( documento );}
 
     @Override protected String[] getArticoli() { return new String[]{
             "il", "lo", "la", "i", "gli", "le", "l'",  // determinativi

@@ -17,7 +17,7 @@ public class Test {
             StopwordManager s=new StopwordITA();
             s.caricaStopword(false, false, false, false, false, false);
 
-            Documento dr = new Documento("testo_prova", Lingua.ITA, Difficolta.FACILE, s);
+            Documento dr = new Documento("testo_prova", Lingua.ITA, Difficolta.FACILE);
             dr.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
 
 
