@@ -20,11 +20,15 @@ public class SessioneDAOPostgres implements SessioneDAO {
     private final String pass;
     private final UtenteDAOPostgres utenteDAO;
 
-    public SessioneDAOPostgres(String url, String user, String pass, UtenteDAOPostgres utenteDAO) {
+    public SessioneDAOPostgres(String url, String user, String pass) {
         this.url = url;
         this.user = user;
         this.pass = pass;
-        this.utenteDAO = utenteDAO;
+        this.utenteDAO = new UtenteDAOPostgres(url, user, pass);
+    }
+
+    public UtenteDAOPostgres getUtenteDAO() {
+        return utenteDAO;
     }
 
     @Override
@@ -60,30 +64,34 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public List<Sessione> selectByUser(String username) {
+    public Optional<Sessione> selectByUser(String username) {
 
-        List<Sessione> sessioni = new ArrayList<>();
+        Optional<Sessione> result = Optional.empty();
 
-        String query = "SELECT * FROM sessione  WHERE utente = ? ORDER BY dataInizio DESC";
+        String query = "SELECT * FROM sessione WHERE utente = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
-             PreparedStatement cmd=connection.prepareStatement (query) ){
+             PreparedStatement cmd = connection.prepareStatement (query) ){
 
             cmd.setString(1, username);
-
             ResultSet rs = cmd.executeQuery();
 
-            while (rs.next()) {
-                sessioni.add ( getSession(rs) );
+            Sessione sessione = null;
+
+            if (rs.next()) {
+                sessione = getSession(rs);
             }
+
+            result = Optional.ofNullable(sessione);
 
         } catch (SQLException e) {
 
-            throw new DBException("ERRORE: Impossibile selezionare le sessioni",e);
+            throw new DBException("ERRORE: Impossibile recuperare info sulla sessione dell'utente " + username, e);
+
         }
 
-        return sessioni;
+        return result;
 
     }
 

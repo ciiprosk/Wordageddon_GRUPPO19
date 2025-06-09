@@ -16,8 +16,7 @@ public class Sessione {
     private boolean completato;
     private final LocalDateTime inizio;
     private int punteggio;
-//    private LocalDateTime fine;
-    //documenti e domande????
+
 
     public Sessione(Utente utente, LocalDateTime inizio) {
 
@@ -25,7 +24,7 @@ public class Sessione {
         this.inizio = inizio;
         this.punteggio = 0;
         this.completato = false;
-//        this.fine = null;
+
     }
 
     public Sessione (long id, Utente utente, LocalDateTime inizio, int punteggio, boolean completato) {
@@ -46,11 +45,7 @@ public class Sessione {
     public LocalDateTime getInizio() {
         return inizio;
     }
-/*
-    public LocalDateTime getFine() {
-        return fine;
-    }
-*/
+
     public long getId() {
         return id;
     }
@@ -79,8 +74,6 @@ public class Sessione {
 
         this.completato = completato;
 
-//        setFine(completato);
-
     }
 
     @Override
@@ -98,14 +91,9 @@ public class Sessione {
 
     }
 
-/*
-    private void setFine(boolean completato) {
-
-        if (completato)
-            this.fine = LocalDateTime.now();
-
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
     }
-*/
-
 
 }
