@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class DocumentoAnalisiTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Documento dr = new Documento("testo_prova2", Lingua.ITA, Difficolta.FACILE);
+        Documento dr = new Documento("testo_prova3", Lingua.ITA, Difficolta.FACILE);
         dr.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
         StopwordManager s=new StopwordITA();
         s.caricaStopword(false, false, false, false, false, false);
@@ -23,7 +23,7 @@ public class DocumentoAnalisiTest {
         a.frequenzeDocumento();
         a.caricaAnalisi();
 
-       dr.cambiaNomeDocumento("ciaoRicchoni");
+       dr.cambiaNomeDocumento("ciaoRicchoni2");
         System.out.println(dr.getTitolo());
        a.modificaNomeAnalisi(dr.getTitolo());
     }

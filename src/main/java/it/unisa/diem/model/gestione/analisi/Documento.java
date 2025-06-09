@@ -179,7 +179,7 @@ public class Documento {
         getAttributes(path, this);
         this.titolo=nome;
         File vecchio=Path.of(path).toFile();
-        vecchio.renameTo(new File(this.path.replace(this.titolo, nome)));
+        vecchio.renameTo(new File(vecchio.getParentFile().getPath()+ "/"+nome+".bin"));
 
     }
     /**

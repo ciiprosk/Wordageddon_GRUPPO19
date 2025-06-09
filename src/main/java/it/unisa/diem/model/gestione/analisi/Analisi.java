@@ -20,7 +20,7 @@ public class Analisi {
     private Map<String, Integer> frequenzeTesto;
     private final Lingua linguaAnalisi;
     private final Difficolta difficoltaAnalisi;
-    private final String titolo;
+    private String titolo;
     private StopwordManager stopwordAnalisi;
     private final String pathAnalisi;
 
@@ -211,6 +211,7 @@ public class Analisi {
         //analisi.modificanome(nome)
         String vecchioPath=this.pathAnalisi;
         File vecchio=Path.of(vecchioPath).toFile();
+        this.titolo=nuovoNomeDoc;
         vecchio.renameTo(new File(vecchio.getParentFile().getPath()+"/"+nuovoNomeDoc+"_analysis.bin"));
         //2. leggo il file e lo scrivo sul file con il nuovo nome
 
