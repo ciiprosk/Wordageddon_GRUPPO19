@@ -23,7 +23,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
     }
 
 
-    public Optional<Domanda> selectByTitle(String titolo) throws SQLException {
+    public Optional<Domanda> selectByTitle(String titolo) throws SQLException, DBException {
 
         Optional<Domanda> result = Optional.empty();
 
@@ -78,7 +78,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
     }
 
-    private Domanda getDomanda(ResultSet rs) throws SQLException {
+    private Domanda getDomanda(ResultSet rs) throws SQLException, DBException {
 
         Domanda domanda = null;
 

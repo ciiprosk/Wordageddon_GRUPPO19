@@ -26,7 +26,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public List<Analisi> selectAll() throws SQLException{
+    public List<Analisi> selectAll() throws SQLException, DBException{
         List<Analisi> analisi= null;
         String query = "SELECT * FROM analisi";
         try(Connection con = DriverManager.getConnection(url, user, password);
@@ -42,7 +42,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public void insert(Analisi analisi) throws SQLException{
+    public void insert(Analisi analisi) throws SQLException, DBException{
         // per inserire analisi ho bisogno di documento che trovo già in analisi--> GODO
         //1. preparo query
         String query = "INSERT INTO analisi (nome, documento, percorso) VALUES (?, ?, ?)";
@@ -66,7 +66,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public void delete(Analisi analisi) throws SQLException{
+    public void delete(Analisi analisi) throws SQLException, DBException{
         //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
         String query = "DELETE FROM analisi WHERE nome = ?";
         try(Connection con= DriverManager.getConnection(url, user, password);

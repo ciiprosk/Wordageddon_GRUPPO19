@@ -32,7 +32,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectById(long id) throws SQLException {
+    public Optional<Sessione> selectById(long id) throws SQLException, DBException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -60,7 +60,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectByUser(String username) throws SQLException {
+    public Optional<Sessione> selectByUser(String username) throws SQLException, DBException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -88,7 +88,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public List<Sessione> selectAll() throws SQLException {
+    public List<Sessione> selectAll() throws SQLException, DBException {
 
         List<Sessione> sessioni = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void insert(Sessione sessione) throws SQLException {
+    public void insert(Sessione sessione) throws SQLException, DBException {
 
         String query = "INSERT INTO sessione " +
                 "(utente, completato, dataInizio, punteggio) " +
@@ -137,7 +137,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void update(Sessione sessione) throws SQLException {
+    public void update(Sessione sessione) throws SQLException, DBException {
 
         String query = "UPDATE sessione " +
                 "SET completato = ?, punteggio = ? " +
@@ -156,7 +156,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void delete(Sessione sessione) throws SQLException {
+    public void delete(Sessione sessione) throws SQLException, DBException {
 
         String query = "DELETE FROM sessione WHERE id = ?";
 
@@ -172,7 +172,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private Sessione getSession(ResultSet rs) throws SQLException {
+    private Sessione getSession(ResultSet rs) throws SQLException, DBException {
 
         Sessione sessione = null;
 
@@ -194,7 +194,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private Utente getUser(String username) throws SQLException {
+    private Utente getUser(String username) throws SQLException, DBException {
 
         Optional<Utente> optionalUtente = utenteDAO.selectByUsername(username);
 
@@ -214,7 +214,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException {
+    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException, DBException {
 
         cmd.setBoolean(1, sessione.isCompletato());
         cmd.setInt(2, sessione.getPunteggio());
@@ -222,7 +222,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException {
+    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException, DBException {
 
         cmd.setLong(1, sessione.getId());
 

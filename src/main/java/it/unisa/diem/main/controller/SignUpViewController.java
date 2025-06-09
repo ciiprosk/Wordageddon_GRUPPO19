@@ -1,6 +1,7 @@
 package it.unisa.diem.main.controller;
 
 import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
+import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
@@ -46,7 +47,7 @@ public class SignUpViewController {
                 mailInUseLabel.setManaged(true);
                 errore = true;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
 
         }
@@ -57,7 +58,7 @@ public class SignUpViewController {
                 usernameInUseLabel.setManaged(true);
                 errore = true;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
         }
 
@@ -67,7 +68,7 @@ public class SignUpViewController {
 
         try {
             utentePostgres.insert(new Utente(username, email, password));
-        } catch (SQLException e) {
+        } catch (SQLException | DBException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
         }
 

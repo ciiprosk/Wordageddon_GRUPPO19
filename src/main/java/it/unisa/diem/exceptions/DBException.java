@@ -1,6 +1,6 @@
 package it.unisa.diem.exceptions;
 
-public class DBException extends RuntimeException {
+public class DBException extends Exception {
 
     public DBException(String message, Throwable cause) {
 

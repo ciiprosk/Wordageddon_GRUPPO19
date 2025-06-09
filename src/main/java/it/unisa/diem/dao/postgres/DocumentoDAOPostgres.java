@@ -25,7 +25,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public Optional<Documento> selectByTitle(String documento) throws SQLException {
+    public Optional<Documento> selectByTitle(String documento) throws SQLException, DBException {
 
         Optional<Documento> result = Optional.empty();
 
@@ -55,7 +55,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
 
-    public int geDocumentoId(Documento documento)throws Exception{
+    public int geDocumentoId(Documento documento)throws SQLException, DBException{
 
         String idQuery ="SELECT id FROM DOCMENTO WHERE nome= ?";
         int id=-1;
@@ -90,7 +90,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
     }
 
-    private Documento getDocument(ResultSet rs) throws SQLException {
+    private Documento getDocument(ResultSet rs) throws SQLException, DBException {
 
         Documento documento = null;
 

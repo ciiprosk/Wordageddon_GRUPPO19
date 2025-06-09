@@ -22,7 +22,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public boolean emailAlreadyExists(String email) throws SQLException {
+    public boolean emailAlreadyExists(String email) throws SQLException, DBException {
 
         String query = "SELECT COUNT(*) FROM utente WHERE email = ?";
 
@@ -55,7 +55,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public boolean usernameAlreadyExists(String username) throws SQLException {
+    public boolean usernameAlreadyExists(String username) throws SQLException, DBException {
 
         String query = "SELECT COUNT(*) FROM utente WHERE username = ?";
 
@@ -87,7 +87,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public Optional<Utente> selectByUsername(String username) throws SQLException {
+    public Optional<Utente> selectByUsername(String username) throws SQLException, DBException {
 
         Optional<Utente> result = Optional.empty();
 
@@ -117,7 +117,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public List<Utente> selectAll() throws SQLException {
+    public List<Utente> selectAll() throws SQLException, DBException {
 
         List<Utente> utenti = new ArrayList<>();
 
@@ -141,7 +141,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public void insert(Utente utente) throws SQLException {
+    public void insert(Utente utente) throws SQLException, DBException {
 
         String query = "INSERT INTO utente (username,email,password,salt,ruolo) " +
                 "VALUES (?,?,?,?,?)";
@@ -161,7 +161,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public void update(Utente utente) throws SQLException {     //NON PREVEDE l'aggiornamento di username
+    public void update(Utente utente) throws SQLException, DBException {     //NON PREVEDE l'aggiornamento di username
 
         String query = "UPDATE utente " +
                 "SET email=?, password=?, ruolo=? " +
@@ -182,7 +182,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public void update(String oldUsername, Utente utente) throws SQLException {     //PREVEDE aggiornamento username
+    public void update(String oldUsername, Utente utente) throws SQLException, DBException {     //PREVEDE aggiornamento username
 
         String query = "UPDATE utente " +
                 "SET username=?, email=?, password=?, ruolo=? " +
@@ -204,7 +204,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
 
-    public void delete(Utente utente) throws SQLException {
+    public void delete(Utente utente) throws SQLException, DBException {
 
         String query = "DELETE FROM utente WHERE username = ?";
 

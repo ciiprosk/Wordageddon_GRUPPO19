@@ -1,5 +1,6 @@
 package it.unisa.diem.dao.interfacce;
 
+import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 
 import java.sql.SQLException;
@@ -8,8 +9,8 @@ import java.util.Optional;
 
 public interface SessioneDAO extends  DAO<Sessione>{
 
-    Optional<Sessione> selectByUser(String username) throws SQLException;
+    Optional<Sessione> selectByUser(String username) throws SQLException, DBException;
 
-    Optional<Sessione> selectById(long id) throws SQLException;
+    Optional<Sessione> selectById(long id) throws SQLException, DBException;
 
 }

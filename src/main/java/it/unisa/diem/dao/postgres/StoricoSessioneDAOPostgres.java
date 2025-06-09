@@ -30,7 +30,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public List<StoricoSessione> selectByUser(String username) throws SQLException {
+    public List<StoricoSessione> selectByUser(String username) throws SQLException, DBException {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public Optional<StoricoSessione> selectById(long id) throws SQLException {
+    public Optional<StoricoSessione> selectById(long id) throws SQLException, DBException {
 
         Optional<StoricoSessione> result = Optional.empty();
 
@@ -85,7 +85,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     @Override
-    public List<StoricoSessione> selectAll() throws SQLException {
+    public List<StoricoSessione> selectAll() throws SQLException, DBException {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
@@ -107,7 +107,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
     }
 
-    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) throws SQLException {
+    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) throws SQLException, DBException {
 
         Map<String, Integer> classifica = new LinkedHashMap<>();
 
@@ -140,7 +140,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
 
 
-    private StoricoSessione getSessionHistory(ResultSet rs) throws SQLException {
+    private StoricoSessione getSessionHistory(ResultSet rs) throws SQLException, DBException {
 
         StoricoSessione storicoSessione = null;
 
@@ -165,7 +165,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
 
-    private Sessione getSession(long idSessione) throws SQLException {
+    private Sessione getSession(long idSessione) throws SQLException, DBException {
 
         Optional<Sessione> optionalSessione = sessioneDAO.selectById(idSessione);
 

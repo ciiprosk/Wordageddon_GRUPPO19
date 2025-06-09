@@ -2,9 +2,11 @@ package it.unisa.diem.main.controller;
 
 import java.time.LocalDateTime;
 import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
+import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -64,8 +67,8 @@ public class HistoryViewController {
         List<StoricoSessione> storicoSessioni = null;
         try {
             storicoSessioni = dao.selectByUser(utente.getUsername());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | DBException e) {
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "DATABASE ERROR", "Impossibile far visualizzare lo storico", "Controllare la connessione al database e riprovare.");
         }
         ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList(storicoSessioni);
         for (StoricoSessione sessione : observableSessioni) {
