@@ -2,6 +2,7 @@ package it.unisa.diem.main.controller;
 
 import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -39,23 +40,36 @@ public class SignUpViewController {
 
         UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
 
-        if (utentePostgres.emailAlreadyExists(email)) {
-            mailInUseLabel.setVisible(true);
-            mailInUseLabel.setManaged(true);
-            errore = true;
+        try {
+            if (utentePostgres.emailAlreadyExists(email)) {
+                mailInUseLabel.setVisible(true);
+                mailInUseLabel.setManaged(true);
+                errore = true;
+            }
+        } catch (SQLException e) {
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
+
         }
 
-        if (utentePostgres.usernameAlreadyExists(username)) {
-            usernameInUseLabel.setVisible(true);
-            usernameInUseLabel.setManaged(true);
-            errore = true;
+        try {
+            if (utentePostgres.usernameAlreadyExists(username)) {
+                usernameInUseLabel.setVisible(true);
+                usernameInUseLabel.setManaged(true);
+                errore = true;
+            }
+        } catch (SQLException e) {
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
         }
 
         if (errore) {
             return;
         }
 
-        utentePostgres.insert(new Utente(username, email, password));
+        try {
+            utentePostgres.insert(new Utente(username, email, password));
+        } catch (SQLException e) {
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
+        }
 
         mostraAlert(Alert.AlertType.INFORMATION, "Successo", null, "Registrazione avvenuta con successo.");
 
