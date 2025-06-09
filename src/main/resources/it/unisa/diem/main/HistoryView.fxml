@@ -35,12 +35,11 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="400.0">
                <children>
-                  <TableView maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0">
+                  <TableView fx:id="tableView" maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0">
                      <columns>
-                        <TableColumn prefWidth="75.0" text="C1" />
-                        <TableColumn prefWidth="75.0" text="C2" />
-                     </columns>
-                  </TableView>
+                        <TableColumn fx:id="dateColumn" prefWidth="348.0" text="End Date" />
+                        <TableColumn fx:id="scoreColumn" prefWidth="348.0" text="Score" />
+                     </columns></TableView>
                </children>
             </HBox>
          </children>

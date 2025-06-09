@@ -39,14 +39,24 @@ public class HomeMenuViewController {
             controller.setUtente(utenteToPass);
             Stage stage = (Stage) leaderboardButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Caricamento");
+            stage.setTitle("Leaderboard");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     public void goToHistory(ActionEvent actionEvent) {
-        SceneLoader.load("HistoryView.fxml", historyButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HistoryView.fxml"));
+            Parent root = loader.load();
+            HistoryViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) historyButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("History");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void goToLogIn(ActionEvent actionEvent) {
