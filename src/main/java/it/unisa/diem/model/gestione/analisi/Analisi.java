@@ -57,6 +57,12 @@ public class Analisi {
         return documento;
     }
 
+    public String getTitolo() {
+        return titolo;
+    }
+    public String getPathAnalisi() {
+        return pathAnalisi;
+    }
     /**
      * Restituisce la mappa delle frequenze delle parole nel testo.
      *
