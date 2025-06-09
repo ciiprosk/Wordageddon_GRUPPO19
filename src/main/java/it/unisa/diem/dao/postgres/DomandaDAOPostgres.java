@@ -23,15 +23,15 @@ public class DomandaDAOPostgres implements DomandaDAO {
     }
 
 
-    public Optional<Domanda> selectByTitle(String titolo) {
+    public Optional<Domanda> selectByTitle(String titolo) throws SQLException {
 
         Optional<Domanda> result = Optional.empty();
 
         String query = "SELECT * FROM Domanda WHERE titolo = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        Connection connection = DriverManager.getConnection(url, user, pass);
 
-            PreparedStatement cmd = connection.prepareStatement (query) ){
+            PreparedStatement cmd = connection.prepareStatement (query);
 
             cmd.setString(1, titolo);
 
@@ -45,9 +45,6 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
             result = Optional.ofNullable(domanda);
 
-        } catch (SQLException e) {
-            throw new DBException("Errore select domanda",e);     //la creiamo?
-        }
 
         return result;
 

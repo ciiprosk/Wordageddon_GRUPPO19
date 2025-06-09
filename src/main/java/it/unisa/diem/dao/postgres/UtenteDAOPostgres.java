@@ -22,7 +22,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public boolean emailAlreadyExists(String email) {
+    public boolean emailAlreadyExists(String email) throws SQLException {
 
         String query = "SELECT COUNT(*) FROM utente WHERE email = ?";
 
@@ -48,22 +48,18 @@ public class UtenteDAOPostgres implements UtenteDAO {
             } else return false;
 
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sull'email " + email, e);
-
         }
 
     }
 
     @Override
-    public boolean usernameAlreadyExists(String username) {
+    public boolean usernameAlreadyExists(String username) throws SQLException {
 
         String query = "SELECT COUNT(*) FROM utente WHERE username = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
-             PreparedStatement cmd = connection.prepareStatement (query) ){
+             PreparedStatement cmd = connection.prepareStatement (query) ) {
 
             cmd.setString(1, username);
 
@@ -77,22 +73,17 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                     return true;
 
-                }
-                else return false;
+                } else return false;
 
             } else return false;
 
-
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sull'username " + username, e);
 
         }
 
     }
 
     @Override
-    public Optional<Utente> selectByUsername(String username) {
+    public Optional<Utente> selectByUsername(String username) throws SQLException {
 
         Optional<Utente> result = Optional.empty();
 
@@ -113,10 +104,6 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                         result = Optional.ofNullable(utente);
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile recuperare info sull'utente " + username, e);
-
         }
 
         return result;
@@ -124,7 +111,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
     }
 
     @Override
-    public List<Utente> selectAll() {
+    public List<Utente> selectAll() throws SQLException {
 
         List<Utente> utenti = new ArrayList<>();
 
@@ -140,16 +127,13 @@ public class UtenteDAOPostgres implements UtenteDAO {
                             utenti.add ( getUser(rs) );
                         }
 
-        } catch (SQLException e) {
-
-                 throw new DBException("ERRORE: Impossibile selezionare gli utenti",e);
         }
 
         return utenti;
     }
 
     @Override
-    public void insert(Utente utente) {
+    public void insert(Utente utente) throws SQLException {
 
         String query = "INSERT INTO utente (username,email,password,salt,ruolo) " +
                 "VALUES (?,?,?,?,?)";
@@ -162,16 +146,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                         cmd.executeUpdate();
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Impossibile inserire l'utente " + utente.getUsername(), e);
-
         }
 
     }
 
     @Override
-    public void update(Utente utente) {     //NON PREVEDE l'aggiornamento di username
+    public void update(Utente utente) throws SQLException {     //NON PREVEDE l'aggiornamento di username
 
         String query = "UPDATE utente " +
                 "SET email=?, password=?, ruolo=? " +
@@ -185,16 +165,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                 cmd.executeUpdate();
 
-            } catch (SQLException e) {
-
-                throw new DBException("ERRORE: Modifiche non riuscite all'utente " + utente.getUsername(), e);
-
             }
 
     }
 
     @Override
-    public void update(String oldUsername, Utente utente) {     //PREVEDE aggiornamento username
+    public void update(String oldUsername, Utente utente) throws SQLException {     //PREVEDE aggiornamento username
 
         String query = "UPDATE utente " +
                 "SET username=?, email=?, password=?, ruolo=? " +
@@ -209,16 +185,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             cmd.executeUpdate();
 
-        } catch (SQLException e) {
-
-            throw new DBException("ERRORE: Modifiche non riuscite all'utente " + utente.getUsername(), e);
-
         }
 
     }
 
 
-    public void delete(Utente utente) {
+    public void delete(Utente utente) throws SQLException {
 
         String query = "DELETE FROM utente WHERE username = ?";
 
@@ -230,8 +202,6 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             cmd.executeUpdate();
 
-        } catch (SQLException e) {
-                 throw new DBException("ERRORE: Impossibile cancellare l'utente " + utente.getUsername(), e);
         }
 
     }
