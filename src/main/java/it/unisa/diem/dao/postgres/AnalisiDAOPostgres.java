@@ -3,6 +3,9 @@ package it.unisa.diem.dao.postgres;
 import it.unisa.diem.dao.interfacce.DAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Analisi;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Documento;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 
 import java.sql.*;
 import java.util.Collections;
@@ -34,6 +37,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
             ResultSet rs=st.executeQuery(query);
             while(rs.next()){
                 //qui devo popolare la listadi analisi, dev prima creare analisi
+                analisi.add(getAnalisi(rs));
             }
         }catch(SQLException e){
             throw e;
@@ -55,7 +59,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
             if(lines == 0)
                 throw new DBException("Errore: nessuna riga modificata");
         }catch(SQLException e){
-            throw e;
+            throw new DBException("Errore: impossibile inserire analisi",e);
         }
 
     }
@@ -78,5 +82,18 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
         }catch(SQLException e){
             throw e;
         }
+    }
+
+    private Analisi getAnalisi(ResultSet rs)throws SQLException, DBException{
+        Analisi a=null;
+        String nome=rs.getString("nome");
+        String documento=rs.getString("documento");
+        String path=rs.getString("percorso");
+        String split[]= path.split("[/.]");
+        String nomeFile=split[split.length-2];
+        Difficolta difficolta= Difficolta.valueOf(split[split.length-3]);
+        Lingua lingua= Lingua.valueOf(split[split.length-4]);
+        a = new Analisi(new Documento(documento,lingua, difficolta), null); //non mi interessano le stopword
+        return a;
     }
 }

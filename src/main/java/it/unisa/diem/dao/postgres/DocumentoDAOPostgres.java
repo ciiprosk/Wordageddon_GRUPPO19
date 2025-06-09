@@ -54,22 +54,6 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
     }
 
-
-    public int geDocumentoId(Documento documento)throws SQLException, DBException{
-
-        String idQuery ="SELECT id FROM DOCMENTO WHERE nome= ?";
-        int id=-1;
-        try(Connection con = DriverManager.getConnection(url,user, pass);
-            PreparedStatement ps= con.prepareStatement(idQuery);){
-            ps.setString(1, documento.getTitolo()); // adesso posso cercare l'id del documento
-            ResultSet ritorno = ps.executeQuery();
-            while(ritorno.next()){
-                id=ritorno.getInt("id");
-            }
-
-        }
-        return id;
-    }
     @Override
     public List<Documento> selectAll() {
         return Collections.emptyList();
