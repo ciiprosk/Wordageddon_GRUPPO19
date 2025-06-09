@@ -43,4 +43,9 @@ public class StoricoSessione extends Sessione{
         return Long.hashCode(this.getId());
     }
 
+    @Override
+    public String toString() {
+        return "Storico di id: " + this.getId() + ", data fine: " + this.dataFine + "e punteggio: " + super.getPunteggio();
+    }
+
 }

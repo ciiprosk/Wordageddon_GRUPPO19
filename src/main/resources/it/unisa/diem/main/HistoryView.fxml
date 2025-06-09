@@ -37,8 +37,9 @@
                <children>
                   <TableView fx:id="tableView" maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0">
                      <columns>
-                        <TableColumn fx:id="dateColumn" prefWidth="348.0" text="End Date" />
-                        <TableColumn fx:id="scoreColumn" prefWidth="347.0" text="Score" />
+                        <TableColumn fx:id="dateColumn" prefWidth="300.0" text="End Date" />
+                        <TableColumn fx:id="scoreColumn" prefWidth="300.0" text="Score" />
+                        <TableColumn fx:id="languageColumn" prefWidth="95.0" text="lang" />
                      </columns></TableView>
                </children>
             </HBox>

@@ -32,6 +32,7 @@ public class HistoryViewController {
     @FXML private TableColumn<StoricoSessione, String> dateColumn;
     @FXML private TableColumn<StoricoSessione, Integer> scoreColumn;
 
+
     private Utente utente;
 
     @FXML
