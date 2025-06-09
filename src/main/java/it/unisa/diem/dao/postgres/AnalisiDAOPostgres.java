@@ -26,12 +26,23 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public List<Analisi> selectAll() {
-        return Collections.emptyList();
+    public List<Analisi> selectAll() throws SQLException{
+        List<Analisi> analisi= null;
+        String query = "SELECT * FROM analisi";
+        try(Connection con = DriverManager.getConnection(url, user, password);
+            Statement st=con.createStatement();){
+            ResultSet rs=st.executeQuery(query);
+            while(rs.next()){
+                //qui devo popolare la listadi analisi, dev prima creare analisi
+            }
+        }catch(SQLException e){
+            throw e;
+        }
+        return analisi;
     }
 
     @Override
-    public void insert(Analisi analisi){
+    public void insert(Analisi analisi) throws SQLException{
         // per inserire analisi ho bisogno di documento che trovo già in analisi--> GODO
         //1. preparo query
         String query = "INSERT INTO analisi (nome, documento, percorso) VALUES (?, ?, ?)";
@@ -41,7 +52,7 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
             ps.setString(2, analisi.getDocumento().getTitolo());
             ps.setString(3, analisi.getPathAnalisi());
             int lines = ps.executeUpdate();
-            if(lines == 0 )
+            if(lines == 0)
                 throw new DBException("Errore: nessuna riga modificata");
         }catch(SQLException e){
             throw e;
@@ -55,8 +66,17 @@ public class AnalisiDAOPostgres implements DAO<Analisi> {
     }
 
     @Override
-    public void delete(Analisi analisi) {
-        //preparo la query
+    public void delete(Analisi analisi) throws SQLException{
+        //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
+        String query = "DELETE FROM analisi WHERE nome = ?";
+        try(Connection con= DriverManager.getConnection(url, user, password);
+        PreparedStatement ps = con.prepareStatement(query);){
+            ps.setString(1, analisi.getTitolo());
+            int lines= ps.executeUpdate();
+            if(lines == 0)  throw new  DBException("Errore: nessuna riga cancellata");
 
+        }catch(SQLException e){
+            throw e;
+        }
     }
 }
