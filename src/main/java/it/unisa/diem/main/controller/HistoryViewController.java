@@ -1,5 +1,6 @@
 package it.unisa.diem.main.controller;
 
+import java.time.LocalDateTime;
 import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
@@ -17,7 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.sql.SQLOutput;
+import java.sql.SQLException;
 import java.util.List;
 
 public class HistoryViewController {
@@ -46,21 +47,29 @@ public class HistoryViewController {
         leaderboardButton.setGraphic(leaderView);
 
         // Inizializza colonne della tabella per StoricoSessione
-        dateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDataFine().toString())
-        );
+        dateColumn.setCellValueFactory(cellData -> {
+            // Otteniamo la data di fine sessione e la convertiamo in stringa
+            LocalDateTime dataFine = cellData.getValue().getDataFine();
+            String formattedDate = dataFine != null ? dataFine.toString() : "";
+            return new SimpleStringProperty(formattedDate);
+        });
 
         scoreColumn.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getSessione().getPunteggio()).asObject()
+                new SimpleIntegerProperty(cellData.getValue().getPunteggio()).asObject()
         );
     }
 
     private void loadStoricoSessioni() {
         StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
 
-        List<StoricoSessione> storicoSessioni = dao.selectByUser(utente.getUsername());
+        List<StoricoSessione> storicoSessioni = null;
+        try {
+            storicoSessioni = dao.selectByUser(utente.getUsername());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList(storicoSessioni);
-
+        System.out.println("yo");
         tableView.setItems(observableSessioni);
     }
 
