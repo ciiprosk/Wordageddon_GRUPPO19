@@ -205,7 +205,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
         LocalDateTime inizio = rs.getTimestamp("dataInizio").toLocalDateTime();
 
-        int punteggio = rs.getInt("punteggio");
+        int punteggio = rs.getInt("punteggioottenuto");
 
         boolean completato = rs.getBoolean("completato");
 

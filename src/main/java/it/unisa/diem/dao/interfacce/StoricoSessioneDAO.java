@@ -8,4 +8,6 @@ public interface StoricoSessioneDAO extends ReadOnlyDAO {
 
     List<StoricoSessione> selectByUser(String username);
 
+
+
 }
