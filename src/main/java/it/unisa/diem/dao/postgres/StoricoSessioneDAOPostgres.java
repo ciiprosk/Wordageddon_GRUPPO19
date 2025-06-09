@@ -2,14 +2,14 @@ package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.StoricoSessioneDAO;
 import it.unisa.diem.exceptions.DBException;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
+import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
@@ -115,6 +115,40 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
         }
 
         return sessioni;
+
+    }
+
+    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) {
+
+        Map<String, Integer> classifica = new LinkedHashMap<>();
+
+        String query = "SELECT u.username as Utente, SUM(s.punteggioOttenuto) as Punti " +
+                "FROM SESSIONE s " +
+                "JOIN STORICOSESSIONE ss ON s.id = ss.id_sessione " +
+                "JOIN SESSIONEDOCUMENTO sd ON s.id = sd.id_sessione " +
+                "JOIN utente u ON s.utente = u.username " +
+                "WHERE sd.difficolta = ? GROUP BY u.username ORDER BY Punti DESC";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            cmd.setString (1, difficolta.toString());
+
+            ResultSet rs = cmd.executeQuery();
+
+            while (rs.next()) {
+
+                classifica.put(rs.getString(1), rs.getInt(2));
+
+            }
+
+        } catch (SQLException e) {
+
+            throw new DBException("ERRORE: Impossibile generare la classifica",e);
+        }
+
+        return classifica;
 
     }
 
