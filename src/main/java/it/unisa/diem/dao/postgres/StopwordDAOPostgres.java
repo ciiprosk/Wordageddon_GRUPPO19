@@ -11,6 +11,7 @@ public class StopwordDAOPostgres implements StopwordDAO {
     private final String url;
     private final String user;
     private final String pass;
+    private final DocumentoDAOPostgres documentoDAO;
 
     /**
      * Costruttore della classe che recupera la stringa di connessione del db, user, pass.
@@ -22,6 +23,7 @@ public class StopwordDAOPostgres implements StopwordDAO {
         this.url=url;
         this.user=user;
         this.pass=pass;
+        documentoDAO = new DocumentoDAOPostgres();
     }
 
     public Optional<StopwordManager> selectById(long id) {
@@ -37,7 +39,10 @@ public class StopwordDAOPostgres implements StopwordDAO {
     //faccio una query che mi restituisce l'id della query
     @Override
     public void insert(StopwordManager stopword) {
-
+        //1. preparo la query
+        //1.1. la query deve prima restituirmi l'id del documento che mi serve per cui ho bisogno di usare documento
+        String query = "SELECT id FROM documento WHERE titolo = ?";
+        //utilizzo una prepared statement
     }
 
     @Override
