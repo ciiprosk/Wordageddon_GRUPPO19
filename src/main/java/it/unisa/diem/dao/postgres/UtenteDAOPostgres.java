@@ -48,6 +48,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
             } else return false;
 
 
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: E-mail " + email + " già esistente!",e);
         }
 
     }
@@ -75,9 +77,11 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                 } else return false;
 
-            } else return false;
+            }   else return false;
 
-
+        }
+        catch (SQLException e) {
+            throw new DBException("ERRORE: username " + username + " già esistente!",e);
         }
 
     }
@@ -104,6 +108,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                         result = Optional.ofNullable(utente);
 
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: utente " + username + " non trovato!",e);
         }
 
         return result;
@@ -127,6 +133,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
                             utenti.add ( getUser(rs) );
                         }
 
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile recuperare le informazioni sugli utenti!",e);
         }
 
         return utenti;
@@ -146,6 +154,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                         cmd.executeUpdate();
 
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile inserire " + utente.getUsername() + "!",e);
         }
 
     }
@@ -165,7 +175,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                 cmd.executeUpdate();
 
-            }
+            }  catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile aggiornare " + utente.getUsername() + "!",e);
+        }
 
     }
 
@@ -185,6 +197,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             cmd.executeUpdate();
 
+        }  catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile aggiornare " + utente.getUsername() + "!",e);
         }
 
     }
@@ -202,6 +216,8 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             cmd.executeUpdate();
 
+        }  catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile eliminare " + utente.getUsername() + "!",e);
         }
 
     }
