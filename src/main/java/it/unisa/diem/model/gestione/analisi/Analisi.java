@@ -1,7 +1,6 @@
 package it.unisa.diem.model.gestione.analisi;
 
 import it.unisa.diem.exceptions.DeleteException;
-import it.unisa.diem.exceptions.UpdateException;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;

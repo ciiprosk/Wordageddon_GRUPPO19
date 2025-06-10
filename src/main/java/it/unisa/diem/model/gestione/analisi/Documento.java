@@ -1,8 +1,6 @@
 package it.unisa.diem.model.gestione.analisi;
 
 import it.unisa.diem.exceptions.DeleteException;
-import it.unisa.diem.exceptions.UpdateException;
-import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.utility.CryptoAlphabet;
 
 import java.io.*;
@@ -180,6 +178,8 @@ public class Documento {
 
     /**
      * Elimina il file del documento dal filesystem.
+     * Il metodo verifica se il file da eliminare esiste e, in caso affermativo, tenta di eliminarlo.
+     * Se il file non esiste o se si verifica un errore durante l'eliminazione, viene sollevata un'eccezione DeleteException.
      */
     public void eliminaDocumento() throws DeleteException {
         String path = this.path.trim();
