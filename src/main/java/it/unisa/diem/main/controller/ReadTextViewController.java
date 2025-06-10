@@ -5,16 +5,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReadTextViewController {
+
+
+    @FXML Label textTitleLabel;
+    @FXML Label textBodyLabel;
 
     private String difficolta;
     private String lingua;
 
-    @FXML
-    private Button continueButton;
+    @FXML private Button continueButton;
 
     public void setDifficolta(String difficolta) {
         this.difficolta = difficolta;
@@ -26,11 +34,26 @@ public class ReadTextViewController {
         System.out.println("Lingua ricevuta: " + lingua);
     }
 
-
     @FXML
     private void initialize() {
-        continueButton.setOnAction(e -> goToQuestionView());
+        getTextFileNames();
     }
+
+
+
+
+
+    private List<String> getTextFileNames() {
+        String path = "data/"+lingua+"/"+difficolta+"/";
+
+
+
+        List<String> files = new ArrayList<>();
+
+
+        return files;
+    }
+
 
     private void goToQuestionView() {
         try {

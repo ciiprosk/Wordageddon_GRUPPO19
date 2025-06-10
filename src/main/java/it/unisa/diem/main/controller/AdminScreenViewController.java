@@ -12,11 +12,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
@@ -58,7 +62,7 @@ public class AdminScreenViewController {
         stopwordITA.aggiungi("esempio");
         /*temporaneo*/
 
-        /*disabilita il messaggio di errore*/
+        /*disabilita il label di errore*/
         alertLabel.setVisible(false);
         alertLabel.setManaged(false);
 
@@ -71,15 +75,25 @@ public class AdminScreenViewController {
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());
         stopwordsListView.setOnEditCommit(event -> {
             int index = event.getIndex();
-            String newValue = event.getNewValue();
+            String newValue = event.getNewValue().trim();
+
+            if (newValue.isEmpty()) {
+                alertLabel.setText("Non si possono inserire parole vuote.");
+                alertLabel.setVisible(true);
+                alertLabel.setManaged(true);
+                return;
+            }
+
             if (newValue.contains(" ")) {
                 alertLabel.setText("Le parole non possono contenere spazi.");
                 alertLabel.setVisible(true);
                 alertLabel.setManaged(true);
                 return;
-            } else {
-                stopwordsListView.getItems().set(index, newValue);
             }
+
+            alertLabel.setVisible(false);
+            alertLabel.setManaged(false);
+            stopwordsListView.getItems().set(index, newValue);
         });
 
         /*imposta l'immagine del tasto indietro*/
@@ -197,6 +211,21 @@ public class AdminScreenViewController {
         SceneLoader.load("HomeMenuView.fxml", backButton);
     }
 
+    private void goToListTexts(String titolo) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
+            Parent root = loader.load();
+            ListTextsController controller = loader.getController();
+            controller.setNewTitle(titolo);
+            Stage stage = (Stage) importButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Titles");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
 
     //ListView
@@ -278,7 +307,7 @@ public class AdminScreenViewController {
             e.printStackTrace();
         }
 
-        goToMainMenu(actionEvent);
+        goToListTexts(titolo);
     }
 
     private void validateConfirmButton() {
