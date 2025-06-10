@@ -38,6 +38,7 @@
 .selected-button:hover {
     -fx-background-color: #8a0000;
     -fx-border-width: 5px;
+    -fx-cursor: hand;
 }
 
 .table-view {
@@ -162,7 +163,39 @@
     -fx-background-radius: 5px;
     -fx-background-color: #ffa600;
 }
-#goToRegisterLabel:hover, #goToLoginLabel:hover {
-    -fx-text-fill: #ffd700;
-    -fx-cursor: hand;
+
+
+/*ListView*/
+.list-cell {
+    -fx-border-color: #ffcc41;
+    -fx-border-width: 0.3px;
+    -fx-text-fill: #ffcc41;
 }
+
+.list-cell:odd {
+    -fx-background-color: #383838;
+}
+
+.list-cell:even {
+    -fx-background-color: #2a2a2a;
+}
+
+.list-cell:hover {
+    -fx-background-color: #ffd700;
+    -fx-text-fill: #303030;
+}
+
+.list-view {
+    -fx-background-color: #ffcc41;
+}
+
+.list-cell .text-field {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.list-cell .text-field:hover {
+    -fx-background-color: #ffd700;
+    -fx-text-fill: #303030;
+}
+

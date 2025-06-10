@@ -53,6 +53,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             result = Optional.ofNullable(sessione);
 
+        } catch(SQLException e){
+            throw new DBException("Errore: impossibile trovare la sessione attiva con id " + id + "!",e);
         }
 
         return result;
@@ -81,6 +83,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             result = Optional.ofNullable(sessione);
 
+        }  catch(SQLException e){
+            throw new DBException("Errore: impossibile trovare la sessione attiva di " + username + "!",e);
         }
 
         return result;
@@ -123,7 +127,9 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             setSessionForInsert(cmd, sessione);
 
-            cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
             try (ResultSet rs = cmd.getGeneratedKeys()) {
 
@@ -149,7 +155,9 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             setSessionForUpdate(cmd, sessione);
 
-            cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
         }
 
@@ -166,7 +174,9 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
             setSessionForDelete(cmd, sessione);
 
-            cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
         }
 

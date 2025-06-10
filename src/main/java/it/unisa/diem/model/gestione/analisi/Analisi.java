@@ -246,6 +246,7 @@ public class Analisi {
     public void eliminaAnalisi() throws DeleteException{
         String path=this.pathAnalisi;
         File file = Path.of(path).toFile();
+
         if(file.exists()){
             if(!file.delete()) throw new DeleteException("Impossibile eliminare il file di analisi: " + file.getName());
             else {

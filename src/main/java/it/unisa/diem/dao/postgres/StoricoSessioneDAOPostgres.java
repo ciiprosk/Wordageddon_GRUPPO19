@@ -132,6 +132,8 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
             }
 
+        }   catch(SQLException e){
+            throw new DBException("Errore: impossibile caricare la Leaderboard per difficoltà " + difficolta + "!",e);
         }
 
         return classifica;

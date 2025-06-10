@@ -7,7 +7,7 @@ import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
-import it.unisa.diem.utility.SceneLoader;
+import it.unisa.diem.model.gestione.utenti.Utente;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,6 +46,8 @@ public class AdminScreenViewController {
     @FXML private CheckBox checkNormal;
     @FXML private CheckBox checkHard;
     @FXML private Label alertLabel;
+
+    Utente utente;
 
     private StopwordManager stopword;
     private ObservableList<String> observableList;
@@ -208,7 +210,17 @@ public class AdminScreenViewController {
 
     //Pulsante indietro
     public void goToMainMenu(ActionEvent actionEvent) {
-        SceneLoader.load("HomeMenuView.fxml", backButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utente);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void goToListTexts(String titolo) {
@@ -317,6 +329,11 @@ public class AdminScreenViewController {
         boolean isDifficultySelected = checkEasy.isSelected() || checkNormal.isSelected() || checkHard.isSelected();
 
         confirmButton.setDisable(!(isTitleFilled && isFileImported && isLanguageSelected && isDifficultySelected));
+    }
+
+    public void setUtente(Utente utente) {
+        this.utente = utente;
+        System.out.println(utente.getUsername());
     }
 
 }

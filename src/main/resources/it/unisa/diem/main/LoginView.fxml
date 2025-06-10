@@ -28,7 +28,7 @@
             <Font size="30.0" />
          </font>
       </PasswordField>
-      <Label fx:id="incorrectLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="Incorrect email or password " visible="false">
+      <Label fx:id="incorrectLabel" prefHeight="30.0" prefWidth="1200.0" style="-fx-text-fill: red" text="Incorrect username or password " visible="false">
          <font>
             <Font size="20.0" />
          </font>

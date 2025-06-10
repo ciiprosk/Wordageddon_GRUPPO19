@@ -152,7 +152,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                         setUserForInsert(cmd, utente);
 
-                        cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
         } catch (SQLException e) {
             throw new DBException("ERRORE: Impossibile inserire " + utente.getUsername() + "!",e);
@@ -173,7 +175,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
                 setUserForUpdate(cmd, utente);
 
-                cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
             }  catch (SQLException e) {
             throw new DBException("ERRORE: Impossibile aggiornare " + utente.getUsername() + "!",e);
@@ -195,7 +199,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             setUserForUpdate(cmd, oldUsername, utente);
 
-            cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
         }  catch (SQLException e) {
             throw new DBException("ERRORE: Impossibile aggiornare " + utente.getUsername() + "!",e);
@@ -214,7 +220,9 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
             setUserForDelete(cmd, utente);
 
-            cmd.executeUpdate();
+            int lines = cmd.executeUpdate();
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
 
         }  catch (SQLException e) {
             throw new DBException("ERRORE: Impossibile eliminare " + utente.getUsername() + "!",e);

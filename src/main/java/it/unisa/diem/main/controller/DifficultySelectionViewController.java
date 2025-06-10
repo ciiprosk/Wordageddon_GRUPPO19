@@ -1,6 +1,7 @@
 package it.unisa.diem.main.controller;
 
 import it.unisa.diem.main.Main;
+import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ public class DifficultySelectionViewController {
 
     private String selectedDifficolta = null;
     private String selectedLanguage = null;
+    private Utente utente = null;
 
     @FXML
     public void initialize() {
@@ -91,7 +93,18 @@ public class DifficultySelectionViewController {
 
     public void goToMainMenu(ActionEvent actionEvent) {
         selectedDifficolta = null;
-        SceneLoader.load("HomeMenuView.fxml", backButton);
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utente);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
@@ -133,4 +146,8 @@ public class DifficultySelectionViewController {
         }
     }
 
+
+    public void setUtente(Utente utenteToPass) {
+        this.utente = utenteToPass;
+    }
 }
