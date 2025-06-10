@@ -19,7 +19,7 @@ public class SessioneDocumento {
             sessioneDocumenti.put(s, List.of(d));
         }
     }
-    //i serve per sapere che domande fare in una sessione interrotta
+    //ti serve per sapere che domande fare in una sessione interrotta
     public List<Documento> getDocumentiBySessione(Sessione s){
         return sessioneDocumenti.getOrDefault(s, List.of());
     }
