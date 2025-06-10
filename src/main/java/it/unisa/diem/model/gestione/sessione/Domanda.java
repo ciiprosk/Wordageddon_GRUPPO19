@@ -1,5 +1,6 @@
 package it.unisa.diem.model.gestione.sessione;
 
+import java.util.ArrayList;
 import java.util.List;
 import it.unisa.diem.utility.TipoDomanda;
 
@@ -9,8 +10,8 @@ import it.unisa.diem.utility.TipoDomanda;
 public class Domanda {
 
     private long id;
-    private final Sessione sessione;
-    private final int numeroDomanda;
+    private  Sessione sessione;
+    private  int numeroDomanda;
     private final String testoDomanda;
     private final TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta
@@ -38,6 +39,15 @@ public class Domanda {
         this.tipo = tipo;
         this.rispostaCorretta = rispostaCorretta;
         this.tempoLimiteSecondi = tempoLimiteSecondi;
+
+    }
+    public Domanda(String testoDomanda, TipoDomanda tipo,List<String> opzioni, String rispostaCorretta) {
+        opzioni=new ArrayList<>();
+
+        this.testoDomanda = testoDomanda;
+        this.tipo = tipo;
+        this.rispostaCorretta = rispostaCorretta;
+
 
     }
 
