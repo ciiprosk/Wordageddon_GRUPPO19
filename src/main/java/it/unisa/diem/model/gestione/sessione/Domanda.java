@@ -8,16 +8,19 @@ import it.unisa.diem.utility.TipoDomanda;
 
 public class Domanda {
 
-    private Sessione sessione;
-    private String testoDomanda;
-    private TipoDomanda tipo;
+    private long id;
+    private final Sessione sessione;
+    private final int numeroDomanda;
+    private final String testoDomanda;
+    private final TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta
-    private String rispostaCorretta;
+    private final String rispostaCorretta;
     private int tempoLimiteSecondi;
 
-    public Domanda(Sessione sessione, String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+    public Domanda(Sessione sessione, int numeroDomanda, String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
 
         this.sessione = sessione;
+        this.numeroDomanda = numeroDomanda;
         this.testoDomanda = testoDomanda;
         this.tipo = tipo;
         this.opzioni = opzioni;
@@ -25,11 +28,17 @@ public class Domanda {
         this.tempoLimiteSecondi = 15;
 
     }
-    public Domanda(String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
+
+    public Domanda(long id, Sessione sessione, int numeroDomanda, String testoDomanda, TipoDomanda tipo, String rispostaCorretta, int tempoLimiteSecondi) {
+
+        this.id = id;
+        this.sessione = sessione;
+        this.numeroDomanda = numeroDomanda;
         this.testoDomanda = testoDomanda;
         this.tipo = tipo;
-        this.opzioni = opzioni;
         this.rispostaCorretta = rispostaCorretta;
+        this.tempoLimiteSecondi = tempoLimiteSecondi;
+
     }
 
     // Getter
@@ -57,5 +66,43 @@ public class Domanda {
     public boolean verificaRisposta(String rispostaUtente) {
         return rispostaCorretta.equalsIgnoreCase(rispostaUtente);
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public Sessione getSessione() {
+        return sessione;
+    }
+
+    public int getNumeroDomanda() {
+        return numeroDomanda;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == null)  return false;
+
+        if (this == o) return true;
+
+        if (o.getClass() != this.getClass()) return false;
+
+        Domanda domanda = (Domanda) o;
+
+        return this.getId() == domanda.getId();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(this.getId());
+    }
+
+
 }
 

@@ -185,7 +185,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 throw new DBException("Errore: nessuna riga modificata");
 
         }   catch(SQLException e){
-                throw new DBException("Errore: impossibile trovare la sessione attiva di " + sessione.getId() + "!",e);
+                throw new DBException("Errore: impossibile eliminare la sessione " + sessione.getId() + "!",e);
         }
 
     }

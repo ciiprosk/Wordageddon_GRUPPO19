@@ -105,7 +105,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             int lines= ps.executeUpdate();
             if(lines == 0)  throw new  DBException("Errore: nessuna riga cancellata");
 
-        }catch(SQLException | DBException e){
+        }catch(SQLException e){
             throw new DBException("Errore nel database, Impossibile cancellare analisi");
         }
     }

@@ -160,7 +160,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
             PreparedStatement cmd = connection.prepareStatement(query)){
 
-            cmd.setString(1, documento.getTitolo());
+            setDocumentForDelete(cmd, documento);
 
             int lines= cmd.executeUpdate();
             if(lines == 0)
@@ -195,6 +195,12 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
         cmd.setString(2, documento.getPath());
         cmd.setObject(3,documento.getLingua(),java.sql.Types.OTHER);
         cmd.setObject(4,documento.getDifficolta(),java.sql.Types.OTHER);
+
+    }
+
+    private void setDocumentForDelete(PreparedStatement cmd, Documento documento) throws SQLException {
+
+        cmd.setString(1,documento.getTitolo());
 
     }
 
