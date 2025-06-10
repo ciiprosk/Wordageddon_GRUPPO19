@@ -136,6 +136,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 if (rs.next()) {
                     sessione.setId(rs.getLong(1));
                 }
+            }   catch(SQLException e){
+                    throw new DBException("Errore: impossibile inserire la sessione attiva " + sessione.getId() + "!",e);
             }
 
         }
@@ -159,6 +161,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
             if(lines == 0)
                 throw new DBException("Errore: nessuna riga modificata");
 
+        }   catch(SQLException e){
+                throw new DBException("Errore: impossibile aggiornare la sessione " + sessione.getId() + "!",e);
         }
 
     }
@@ -178,6 +182,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
             if(lines == 0)
                 throw new DBException("Errore: nessuna riga modificata");
 
+        }   catch(SQLException e){
+                throw new DBException("Errore: impossibile trovare la sessione attiva di " + sessione.getId() + "!",e);
         }
 
     }
