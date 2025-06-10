@@ -97,7 +97,17 @@ public class HistoryViewController {
     }
 
     public void goToLeaderboard(ActionEvent actionEvent) {
-        SceneLoader.load("LeaderboardView.fxml", leaderboardButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LeaderboardView.fxml"));
+            Parent root = loader.load();
+            LeaderboardViewController controller = loader.getController();
+            controller.setUtente(utente);
+            Stage stage = (Stage) leaderboardButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void setUtente(Utente utente) {
