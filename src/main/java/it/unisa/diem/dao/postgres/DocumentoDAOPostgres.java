@@ -173,8 +173,8 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
     private void setDocumentForInsert(PreparedStatement cmd, Documento documento) throws SQLException {
 
-        cmd.setString(1,"nome");
-        cmd.setString(2,"percorso");
+        cmd.setString(1,documento.getTitolo());
+        cmd.setString(2, documento.getPath());
         cmd.setObject(3,documento.getLingua(),java.sql.Types.OTHER);
         cmd.setObject(4,documento.getDifficolta(),java.sql.Types.OTHER);
 

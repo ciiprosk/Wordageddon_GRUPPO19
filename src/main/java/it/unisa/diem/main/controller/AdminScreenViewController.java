@@ -1,5 +1,8 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
+import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
+import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
@@ -217,18 +220,17 @@ public class AdminScreenViewController {
             controller.setUtente(utente);
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Caricamento");
+            stage.setTitle("Menu");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void goToListTexts(String titolo) {
+    private void goToListTexts() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
             Parent root = loader.load();
-            ListTextsController controller = loader.getController();
-            controller.setNewTitle(titolo);
+
             Stage stage = (Stage) importButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Titles");
@@ -319,7 +321,13 @@ public class AdminScreenViewController {
             e.printStackTrace();
         }
 
-        goToListTexts(titolo);
+        DocumentoDAOPostgres dao = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        try {
+            dao.insert(documento);
+        } catch (DBException e) {
+            throw new RuntimeException(e);
+        }
+        goToListTexts();
     }
 
     private void validateConfirmButton() {
