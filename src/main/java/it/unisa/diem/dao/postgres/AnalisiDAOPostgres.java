@@ -9,6 +9,7 @@ import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
  */
     @Override
     public List<Analisi> selectAll() throws DBException{
-        List<Analisi> analisi= null;
+        List<Analisi> analisi=  new ArrayList<>();
         String query = "SELECT * FROM analisi";
         try(Connection con = DriverManager.getConnection(url, user, password);
             Statement st=con.createStatement();){
@@ -96,7 +97,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
 
     @Override
     public void update(Analisi analisi) throws DBException{
-        String query = "UPDATE analisi SET nome = ? percorso = ? WHERE nome = ?";
+        String query = "UPDATE analisi SET nome = ?, percorso = ? WHERE nome = ?";
         try(Connection con=DriverManager.getConnection(url, user, password);
             PreparedStatement ps=con.prepareStatement(query);){
             ps.setString(1, analisi.getTitolo());

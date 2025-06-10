@@ -81,14 +81,17 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public List<String> selectAllTitles() throws DBException {
+    public List<String> selectTitlesByLangAndDif(Lingua lingua, Difficolta difficolta) throws DBException {
         List<String> titoli = new ArrayList<>();
 
-        String query = "SELECT nome FROM documento";
+        String query = "SELECT nome FROM documento WHERE lingua = ? AND difficolta = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            cmd.setObject(1, lingua.name(), java.sql.Types.OTHER);
+            cmd.setObject(2, difficolta.name(), java.sql.Types.OTHER);
 
             ResultSet rs = cmd.executeQuery();
 
