@@ -14,12 +14,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -79,7 +83,17 @@ public class HistoryViewController {
     }
 
     public void goToMainMenu(ActionEvent actionEvent) {
-        SceneLoader.load("HomeMenuView.fxml", backButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utente);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void goToLeaderboard(ActionEvent actionEvent) {

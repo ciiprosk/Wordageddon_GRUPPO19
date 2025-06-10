@@ -28,7 +28,17 @@ public class HomeMenuViewController {
     }
 
     public void goToNewGame(ActionEvent actionEvent) {
-        SceneLoader.load("DifficultySelectionView.fxml", newGameButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/DifficultySelectionView.fxml"));
+            Parent root = loader.load();
+            DifficultySelectionViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) newGameButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("NEW GAME");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void goToLeaderboard(ActionEvent actionEvent) {
@@ -64,7 +74,17 @@ public class HomeMenuViewController {
     }
 
     public void goToLoadDocument(ActionEvent actionEvent) {
-        SceneLoader.load("AdminScreenView.fxml", adminButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/AdminScreenView.fxml"));
+            Parent root = loader.load();
+            AdminScreenViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) adminButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Admin");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void showAdminButton() {
@@ -74,6 +94,6 @@ public class HomeMenuViewController {
     }
 
     public void setUtente(Utente utente) {
-        utenteToPass = utente;
+        this.utenteToPass = utente;
     }
 }
