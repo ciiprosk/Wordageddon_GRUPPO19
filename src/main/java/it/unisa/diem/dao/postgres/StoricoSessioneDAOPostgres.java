@@ -130,7 +130,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
-            cmd.setObject(3, difficolta.name(), Types.OTHER);
+            cmd.setObject(1, difficolta.name(), Types.OTHER);
 
             ResultSet rs = cmd.executeQuery();
 
