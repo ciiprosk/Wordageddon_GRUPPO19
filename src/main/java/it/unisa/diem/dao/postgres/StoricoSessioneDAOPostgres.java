@@ -3,6 +3,7 @@ package it.unisa.diem.dao.postgres;
 import it.unisa.diem.dao.interfacce.StoricoSessioneDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.classifica.VoceClassifica;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
@@ -107,28 +108,35 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
     }
 
-    public Map<String, Integer> selectByTopRanking(Difficolta difficolta) throws SQLException, DBException {
+    public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
 
-        Map<String, Integer> classifica = new LinkedHashMap<>();
+        List<VoceClassifica> classifica = new ArrayList<>();
 
-        String query = "SELECT u.username as Utente, SUM(s.punteggioOttenuto) as Punti " +
-                "FROM SESSIONE s " +
-                "JOIN STORICOSESSIONE ss ON s.id = ss.id_sessione " +
-                "JOIN SESSIONEDOCUMENTO sd ON s.id = sd.id_sessione " +
-                "JOIN utente u ON s.utente = u.username " +
-                "WHERE sd.difficolta = ? GROUP BY u.username ORDER BY Punti DESC";
+        String query = """
+
+    SELECT u.username, AVG(s.punteggioottenuto) AS media_punteggio, SUM(s.punteggioottenuto) AS somma_punteggio 
+    FROM sessione s
+        JOIN storicosessione ss ON s.id = ss.id_sessione
+        JOIN sessionedocumento sd ON s.id = sd.sessione
+        JOIN utente u ON s.utente = u.username
+    	JOIN documento d ON sd.documento=d.nome
+        WHERE d.difficolta = ?
+        GROUP BY u.username
+        ORDER BY media_punteggio DESC
+        LIMIT 10
+""";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
-            cmd.setString (1, difficolta.toString());
+            cmd.setObject(3, difficolta.name(), Types.OTHER);
 
             ResultSet rs = cmd.executeQuery();
 
             while (rs.next()) {
 
-                classifica.put(rs.getString(1), rs.getInt(2));
+                classifica.add(getLeaderboard(rs));
 
             }
 
@@ -137,6 +145,22 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
         }
 
         return classifica;
+
+    }
+
+    private VoceClassifica getLeaderboard(ResultSet rs) throws SQLException {
+
+        VoceClassifica vc = null;
+
+        String username = rs.getString("username");
+
+        int sum = rs.getInt("somma_punteggio");
+
+        double avg = rs.getDouble("media_punteggio");
+
+        vc = new VoceClassifica(username, sum, avg);
+
+        return vc;
 
     }
 
