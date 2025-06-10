@@ -112,7 +112,7 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleItButton() {
-        selectedLanguage = "IT";
+        selectedLanguage = "ITA";
         System.out.println("hai clickato it");
 
         engButton.getStyleClass().remove("selected-button");
