@@ -44,7 +44,6 @@ public class LeaderboardViewController {
 
     @FXML
     public void initialize() {
-        PropertiesLoader.init();
         Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
         backView.setFitWidth(30);

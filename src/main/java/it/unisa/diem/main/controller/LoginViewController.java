@@ -41,20 +41,11 @@ public class LoginViewController {
     @FXML
     public void initialize() {
 
-        PropertiesLoader.init();
 
         this.url = PropertiesLoader.getProperty("database.url");
         this.user = PropertiesLoader.getProperty("database.user");
         this.pass = PropertiesLoader.getProperty("database.password");
 
-        try (Connection co = DriverManager.getConnection(url, user, pass);){
-
-            System.out.println("Connessione al database riuscita!");
-        } catch (SQLException e) {
-            System.out.println("Connessione al database fallita!"); //probabilmente da sostituire con un alert e
-            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Connessione al database fallita!", null, "Assicurati di essere connesso a internet!");
-            Platform.exit();
-        }
 
         loginUsernameField.textProperty().addListener((obs, oldVal, newVal) -> validateLoginForm());
         loginPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateLoginForm());
