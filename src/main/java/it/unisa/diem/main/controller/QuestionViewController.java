@@ -1,5 +1,8 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Documento;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.TipoDomanda;
@@ -25,6 +28,7 @@ public class QuestionViewController {
 
     private final List<Domanda> domande = new ArrayList<>();
     private Utente utente;
+    private Documento documento;
 
     public void initialize() {
         List<String> opzioni1 = new ArrayList<>();
@@ -104,5 +108,9 @@ public class QuestionViewController {
 
     public void setUtente(Utente utenteToPass) {
         this.utente = utenteToPass;
+    }
+
+    public void setDocumento(Documento documento) {
+        this.documento = documento;
     }
 }

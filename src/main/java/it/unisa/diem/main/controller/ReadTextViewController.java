@@ -31,6 +31,7 @@ public class ReadTextViewController {
     private Difficolta difficolta;
     private Lingua lingua;
     private String path;
+    private Documento documento;
 
     private List<String> words = new ArrayList<>();
 
@@ -89,7 +90,7 @@ public class ReadTextViewController {
         }
         String newPath = path + titolo + ".bin";
         try {
-            Documento documento = Documento.leggiDocumento(newPath);
+            documento = Documento.leggiDocumento(newPath);
             words = documento.getTesto();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -115,6 +116,7 @@ public class ReadTextViewController {
             Parent root = loader.load();
             QuestionViewController controller = loader.getController();
             controller.setUtente(utente);
+            controller.setDocumento(documento);
 
 
             Stage stage = (Stage) continueButton.getScene().getWindow();
