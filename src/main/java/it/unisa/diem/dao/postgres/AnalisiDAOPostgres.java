@@ -18,15 +18,9 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     private String user;
     private String password;
 
-    public AnalisiDAOPostgres(String url, String user, String password) {
-        this.url = url;
-        this.user=user;
-        this.password=password;
-    }
-
 
     @Override
-    public Optional<Analisi> selectAnalisiByTitle(String titolo) throws SQLException, DBException{
+    public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException{
         Optional<Analisi> analisi = Optional.empty();
         //query: la query fa una select per nome analisi
         String query= "SELECT * FROM analisi where nome = ?";
@@ -46,14 +40,15 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         }
         return analisi;
     }
-
+/*
     @Override
     public void update(Analisi a, String oldTitolo) throws SQLException, DBException { //c'è un trigger che cambia anche documento e vale il viceversa
-        String query = "UPDATE analisi SET nome = ? WHERE nome = ?";
+        String query = "UPDATE analisi SET nome = ? percorso = ? WHERE nome = ?";
         try(Connection con=DriverManager.getConnection(url, user, password);
         PreparedStatement ps=con.prepareStatement(query);){
             ps.setString(1, a.getTitolo());
-            ps.setString(2, oldTitolo);
+            ps.setString(2, a.getPathAnalisi());
+            ps.setString(3, oldTitolo);
             int lines=ps.executeUpdate();
             if(lines == 0) throw new DBException("Errore: nessuna riga modificata");
 
@@ -62,8 +57,10 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         }
     }
 
+
+ */
     @Override
-    public List<Analisi> selectAll() throws SQLException, DBException{
+    public List<Analisi> selectAll() throws DBException{
         List<Analisi> analisi= null;
         String query = "SELECT * FROM analisi";
         try(Connection con = DriverManager.getConnection(url, user, password);
@@ -74,14 +71,13 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
                 analisi.add(getAnalisi(rs));
             }
         }catch(SQLException e){
-            throw e;
+            throw new DBException("Errore nel databse, Impossibile selezionare analisi");
         }
         return analisi;
     }
 
     @Override
-    public void insert(Analisi analisi) throws SQLException, DBException{
-        // per inserire analisi ho bisogno di documento che trovo già in analisi--> GODO
+    public void insert(Analisi analisi) throws DBException{
         //1. preparo query
         String query = "INSERT INTO analisi (nome, documento, percorso) VALUES (?, ?, ?)";
         try(Connection con = DriverManager.getConnection(url,user, password);
@@ -93,20 +89,30 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             if(lines == 0)
                 throw new DBException("Errore: nessuna riga modificata");
         }catch(SQLException e){
-            throw new DBException("Errore: impossibile inserire analisi",e);
+            throw new DBException("Errore: impossibile inserire analisi");
         }
 
     }
 
     @Override
-    public void update(Analisi analisi) {
-        //faccoi query che modifica il nome di analisi
+    public void update(Analisi analisi) throws DBException{
+        String query = "UPDATE analisi SET nome = ? percorso = ? WHERE nome = ?";
+        try(Connection con=DriverManager.getConnection(url, user, password);
+            PreparedStatement ps=con.prepareStatement(query);){
+            ps.setString(1, analisi.getTitolo());
+            ps.setString(2, analisi.getPathAnalisi());
+            ps.setString(3, analisi.getDocumento().getTitolo());
+            int lines=ps.executeUpdate();
+            if(lines == 0) throw new DBException("Errore: nessuna riga modificata");
 
+        }catch(SQLException e){
+            throw new DBException("Errore nel databse, Impossibile inserire username",e);
+        }
 
     }
 
     @Override
-    public void delete(Analisi analisi) throws SQLException, DBException{
+    public void delete(Analisi analisi) throws DBException{
         //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
         String query = "DELETE FROM analisi WHERE nome = ?";
         try(Connection con= DriverManager.getConnection(url, user, password);
@@ -116,11 +122,11 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             if(lines == 0)  throw new  DBException("Errore: nessuna riga cancellata");
 
         }catch(SQLException e){
-            throw e;
+            throw new DBException("Errore nel databse, Impossibile cancellare analisi", e);
         }
     }
 
-    private Analisi getAnalisi(ResultSet rs)throws SQLException, DBException{
+    private Analisi getAnalisi(ResultSet rs)throws SQLException{
         Analisi a=null;
         String nome=rs.getString("nome");
         String documento=rs.getString("documento");
