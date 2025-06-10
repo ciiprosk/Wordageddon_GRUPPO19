@@ -1,7 +1,7 @@
 package it.unisa.diem.main.controller;
 
 //import it.unisa.diem.dao.postgres.ClassificaDAOPostgres;
-import it.unisa.diem.dao.postgres.ClassificaDAOPostgres;
+import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
 //import it.unisa.diem.model.gestione.classifica.VoceClassifica;
@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class LeaderboardViewController {
@@ -32,8 +33,8 @@ public class LeaderboardViewController {
 
     private Utente utenteToPass;
 
- private final ClassificaDAOPostgres classificaDAO =
-            new ClassificaDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
+ private final StoricoSessioneDAOPostgres StoricoSessioneDAO =
+            new StoricoSessioneDAOPostgres(PropertiesLoader.getProperty("database.url"), PropertiesLoader.getProperty("database.user"), PropertiesLoader.getProperty("database.password"));
 
 
 
@@ -76,7 +77,7 @@ public class LeaderboardViewController {
 
         List<VoceClassifica> top10 = null;
         try {
-            top10 = classificaDAO.getTop10ByDifficolta(difficoltaDB);
+            top10 = StoricoSessioneDAO.selectByTopRanking(difficoltaDB);
         } catch (DBException e) {
             throw new RuntimeException(e);
         }

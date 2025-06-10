@@ -26,7 +26,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public Optional<Documento> selectByTitle(String documento) throws SQLException, DBException {
+    public Optional<Documento> selectByTitle(String documento) throws DBException {
 
         Optional<Documento> result = Optional.empty();
 
