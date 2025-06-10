@@ -47,8 +47,8 @@ public class LoginViewController {
         this.user = PropertiesLoader.getProperty("database.user");
         this.pass = PropertiesLoader.getProperty("database.password");
 
-        try {
-            Connection co = DriverManager.getConnection(url, user, pass);
+        try (Connection co = DriverManager.getConnection(url, user, pass);){
+
             System.out.println("Connessione al database riuscita!");
         } catch (SQLException e) {
             System.out.println("Connessione al database fallita!"); //probabilmente da sostituire con un alert e
