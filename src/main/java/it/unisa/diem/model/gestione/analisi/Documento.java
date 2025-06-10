@@ -1,5 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
+import it.unisa.diem.exceptions.DeleteException;
+import it.unisa.diem.exceptions.UpdateException;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.utility.CryptoAlphabet;
 
@@ -174,13 +176,44 @@ public class Documento {
         dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
         dr.path=filename;
     }
-    public void cambiaNomeDocumento(String nome){
-        String path=this.path;
-        getAttributes(path, this);
-        this.titolo=nome;
-        File vecchio=Path.of(path).toFile();
-        vecchio.renameTo(new File(vecchio.getParentFile().getPath()+ "/"+nome+".bin"));
 
+    /**
+     * Cambia il nome del documento e rinomina il file corrispondente nel filesystem.
+     * @param nome
+     */
+    public void cambiaNomeDocumento(String nome) throws UpdateException {
+        //creo file analisi con vecchio nome
+        String path=this.path.trim();
+        File vecchioFile = Path.of(path).toFile();
+        if(!vecchioFile.exists()){
+            throw new UpdateException("Il file del documento non esiste: " + vecchioFile.getName());
+        }
+        File nuovoFile = new File(vecchioFile.getParentFile(), nome + ".bin");
+        if(!vecchioFile.renameTo(nuovoFile)) {
+            throw new UpdateException("Impossibile rinominare il file del documento: " + vecchioFile.getName());
+        }
+        //aggiorno il path del documento
+        this.path = nuovoFile.getPath();
+        //aggiorno il titolo del documentoù
+        this.titolo = nome;
+    }
+
+    /**
+     * Elimina il file del documento dal filesystem.
+     */
+    public void eliminaDocumento() throws DeleteException {
+        String path = this.path.trim();
+        File file = Path.of(path).toFile();
+        if (file.exists())
+            if (!file.delete()) throw new DeleteException("Impossibile eliminare il file del documento: " + file.getName());
+            else {
+                this.titolo = null;
+                this.lingua = null;
+                this.difficolta = null;
+                this.path = null;
+                this.testo.clear();
+            }
+        else throw new DeleteException("Il file del documento non esiste: " + file.getName());
     }
     /**
      * Restituisce una rappresentazione testuale del documento.

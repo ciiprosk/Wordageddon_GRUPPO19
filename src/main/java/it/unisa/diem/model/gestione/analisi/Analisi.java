@@ -1,5 +1,7 @@
 package it.unisa.diem.model.gestione.analisi;
 
+import it.unisa.diem.exceptions.DeleteException;
+import it.unisa.diem.exceptions.UpdateException;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
@@ -16,13 +18,14 @@ import java.util.stream.Collectors;
  * Fornisce inoltre metodi che permettono il salvataggio su file e lettura dell'analisi.
  */
 public class Analisi {
-    private final Documento documento;
+    private Documento documento;
     private Map<String, Integer> frequenzeTesto;
-    private final Lingua linguaAnalisi;
-    private final Difficolta difficoltaAnalisi;
+    private Lingua linguaAnalisi;
+    private Difficolta difficoltaAnalisi;
     private String titolo;
     private StopwordManager stopwordAnalisi;
-    private final String pathAnalisi;
+    private String pathAnalisi;
+
 
     /**
      * Costruisce un oggetto Analisi basato sul documento fornito.
@@ -45,6 +48,15 @@ public class Analisi {
         if(stopwordAnalisi != null){
             this.stopwordAnalisi=stopwordAnalisi;
         }
+    }
+    public Analisi(Documento documento) {
+        frequenzeTesto = new HashMap<>();
+        this.documento = documento;
+        linguaAnalisi = documento.getLingua();
+        difficoltaAnalisi = documento.getDifficolta();
+        titolo = documento.getTitolo();
+        pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi + "/" + titolo + "_analysis.bin";
+
     }
     
 
@@ -201,21 +213,53 @@ public class Analisi {
        return path;
     }
 
-    public void modificaNomeAnalisi(String nomeNuovoAnalisi, String vecchioNomeAnalisi){
+    /**
+     * Modifica il nome del file di analisi corrente utilizzando il nuovo nome del documento.
+     * Il metodo mantiene la stessa struttura di directory e aggiunge il suffisso "_analysis.bin"
+     * al nuovo nome del file.
+     *
+     * @param nuovoNomeDoc il nuovo nome del documento da utilizzare per rinominare il file di analisi
+     */
+    public void modificaNomeAnalisi(String nuovoNomeDoc) throws UpdateException {
         //1. cerco file analisi con vecchio nome
-
-        //2. leggo il file e lo scrivo sul file con il nuovo nome
+        String path= this.pathAnalisi.trim();
+        File vecchioFile = Path.of(path).toFile();
+        // 2. crarto il file devo verifiacre che esista
+        if(!vecchioFile.exists()){
+            throw new RuntimeException("Il file di analisi non esiste: " + vecchioFile.getName());
+        }
+        //3. devo sostituire questo percorso con il nuovo nome
+        File nuovo= new File(vecchioFile.getParentFile(), nuovoNomeDoc + "_analysis.bin");
+        if(!vecchioFile.renameTo(nuovo)) {
+            throw new UpdateException("Impossibile rinominare il file di analisi: " + vecchioFile.getName());
+        }
+        //4. aggiorno il path analisi
+        this.pathAnalisi = nuovo.getPath();
+        //5. aggiorno il titolo
+        this.titolo = nuovoNomeDoc;
     }
-    public void modificaNomeAnalisi(String nuovoNomeDoc){
-        //1. cerco file analisi con vecchio nome
-        //analisi.modificanome(nome)
-        String vecchioPath=this.pathAnalisi;
-        File vecchio=Path.of(vecchioPath).toFile();
-        this.titolo=nuovoNomeDoc;
-        vecchio.renameTo(new File(vecchio.getParentFile().getPath()+"/"+nuovoNomeDoc+"_analysis.bin"));
-        //2. leggo il file e lo scrivo sul file con il nuovo nome
-
+/**
+     * Elimina il file di analisi associato all'oggetto corrente.
+     * Se il file esiste nel percorso specificato da pathAnalisi, viene rimosso dal filesystem.
+     * Se il file non esiste, non viene eseguita alcuna operazione.
+     */
+    public void eliminaAnalisi() throws DeleteException{
+        String path=this.pathAnalisi;
+        File file = Path.of(path).toFile();
+        if(file.exists()){
+            if(!file.delete()) throw new DeleteException("Impossibile eliminare il file di analisi: " + file.getName());
+            else {
+                this.titolo = null; // resetto il titolo
+                this.frequenzeTesto.clear(); // resetto le frequenze
+                this.pathAnalisi = null; // resetto il path
+                this.stopwordAnalisi = null; // resetto le stopword
+                this.documento = null; // resetto il documento
+                this.linguaAnalisi = null; // resetto la lingua
+                this.difficoltaAnalisi = null; // resetto la difficoltà
+            }
+        }else  throw new DeleteException("Il file di analisi non esiste: " + file.getName());
     }
+
     @Override
     public String toString(){
         return frequenzeTesto.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).toString();
