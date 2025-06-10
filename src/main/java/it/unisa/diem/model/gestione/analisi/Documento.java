@@ -21,11 +21,11 @@ public class Documento {
     private String titolo;
     private Lingua lingua;
     private Difficolta difficolta;
-    private String path ;
+    private String path;
     private List<String> testo;
 
     /**
-     * Costruttore della classe Docuemento.
+     * Costruttore della classe Documento.
      * @param titolo rappresenta il titolo del documento.
      * @param lingua rappresenta in che lingua si presenta il documento.
      * @param difficolta rappresenta la difficoltà del documento fornito.
@@ -177,26 +177,6 @@ public class Documento {
         dr.path=filename;
     }
 
-    /**
-     * Cambia il nome del documento e rinomina il file corrispondente nel filesystem.
-     * @param nome
-     */
-    public void cambiaNomeDocumento(String nome) throws UpdateException {
-        //creo file analisi con vecchio nome
-        String path=this.path.trim();
-        File vecchioFile = Path.of(path).toFile();
-        if(!vecchioFile.exists()){
-            throw new UpdateException("Il file del documento non esiste: " + vecchioFile.getName());
-        }
-        File nuovoFile = new File(vecchioFile.getParentFile(), nome + ".bin");
-        if(!vecchioFile.renameTo(nuovoFile)) {
-            throw new UpdateException("Impossibile rinominare il file del documento: " + vecchioFile.getName());
-        }
-        //aggiorno il path del documento
-        this.path = nuovoFile.getPath();
-        //aggiorno il titolo del documentoù
-        this.titolo = nome;
-    }
 
     /**
      * Elimina il file del documento dal filesystem.

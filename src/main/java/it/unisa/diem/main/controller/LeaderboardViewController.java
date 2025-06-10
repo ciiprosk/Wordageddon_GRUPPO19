@@ -12,12 +12,16 @@ import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -90,15 +94,32 @@ public class LeaderboardViewController {
 
     }
 
-
-
-
     public void goToMainMenu(ActionEvent actionEvent) {
-        SceneLoader.load("HomeMenuView.fxml", backButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void goToHistory(ActionEvent actionEvent) {
-        SceneLoader.load("HistoryView.fxml", historyButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HistoryView.fxml"));
+            Parent root = loader.load();
+            HistoryViewController controller = loader.getController();
+            controller.setUtente(utenteToPass);
+            Stage stage = (Stage) historyButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Caricamento");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void setUtente(Utente utente) {

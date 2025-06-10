@@ -213,31 +213,6 @@ public class Analisi {
        return path;
     }
 
-    /**
-     * Modifica il nome del file di analisi corrente utilizzando il nuovo nome del documento.
-     * Il metodo mantiene la stessa struttura di directory e aggiunge il suffisso "_analysis.bin"
-     * al nuovo nome del file.
-     *
-     * @param nuovoNomeDoc il nuovo nome del documento da utilizzare per rinominare il file di analisi
-     */
-    public void modificaNomeAnalisi(String nuovoNomeDoc) throws UpdateException {
-        //1. cerco file analisi con vecchio nome
-        String path= this.pathAnalisi.trim();
-        File vecchioFile = Path.of(path).toFile();
-        // 2. crarto il file devo verifiacre che esista
-        if(!vecchioFile.exists()){
-            throw new RuntimeException("Il file di analisi non esiste: " + vecchioFile.getName());
-        }
-        //3. devo sostituire questo percorso con il nuovo nome
-        File nuovo= new File(vecchioFile.getParentFile(), nuovoNomeDoc + "_analysis.bin");
-        if(!vecchioFile.renameTo(nuovo)) {
-            throw new UpdateException("Impossibile rinominare il file di analisi: " + vecchioFile.getName());
-        }
-        //4. aggiorno il path analisi
-        this.pathAnalisi = nuovo.getPath();
-        //5. aggiorno il titolo
-        this.titolo = nuovoNomeDoc;
-    }
 /**
      * Elimina il file di analisi associato all'oggetto corrente.
      * Se il file esiste nel percorso specificato da pathAnalisi, viene rimosso dal filesystem.

@@ -11,7 +11,7 @@ public class Utente {
     private final byte[] salt;
 
 
-
+    //serve per la registrazione
     public Utente(String username, String email, String password) {
         //Costruttore utilizzato nella registrazione di un nuovo utente
         //password da hashare, salt da generare, ruolo di default USER
@@ -22,6 +22,7 @@ public class Utente {
         this.ruolo = Ruolo.USER;
     }
 
+    //serve per il login
     public Utente(String username, String email, String hashedPassword, byte[] salt, Ruolo ruolo) {
         //Costruttore utilizzato per recuperare un utente da DB
         //password già hashata, salt già generato
@@ -91,5 +92,10 @@ public class Utente {
     CREDO ANDREBBE CREATA UN'ALTRA CLASSE PER FARE QUESTA COSA
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
+
+    @Override
+    public String toString() {
+        return this.username+ " "+ this.email + " "+ this.hashedPassword+ " "+ this.ruolo.toString();
+    }
 
 }

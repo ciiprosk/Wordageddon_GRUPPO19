@@ -5,12 +5,9 @@ import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
-import it.unisa.diem.model.gestione.utenti.Ruolo;
-import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,14 +78,17 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public List<String> selectAllTitles() throws DBException {
+    public List<String> selectTitlesByLangAndDif(Lingua lingua, Difficolta difficolta) throws DBException {
         List<String> titoli = new ArrayList<>();
 
-        String query = "SELECT nome FROM documento";
+        String query = "SELECT nome FROM documento WHERE lingua = ? AND difficolta = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            cmd.setObject(1, lingua.name(), java.sql.Types.OTHER);
+            cmd.setObject(2, difficolta.name(), java.sql.Types.OTHER);
 
             ResultSet rs = cmd.executeQuery();
 
@@ -105,12 +105,24 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public void insert(Documento documento) {
+    public void insert(Documento documento) throws DBException {
 
-    }
+        String query = "INSERT INTO DOCUMENTO (nome, percorso, lingua, difficolta) VALUES (?, ?, ?, ?)";
 
-    @Override
-    public void update(Documento documento) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            setDocumentForInsert(cmd, documento);
+
+            int lines = cmd.executeUpdate();
+
+            if(lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
+
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile inserire il documento" + documento.getTitolo() + "!",e);
+        }
 
     }
 
@@ -128,11 +140,21 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
         Difficolta difficolta = Difficolta.valueOf(rs.getString("difficolta"));
         String path = rs.getString("percorso");
 
-
         documento = new Documento(titolo, lingua, difficolta, path);
 
         return documento;
 
     }
+
+    private void setDocumentForInsert(PreparedStatement cmd, Documento documento) throws SQLException {
+
+        cmd.setString(1,"nome");
+        cmd.setString(2,"percorso");
+        cmd.setObject(3,documento.getLingua(),java.sql.Types.OTHER);
+        cmd.setObject(4,documento.getDifficolta(),java.sql.Types.OTHER);
+
+    }
+
+
 
 }

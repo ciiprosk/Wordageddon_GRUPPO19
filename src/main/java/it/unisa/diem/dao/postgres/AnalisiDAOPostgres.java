@@ -96,24 +96,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     }
 
     @Override
-    public void update(Analisi analisi) throws DBException{
-        String query = "UPDATE analisi SET nome = ?, percorso = ? WHERE nome = ?";
-        try(Connection con=DriverManager.getConnection(url, user, password);
-            PreparedStatement ps=con.prepareStatement(query);){
-            ps.setString(1, analisi.getTitolo());
-            ps.setString(2, analisi.getPathAnalisi());
-            ps.setString(3, analisi.getDocumento().getTitolo());
-            int lines=ps.executeUpdate();
-            if(lines == 0) throw new DBException("Errore: nessuna riga modificata");
-
-        }catch(SQLException e){
-            throw new DBException("Errore nel databse, Impossibile inserire username",e);
-        }
-
-    }
-
-    @Override
-    public void delete(Analisi analisi) throws DBException{
+    public void delete(Analisi analisi) throws DBException {
         //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
         String query = "DELETE FROM analisi WHERE nome = ?";
         try(Connection con= DriverManager.getConnection(url, user, password);
@@ -122,8 +105,8 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             int lines= ps.executeUpdate();
             if(lines == 0)  throw new  DBException("Errore: nessuna riga cancellata");
 
-        }catch(SQLException e){
-            throw new DBException("Errore nel databse, Impossibile cancellare analisi", e);
+        }catch(SQLException | DBException e){
+            throw new DBException("Errore nel databse, Impossibile cancellare analisi");
         }
     }
 

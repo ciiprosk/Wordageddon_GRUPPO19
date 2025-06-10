@@ -6,8 +6,12 @@ import it.unisa.diem.model.gestione.analisi.Analisi;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public interface AnalisiDAO extends DAO<Analisi>{
+public interface AnalisiDAO extends NotEditableDAO<Analisi>{
 
-    public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException;
-    //public void update(Analisi a, String oldTitolo) throws SQLException, DBException;
+    Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException;
+
+    void insert(Analisi analisi) throws DBException;
+
+    void delete(Analisi analisi) throws DBException;
+
 }
