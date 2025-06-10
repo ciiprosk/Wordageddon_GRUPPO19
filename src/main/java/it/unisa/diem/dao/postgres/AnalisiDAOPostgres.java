@@ -121,6 +121,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     }
 
     private Analisi getAnalisi(ResultSet rs)throws SQLException, DBException{
+
         Analisi a=null;
         String nome=rs.getString("nome");
         String documento=rs.getString("documento");
@@ -131,6 +132,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         Lingua lingua= Lingua.valueOf(split[split.length-4]);
         a = new Analisi(new Documento(documento,lingua, difficolta), null); //non mi interessano le stopword
         return a;
+
     }
 
 

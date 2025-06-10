@@ -9,6 +9,7 @@ import it.unisa.diem.model.gestione.utenti.Ruolo;
 import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -55,8 +56,52 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public List<Documento> selectAll() {
-        return Collections.emptyList();
+    public List<Documento> selectAll() throws DBException {
+
+        List<Documento> documenti = new ArrayList<>();
+
+        String query = "SELECT * FROM documento";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            ResultSet rs = cmd.executeQuery();
+
+            while (rs.next()) {
+                documenti.add ( getDocument (rs) );
+            }
+
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile selezionare i documenti!", e);
+        }
+
+        return documenti;
+
+    }
+
+    @Override
+    public List<String> selectAllTitles() throws DBException {
+        List<String> titoli = new ArrayList<>();
+
+        String query = "SELECT nome FROM documento";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            ResultSet rs = cmd.executeQuery();
+
+            while (rs.next()) {
+                titoli.add ( rs.getString("nome") );
+            }
+
+        } catch (SQLException e) {
+            throw new DBException("ERRORE: Impossibile selezionare i titoli dei documenti!", e);
+        }
+
+        return titoli;
+
     }
 
     @Override
