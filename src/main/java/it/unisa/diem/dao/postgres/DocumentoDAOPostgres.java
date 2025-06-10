@@ -152,11 +152,29 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
     }
 
     @Override
-    public void delete(Documento documento) {
+    public void delete(Documento documento) throws DBException {
+
+        String query = "DELETE FROM DOCUMENTO WHERE nome = ?";
+
+        try(Connection connection = DriverManager.getConnection(url, user, pass);
+
+            PreparedStatement cmd = connection.prepareStatement(query)){
+
+            cmd.setString(1, documento.getTitolo());
+
+            int lines= cmd.executeUpdate();
+            if(lines == 0)
+                throw new  DBException("ERRORE: nessuna riga modificata");
+
+        }catch(SQLException e){
+
+            throw new DBException("Errore nel database, Impossibile cancellare documento");
+
+        }
 
     }
 
-    private Documento getDocument(ResultSet rs) throws SQLException, DBException {
+    private Documento getDocument(ResultSet rs) throws SQLException {
 
         Documento documento = null;
 

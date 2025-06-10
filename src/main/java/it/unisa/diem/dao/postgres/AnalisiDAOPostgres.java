@@ -37,7 +37,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             analisi = Optional.ofNullable(a);
 
         }catch(SQLException e){
-            throw new DBException("Errore nel databse");
+            throw new DBException("Errore nel database");
         }
         return analisi;
     }
@@ -72,7 +72,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
                 analisi.add(getAnalisi(rs));
             }
         }catch(SQLException e){
-            throw new DBException("Errore nel databse, Impossibile selezionare analisi");
+            throw new DBException("Errore nel database, Impossibile selezionare analisi");
         }
         return analisi;
     }
@@ -106,7 +106,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
             if(lines == 0)  throw new  DBException("Errore: nessuna riga cancellata");
 
         }catch(SQLException | DBException e){
-            throw new DBException("Errore nel databse, Impossibile cancellare analisi");
+            throw new DBException("Errore nel database, Impossibile cancellare analisi");
         }
     }
 

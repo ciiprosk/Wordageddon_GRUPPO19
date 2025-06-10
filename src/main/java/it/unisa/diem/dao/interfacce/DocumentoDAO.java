@@ -5,7 +5,6 @@ import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
