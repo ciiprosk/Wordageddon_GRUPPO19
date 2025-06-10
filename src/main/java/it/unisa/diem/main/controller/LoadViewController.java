@@ -1,5 +1,8 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.model.gestione.utenti.Utente;
 import javafx.concurrent.Task;
 import javafx.fxml.*;
 import javafx.scene.Parent;
@@ -14,17 +17,18 @@ public class LoadViewController {
     @FXML private Label textLabel;
     @FXML private ProgressBar progressBar;
 
-    private String difficolta;
-    private String lingua;
+    private Difficolta difficolta;
+    private Lingua lingua;
+    private Utente utente;
 
-    public void setDifficolta(String difficolta) {
+    public void setDifficolta(Difficolta difficolta) {
         this.difficolta = difficolta;
-        difficultyLabel.setText(difficolta);
 
-        switch (difficolta.toLowerCase()) {
-            case "easy": textLabel.setText("This is going to be easy :)"); break;
-            case "normal": textLabel.setText("Starting to sweat..."); break;
-            case "hard": textLabel.setText("THIS is gonna be a challenge."); break;
+
+        switch (difficolta.toString().toLowerCase()) {
+            case "facile": textLabel.setText("This is going to be easy :)"); difficultyLabel.setText("EASY"); break;
+            case "intermedio": textLabel.setText("Starting to sweat..."); difficultyLabel.setText("NORMAL"); break;
+            case "difficile": textLabel.setText("THIS is gonna be a challenge.");difficultyLabel.setText("HARD"); break;
             default: textLabel.setText("no text");
         }
 
@@ -53,7 +57,7 @@ public class LoadViewController {
         new Thread(task).start();
     }
 
-    public void setLingua(String lingua) {
+    public void setLingua(Lingua lingua) {
         this.lingua = lingua;
     }
 
@@ -67,6 +71,7 @@ public class LoadViewController {
             ReadTextViewController controller = loader.getController();
             controller.setDifficolta(difficolta);
             controller.setLingua(lingua);
+            controller.setUtente(utente);
 
             Stage stage = (Stage) difficultyLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -74,5 +79,9 @@ public class LoadViewController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void setUtente(Utente utenteToPass) {
+        this.utente = utenteToPass;
     }
 }

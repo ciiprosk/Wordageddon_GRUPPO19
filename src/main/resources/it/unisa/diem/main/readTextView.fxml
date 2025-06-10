@@ -21,7 +21,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="1080.0">
                      <children>
-                        <Label fx:id="textBodyLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" text="Text" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                        <Label fx:id="textBodyLabel" alignment="TOP_LEFT" style="-fx-text-fill: white" layoutX="14.0" layoutY="14.0" maxWidth="1060.0" prefWidth="1060.0" text="Text" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <font>
                               <Font size="20.0" />
                            </font>

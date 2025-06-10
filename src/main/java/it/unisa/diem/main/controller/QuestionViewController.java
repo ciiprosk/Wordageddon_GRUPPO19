@@ -1,6 +1,7 @@
 package it.unisa.diem.main.controller;
 
 import it.unisa.diem.model.gestione.sessione.Domanda;
+import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.TipoDomanda;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,6 +24,7 @@ public class QuestionViewController {
     private int score = 0;
 
     private final List<Domanda> domande = new ArrayList<>();
+    private Utente utente;
 
     public void initialize() {
         List<String> opzioni1 = new ArrayList<>();
@@ -100,4 +102,7 @@ public class QuestionViewController {
     }
 
 
+    public void setUtente(Utente utenteToPass) {
+        this.utente = utenteToPass;
+    }
 }

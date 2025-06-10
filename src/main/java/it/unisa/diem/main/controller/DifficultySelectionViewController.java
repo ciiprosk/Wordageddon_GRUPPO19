@@ -1,6 +1,8 @@
 package it.unisa.diem.main.controller;
 
 import it.unisa.diem.main.Main;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
@@ -22,8 +24,8 @@ public class DifficultySelectionViewController {
     @FXML private Button engButton;
     @FXML private Button playButton;
 
-    private String selectedDifficolta = null;
-    private String selectedLanguage = null;
+    private Difficolta selectedDifficolta = null;
+    private Lingua selectedLanguage = null;
     private Utente utente = null;
 
     @FXML
@@ -46,20 +48,22 @@ public class DifficultySelectionViewController {
         engView.setFitHeight(20);
         engButton.setGraphic(engView);
 
-        facileButton.setOnAction(e -> {
-            selectedDifficolta = "Easy";
-            highlightSelectedButton(facileButton);
-        });
 
-        medioButton.setOnAction(e -> {
-            selectedDifficolta = "Normal";
-            highlightSelectedButton(medioButton);
-        });
+            facileButton.setOnAction(e -> {
+                selectedDifficolta = Difficolta.FACILE;
+                highlightSelectedButton(facileButton);
+            });
 
-        difficileButton.setOnAction(e -> {
-            selectedDifficolta = "Hard";
-            highlightSelectedButton(difficileButton);
-        });
+            medioButton.setOnAction(e -> {
+                selectedDifficolta = Difficolta.INTERMEDIO;
+                highlightSelectedButton(medioButton);
+            });
+
+            difficileButton.setOnAction(e -> {
+                selectedDifficolta = Difficolta.DIFFICILE;
+                highlightSelectedButton(difficileButton);
+            });
+
     }
 
     //funzione per aggiungere css a pulsante cliccato
@@ -74,13 +78,14 @@ public class DifficultySelectionViewController {
     }
 
 
-    private void goToLoadView(String difficolta, String lingua, Button sourceButton) {
+    private void goToLoadView(Difficolta difficolta, Lingua lingua, Button sourceButton) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LoadView.fxml"));
             Parent root = loader.load();
             LoadViewController controller = loader.getController();
             controller.setDifficolta(difficolta);
             controller.setLingua(lingua);
+            controller.setUtente(utente);
 
 
             Stage stage = (Stage) sourceButton.getScene().getWindow();
@@ -125,7 +130,7 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleItButton() {
-        selectedLanguage = "ITA";
+        selectedLanguage = Lingua.ITA;
         System.out.println("hai clickato it");
 
         engButton.getStyleClass().remove("selected-button");
@@ -137,7 +142,7 @@ public class DifficultySelectionViewController {
 
     @FXML
     private void handleEngButton() {
-        selectedLanguage = "ENG";
+        selectedLanguage = Lingua.ENG;
         System.out.println("hai clickato eng");
         itButton.getStyleClass().remove("selected-button");
 
