@@ -32,7 +32,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectById(long id) throws SQLException, DBException {
+    public Optional<Sessione> selectById(long id) throws DBException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -54,7 +54,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
             result = Optional.ofNullable(sessione);
 
         } catch(SQLException e){
-            throw new DBException("Errore: impossibile trovare la sessione attiva con id " + id + "!",e);
+            throw new DBException("ERRORE: impossibile trovare la sessione attiva con id " + id + "!",e);
         }
 
         return result;
@@ -62,7 +62,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public Optional<Sessione> selectByUser(String username) throws SQLException, DBException {
+    public Optional<Sessione> selectByUser(String username) throws DBException {
 
         Optional<Sessione> result = Optional.empty();
 
@@ -84,7 +84,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
             result = Optional.ofNullable(sessione);
 
         }  catch(SQLException e){
-            throw new DBException("Errore: impossibile trovare la sessione attiva di " + username + "!",e);
+            throw new DBException("ERRORE: impossibile trovare la sessione attiva di " + username + "!",e);
         }
 
         return result;
@@ -92,7 +92,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public List<Sessione> selectAll() throws SQLException, DBException {
+    public List<Sessione> selectAll() throws DBException {
 
         List<Sessione> sessioni = new ArrayList<>();
 
@@ -108,6 +108,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 sessioni.add ( getSession(rs) );
             }
 
+        }  catch(SQLException e){
+            throw new DBException("ERRORE: impossibile selezionare le sessioni attive!",e);
         }
 
         return sessioni;
@@ -115,7 +117,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void insert(Sessione sessione) throws SQLException, DBException {
+    public void insert(Sessione sessione) throws DBException {
 
         String query = "INSERT INTO sessione " +
                 "(utente, completato, dataInizio, punteggio) " +
@@ -136,16 +138,16 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 if (rs.next()) {
                     sessione.setId(rs.getLong(1));
                 }
-            }   catch(SQLException e){
-                    throw new DBException("Errore: impossibile inserire la sessione attiva " + sessione.getId() + "!",e);
             }
 
+        }    catch(SQLException e){
+            throw new DBException("Errore: impossibile inserire la sessione attiva " + sessione.getId() + "!",e);
         }
 
     }
 
     @Override
-    public void update(Sessione sessione) throws SQLException, DBException {
+    public void update(Sessione sessione) throws DBException {
 
         String query = "UPDATE sessione " +
                 "SET completato = ?, punteggio = ? " +
@@ -168,7 +170,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     @Override
-    public void delete(Sessione sessione) throws SQLException, DBException {
+    public void delete(Sessione sessione) throws DBException {
 
         String query = "DELETE FROM sessione WHERE id = ?";
 
@@ -230,7 +232,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException, DBException {
+    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException{
 
         cmd.setBoolean(1, sessione.isCompletato());
         cmd.setInt(2, sessione.getPunteggio());
@@ -238,7 +240,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
-    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException, DBException {
+    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException{
 
         cmd.setLong(1, sessione.getId());
 
