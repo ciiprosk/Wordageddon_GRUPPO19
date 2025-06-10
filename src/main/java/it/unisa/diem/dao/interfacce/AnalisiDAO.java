@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface AnalisiDAO extends DAO<Analisi>{
 
-    public Optional<Analisi> selectAnalisiByTitle(String titolo) throws SQLException, DBException;
-    public void update(Analisi a, String oldTitolo) throws SQLException, DBException;
+    public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException;
+    //public void update(Analisi a, String oldTitolo) throws SQLException, DBException;
 }
