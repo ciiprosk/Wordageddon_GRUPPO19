@@ -3,9 +3,11 @@ package it.unisa.diem.dao.postgres;
 import it.unisa.diem.dao.interfacce.StoricoSessioneDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.classifica.VoceClassifica;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
+import it.unisa.diem.model.gestione.sessione.VoceStorico;
 import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.sql.*;
@@ -113,6 +115,39 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
     }
 
+    public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws SQLException {
+
+        List<VoceStorico> storico = new ArrayList<>();
+
+        String query = "SELECT ss.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
+                "FROM STORICOSESSIONE ss JOIN SESSIONE s ON ss.id_sessione = s.id " +
+                "JOIN SESSIONEDOCUMENTO sd ON sd.sessione = s.id " +
+                "JOIN DOCUMENTO d ON d.nome = sd.documento " +
+                "WHERE d.difficolta = ? AND s.utente = ? " +
+                "ORDER BY ss.dataFine DESC " +
+                "LIMIT 10";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+
+             PreparedStatement cmd=connection.prepareStatement (query) ){
+
+            cmd.setString(1, username);
+            cmd.setObject(2, difficolta.name(), Types.OTHER);
+
+            ResultSet rs = cmd.executeQuery();
+
+            while (rs.next()) {
+
+                storico.add ( getLastSessions(rs) );
+
+            }
+
+        }
+
+        return storico;
+
+    }
+
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
 
         List<VoceClassifica> classifica = new ArrayList<>();
@@ -168,8 +203,6 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
     }
 
-
-
     private StoricoSessione getSessionHistory(ResultSet rs) throws SQLException, DBException {
 
         StoricoSessione storicoSessione = null;
@@ -197,6 +230,23 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
         return optionalSessione.orElseThrow(() ->
                 new DBException("ERRORE: Sessione " + idSessione + " non trovata!")
         );
+
+    }
+
+    private VoceStorico getLastSessions(ResultSet rs) throws SQLException {
+
+        VoceStorico voceStorico = null;
+
+        LocalDateTime dataFine = rs.getTimestamp("dataFine").toLocalDateTime();
+
+        int punteggio = rs.getInt("punteggioOttenuto");
+
+        Lingua lingua = Lingua.valueOf(rs.getString("lingua"));
+
+        voceStorico = new VoceStorico(dataFine, punteggio, lingua);
+
+        return voceStorico;
+
     }
 
 }
