@@ -31,7 +31,7 @@ public class QuestionViewController {
     private int currentQuestionIndex = 0;
     private int score = 0;
 
-    private final List<Domanda> domande = new ArrayList<>();
+    private List<Domanda> domande = new ArrayList<>();
     private Utente utente;
     private Documento primoDocumento;
     private Documento secondoDocumento;
@@ -75,7 +75,7 @@ public class QuestionViewController {
         DomandaFactory domandaFactory = new DomandaFactory(listaAnalisi);
         System.out.println(domandaFactory.toString());
 
-        List<Domanda> domande = domandaFactory.generaDomande(difficolta);
+        this.domande = domandaFactory.generaDomande(difficolta);
 
         List<String> opzioni0 = new ArrayList<>();
 
