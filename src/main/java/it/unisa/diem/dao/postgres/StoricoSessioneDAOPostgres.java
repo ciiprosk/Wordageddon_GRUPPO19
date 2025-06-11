@@ -18,24 +18,26 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     private final String user;
     private final String pass;
     private final SessioneDAOPostgres sessioneDAO;
+    private final UtenteDAOPostgres utenteDAO;
 
     public StoricoSessioneDAOPostgres(String url, String user, String pass) {
         this.url = url;
         this.user = user;
         this.pass = pass;
         sessioneDAO = new SessioneDAOPostgres(url, user, pass);
+        utenteDAO = new UtenteDAOPostgres(url, user, pass);
     }
 
     public SessioneDAOPostgres getSessioneDAO() {
         return sessioneDAO;
     }
-
+    
     @Override
     public List<StoricoSessione> selectByUser(String username) throws SQLException, DBException {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
-        String query = "SELECT storico.* " +
+        String query = "SELECT storico.id_sessione, storico.dataFine, s.id, s.utente, s.dataInizio, s.punteggioottenuto, s.completato " +
                 "FROM STORICOSESSIONE storico JOIN SESSIONE s ON storico.id_sessione=s.id " +
                 "WHERE s.utente = ?";
 
@@ -62,7 +64,9 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
         Optional<StoricoSessione> result = Optional.empty();
 
-        String query = "SELECT * FROM STORICOSESSIONE WHERE id_sessione = ?";
+        String query = "SELECT * FROM STORICOSESSIONE ss " +
+                "JOIN SESSIONE s ON ss.id_sessione = s.id " +
+                "WHERE id_sessione = ?";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -90,7 +94,8 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
         List<StoricoSessione> sessioni = new ArrayList<>();
 
-        String query = "SELECT * FROM STORICOSESSIONE";
+        String query = "SELECT * FROM STORICOSESSIONE"
+                + " JOIN SESSIONE s ON STORICOSESSIONE.id_sessione = s.id";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -112,19 +117,18 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
         List<VoceClassifica> classifica = new ArrayList<>();
 
-        String query = """
+        String query =
 
-    SELECT u.username, AVG(s.punteggioottenuto) AS media_punteggio, SUM(s.punteggioottenuto) AS somma_punteggio 
-    FROM sessione s
-        JOIN storicosessione ss ON s.id = ss.id_sessione
-        JOIN sessionedocumento sd ON s.id = sd.sessione
-        JOIN utente u ON s.utente = u.username
-    	JOIN documento d ON sd.documento=d.nome
-        WHERE d.difficolta = ?
-        GROUP BY u.username
-        ORDER BY media_punteggio DESC
-        LIMIT 10
-""";
+                "SELECT u.username, AVG(s.punteggioottenuto) AS media_punteggio, SUM(s.punteggioottenuto) AS somma_punteggio " +
+                        "FROM sessione s "+
+                        "JOIN storicosessione ss ON s.id = ss.id_sessione " +
+                        "JOIN sessionedocumento sd ON s.id = sd.sessione " +
+                        "JOIN utente u ON s.utente = u.username "+
+                        "JOIN documento d ON sd.documento=d.nome "+
+                        "WHERE d.difficolta = ? "+
+                        "GROUP BY u.username "+
+                        "ORDER BY media_punteggio DESC "+
+                        "LIMIT 10";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -169,22 +173,17 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     private StoricoSessione getSessionHistory(ResultSet rs) throws SQLException, DBException {
 
         StoricoSessione storicoSessione = null;
+        //prima di cosrtuire StoricoSessione devo costruirmi utente
+        Utente utente= utenteDAO.selectByUsername(rs.getString("utente")).orElseThrow(()->new DBException("Utente non trovato"));
 
         long idSessione = rs.getLong("id_sessione");
 
-        Sessione sessione = getSession(idSessione);
-
-        long id = sessione.getId();
-
-        Utente utente = sessione.getUtente();
-
-        LocalDateTime dataInizio = sessione.getInizio();
-
-        int punteggio = sessione.getPunteggio();
 
         LocalDateTime dataFine = rs.getTimestamp("dataFine").toLocalDateTime();
 
-        storicoSessione = new StoricoSessione(id, utente, dataInizio, punteggio, dataFine);
+        storicoSessione = new StoricoSessione(idSessione, utente,rs.getTimestamp("dataInizio").toLocalDateTime(),
+                rs.getInt("punteggioottenuto"), dataFine
+        );
 
         return storicoSessione;
 

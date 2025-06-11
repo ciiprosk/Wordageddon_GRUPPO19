@@ -14,7 +14,7 @@
          <children>
             <Label alignment="CENTER" prefHeight="100.0" prefWidth="800.0" text="WORDAGEDDON">
                <font>
-                  <Font name="Britannic Bold" size="110.0" />
+                  <Font name="Britannic Bold" size="105.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="10.0" top="60.0" />
