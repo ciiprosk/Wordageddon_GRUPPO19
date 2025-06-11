@@ -231,6 +231,8 @@ public class AdminScreenViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
             Parent root = loader.load();
+            HomeMenuViewController controller = loader.getController();
+            controller.setUtente(utente);
 
             Stage stage = (Stage) importButton.getScene().getWindow();
             stage.setScene(new Scene(root));
