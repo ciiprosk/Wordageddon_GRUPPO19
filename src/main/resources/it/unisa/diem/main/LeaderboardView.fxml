@@ -49,11 +49,11 @@
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="400.0">
                <children>
-                  <TableView fx:id="leaderboardTable" prefHeight="500.0" prefWidth="700.0">
+                  <TableView fx:id="leaderboardTable" maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0">
                      <columns>
-                        <TableColumn fx:id="usernameCol" prefWidth="232.0" text="Username" />
-                        <TableColumn fx:id="sumCol" prefWidth="231.0" text="Somma punteggi" />
-                        <TableColumn fx:id="mediaCol" prefWidth="231.0" text="Punteggio Medio" />
+                        <TableColumn fx:id="usernameCol" prefWidth="234.0" text="Username" />
+                        <TableColumn fx:id="sumCol" prefWidth="232.0" text="Somma punteggi" />
+                        <TableColumn fx:id="mediaCol" prefWidth="234.0" text="Punteggio Medio" />
                      </columns>
                   </TableView>
                </children>

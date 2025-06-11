@@ -102,6 +102,10 @@
     -fx-background-color: #ffd700;
 }
 
+.combo-box .list-cell:hover {
+    -fx-background-color: blue;
+}
+
 .check-box .box {
     -fx-background-color: #232323;
     -fx-border-color: #ffd700;
