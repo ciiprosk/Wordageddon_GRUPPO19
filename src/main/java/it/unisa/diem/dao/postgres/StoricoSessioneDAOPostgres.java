@@ -116,7 +116,6 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
     }
 
     public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws SQLException {
-
         List<VoceStorico> storico = new ArrayList<>();
 
         String query = "SELECT ss.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
@@ -128,25 +127,21 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 "LIMIT 10";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement cmd = connection.prepareStatement(query)) {
 
-             PreparedStatement cmd=connection.prepareStatement (query) ){
-
-            cmd.setString(1, username);
-            cmd.setObject(2, difficolta.name(), Types.OTHER);
+            cmd.setObject(1, difficolta.name(), Types.OTHER);
+            cmd.setString(2, username);
 
             ResultSet rs = cmd.executeQuery();
 
             while (rs.next()) {
-
-                storico.add ( getLastSessions(rs) );
-
+                storico.add(getLastSessions(rs));
             }
-
         }
 
         return storico;
-
     }
+
 
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
 

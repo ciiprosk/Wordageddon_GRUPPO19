@@ -75,7 +75,9 @@ public class QuestionViewController {
         DomandaFactory domandaFactory = new DomandaFactory(listaAnalisi);
         System.out.println(domandaFactory.toString());
 
+        System.out.println("errore sotto");
         this.domande = domandaFactory.generaDomande(difficolta);
+        System.out.println("errore sopra");
 
         List<String> opzioni0 = new ArrayList<>();
 
