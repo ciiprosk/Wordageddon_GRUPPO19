@@ -7,10 +7,12 @@ import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.AlertUtils;
+import it.unisa.diem.utility.PropertiesLoader;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -43,9 +45,17 @@ public class HistoryViewController {
 
 
     private Utente utente;
+    private String url;
+    private String username;
+    private String password;
 
     @FXML
     public void initialize() {
+        //sono rosa inizializzo i campi per le query
+        url = PropertiesLoader.getProperty("database.url");
+        username = PropertiesLoader.getProperty("database.user");
+        password = PropertiesLoader.getProperty("database.password");
+
         // Imposta le immagini dei bottoni
         Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
@@ -95,18 +105,18 @@ public class HistoryViewController {
     }
 
     private void loadStoricoSessioni() {
-        StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
-        SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(url, username, password);
+        SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres(url, username, password);
 
         List<StoricoSessione> storicoSessioni = null;
         try {
             storicoSessioni = dao.selectByUser(utente.getUsername());
 
             for (StoricoSessione sessione : storicoSessioni) {
-                List<it.unisa.diem.model.gestione.analisi.Documento> documenti = docDao.selectDocumentsBySession(sessione.getId());
+                List<Documento> documenti = docDao.selectDocumentsBySession(sessione.getId());
 
                 if (!documenti.isEmpty()) {
-                    it.unisa.diem.model.gestione.analisi.Documento documento = documenti.get(0);
+                    Documento documento = documenti.get(0);
                     sessione.setLingua(documento.getLingua());
                     sessione.setDifficolta(documento.getDifficolta());
                 } else {

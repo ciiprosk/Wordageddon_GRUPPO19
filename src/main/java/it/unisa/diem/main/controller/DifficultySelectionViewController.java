@@ -102,7 +102,7 @@ public class DifficultySelectionViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
-            ListTextsController controller = loader.getController();
+            HomeMenuViewController controller = loader.getController();
             controller.setUtente(utente);
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
