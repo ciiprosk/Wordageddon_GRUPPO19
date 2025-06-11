@@ -42,8 +42,8 @@ public class Domanda {
 
     }
     public Domanda(String testoDomanda, TipoDomanda tipo,List<String> opzioni, String rispostaCorretta) {
-        opzioni=new ArrayList<>();
 
+        this.opzioni = opzioni;
         this.testoDomanda = testoDomanda;
         this.tipo = tipo;
         this.rispostaCorretta = rispostaCorretta;
