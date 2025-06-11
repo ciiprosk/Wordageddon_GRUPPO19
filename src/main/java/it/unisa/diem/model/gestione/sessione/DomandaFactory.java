@@ -15,7 +15,7 @@ public class DomandaFactory {
         listaDomande = new ArrayList<>();
     }
 
-    List<Domanda> generaDomande(Difficolta difficolta) {
+    public List<Domanda> generaDomande(Difficolta difficolta) {
         if (difficolta == Difficolta.FACILE) {
             listaDomande.add(generaDomandaAssociazione());
             listaDomande.add(generaDomandaFrequenza());

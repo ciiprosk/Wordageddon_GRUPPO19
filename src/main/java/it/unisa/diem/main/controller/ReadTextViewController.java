@@ -32,6 +32,7 @@ public class ReadTextViewController {
     private Lingua lingua;
     private String path;
     private Documento documento;
+    private Documento documentoOriginale = null;
 
     private List<String> words = new ArrayList<>();
 
@@ -116,8 +117,12 @@ public class ReadTextViewController {
             Parent root = loader.load();
             QuestionViewController controller = loader.getController();
             controller.setUtente(utente);
-            controller.setDocumento(documento);
 
+            if (documentoOriginale != null) {
+                controller.setDocumenti(documentoOriginale, documento);  // Passo entrambi i documenti
+            } else {
+                controller.setDocumento(documento); // Solo uno se difficoltà FACILE
+            }
 
             Stage stage = (Stage) continueButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -128,10 +133,38 @@ public class ReadTextViewController {
     }
 
     public void handleContinue(ActionEvent actionEvent) {
-        goToQuestionView();
+        if(difficolta != Difficolta.FACILE){
+            goToSecondText();
+        }else{
+            goToQuestionView();
+        }
+    }
+
+    private void goToSecondText() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ReadTextView.fxml"));
+            Parent root = loader.load();
+            ReadTextViewController controller = loader.getController();
+            controller.setUtente(utente);
+            controller.setLingua(lingua);
+            controller.setDifficolta(difficolta);
+            controller.setDocumentoOriginale(this.documento);
+
+            Stage stage = (Stage) continueButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Secondo Documento");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setDocumentoOriginale(Documento documento) {
+        documentoOriginale = documento;
     }
 
     public void setUtente(Utente utenteToPass) {
         this.utente = utenteToPass;
     }
+
+
 }

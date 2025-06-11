@@ -19,6 +19,11 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     private String user;
     private String password;
 
+    public AnalisiDAOPostgres(String url, String user, String pass) {
+        this.url = url;
+        this.user = user;
+        this.password = pass;
+    }
 
     @Override
     public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException{

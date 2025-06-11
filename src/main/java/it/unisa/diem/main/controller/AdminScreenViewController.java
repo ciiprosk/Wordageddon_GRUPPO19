@@ -1,9 +1,10 @@
 package it.unisa.diem.main.controller;
 
-import it.unisa.diem.dao.interfacce.DocumentoDAO;
+import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
+import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
@@ -321,10 +322,18 @@ public class AdminScreenViewController {
             e.printStackTrace();
         }
 
-        DocumentoDAOPostgres dao = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        DocumentoDAOPostgres daoDoc = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
         try {
-            dao.insert(documento);
+            Analisi analisi = new Analisi(documento, stopword);
+            analisi.caricaAnalisi();
+            daoDoc.insert(documento);
+            daoAn.insert(analisi);
         } catch (DBException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         goToListTexts();
