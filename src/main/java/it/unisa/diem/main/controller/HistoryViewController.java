@@ -1,13 +1,16 @@
 package it.unisa.diem.main.controller;
 
 import java.time.LocalDateTime;
+
+import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.AlertUtils;
-import it.unisa.diem.utility.SceneLoader;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -35,6 +38,8 @@ public class HistoryViewController {
     @FXML private TableView<StoricoSessione> tableView;
     @FXML private TableColumn<StoricoSessione, String> dateColumn;
     @FXML private TableColumn<StoricoSessione, Integer> scoreColumn;
+    @FXML private TableColumn<StoricoSessione, String> modeColummn;
+    @FXML private TableColumn<StoricoSessione, String> langColummn;
 
 
     private Utente utente;
@@ -55,32 +60,70 @@ public class HistoryViewController {
         leaderboardButton.setGraphic(leaderView);
 
 
+
         dateColumn.setCellValueFactory(cellData -> {
             LocalDateTime dataFine = cellData.getValue().getDataFine();
             String formattedDate = dataFine.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            return new SimpleStringProperty(formattedDate);
+            if(dataFine != null) {
+                return new SimpleStringProperty(formattedDate);
+            }else{
+                return new SimpleStringProperty(":/");
+            }
         });
 
         scoreColumn.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getPunteggio()).asObject()
         );
+
+        langColummn.setCellValueFactory(cellData -> {
+            Lingua lingua = cellData.getValue().getLingua();
+            if(lingua != null) {
+                return new SimpleStringProperty(lingua.toString());
+            } else {
+                return new SimpleStringProperty(":/");
+            }
+        });
+
+        modeColummn.setCellValueFactory(cellData -> {
+            Difficolta difficolta = cellData.getValue().getDifficolta();
+            if(difficolta != null) {
+                return new SimpleStringProperty(difficolta.toString());
+            } else {
+                return new SimpleStringProperty(":/");
+            }
+        });
     }
 
     private void loadStoricoSessioni() {
         StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
 
         List<StoricoSessione> storicoSessioni = null;
         try {
             storicoSessioni = dao.selectByUser(utente.getUsername());
+
+            for (StoricoSessione sessione : storicoSessioni) {
+                List<it.unisa.diem.model.gestione.analisi.Documento> documenti = docDao.selectDocumentsBySession(sessione.getId());
+
+                if (!documenti.isEmpty()) {
+                    it.unisa.diem.model.gestione.analisi.Documento documento = documenti.get(0);
+                    sessione.setLingua(documento.getLingua());
+                    sessione.setDifficolta(documento.getDifficolta());
+                } else {
+                    sessione.setLingua(null);
+                    sessione.setDifficolta(null);
+                }
+            }
+
         } catch (SQLException | DBException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "DATABASE ERROR", "Impossibile far visualizzare lo storico", "Controllare la connessione al database e riprovare.");
         }
+
         ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList(storicoSessioni);
-        for (StoricoSessione sessione : observableSessioni) {
-            System.out.println(sessione.toString());
-        }
         tableView.setItems(observableSessioni);
     }
+
+
 
     public void goToMainMenu(ActionEvent actionEvent) {
         try {

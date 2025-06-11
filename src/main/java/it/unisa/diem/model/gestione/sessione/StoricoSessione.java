@@ -1,5 +1,7 @@
 package it.unisa.diem.model.gestione.sessione;
 
+import it.unisa.diem.model.gestione.analisi.Difficolta;
+import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.utenti.Utente;
 
 import java.time.LocalDateTime;
@@ -48,4 +50,22 @@ public class StoricoSessione extends Sessione{
         return "Storico di id: " + this.getId() + ", data fine: " + this.dataFine + "e punteggio: " + super.getPunteggio();
     }
 
+    private Lingua lingua;
+    private Difficolta difficolta;
+
+    public Lingua getLingua() {
+        return lingua;
+    }
+
+    public void setLingua(Lingua lingua) {
+        this.lingua = lingua;
+    }
+
+    public Difficolta getDifficolta() {
+        return difficolta;
+    }
+
+    public void setDifficolta(Difficolta difficolta) {
+        this.difficolta = difficolta;
+    }
 }
