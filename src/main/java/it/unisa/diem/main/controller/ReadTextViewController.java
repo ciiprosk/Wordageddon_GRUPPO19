@@ -6,6 +6,8 @@ import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,12 +30,16 @@ public class ReadTextViewController {
 
     @FXML Label textTitleLabel;
     @FXML Label textBodyLabel;
+    @FXML Label timerLabel;
 
     private Difficolta difficolta;
     private Lingua lingua;
     private String path;
     private Documento documento;
     private Documento documentoOriginale = null;
+    private Timeline timeline;
+    private int timeSeconds;
+
 
     private List<String> words = new ArrayList<>();
 
@@ -49,12 +56,6 @@ public class ReadTextViewController {
         System.out.println("Lingua ricevuta: " + lingua);
         getTextFileNames();
     }
-
-    @FXML
-    private void initialize() {
-    }
-
-
 
 
 
@@ -103,6 +104,7 @@ public class ReadTextViewController {
         }
 
         setBodyText();
+        startTimer();
     }
 
     private void setBodyText() {
@@ -157,6 +159,35 @@ public class ReadTextViewController {
             ex.printStackTrace();
         }
     }
+
+    private void startTimer() {
+        if (difficolta == Difficolta.INTERMEDIO) {
+            timeSeconds = 60; // 1 minuto
+        } else {
+            timeSeconds = 90; // 1 minuto e 30 secondi
+        }
+
+        updateTimerLabel();
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeSeconds--;
+            updateTimerLabel();
+
+            if (timeSeconds <= 0) {
+                timeline.stop();
+                handleContinue(null); // Passo null perché non viene da un evento ActionEvent
+            }
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    private void updateTimerLabel() {
+        int minutes = timeSeconds / 60;
+        int seconds = timeSeconds % 60;
+        timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+    }
+
 
     private void setDocumentoOriginale(Documento documento) {
         documentoOriginale = documento;

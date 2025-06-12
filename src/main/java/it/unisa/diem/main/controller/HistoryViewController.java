@@ -1,47 +1,41 @@
 package it.unisa.diem.main.controller;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
-import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.model.gestione.classifica.VoceClassifica;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
+import it.unisa.diem.model.gestione.sessione.VoceStorico;
 import it.unisa.diem.model.gestione.utenti.Utente;
-import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class HistoryViewController {
     @FXML private Button leaderboardButton;
     @FXML private Button backButton;
 
-    @FXML private TableView<StoricoSessione> tableView;
-    @FXML private TableColumn<StoricoSessione, String> dateColumn;
-    @FXML private TableColumn<StoricoSessione, Integer> scoreColumn;
-    @FXML private TableColumn<StoricoSessione, String> modeColummn;
-    @FXML private TableColumn<StoricoSessione, String> langColummn;
+        @FXML private TableView<VoceStorico> tableView;
+    @FXML private TableColumn<VoceStorico, String> dateColumn;
+    @FXML private TableColumn<VoceStorico, Integer> scoreColumn;
+    @FXML private TableColumn<VoceStorico, String> langColummn;
+    @FXML private ComboBox<String> difficoltaComboBox;
 
 
     private Utente utente;
@@ -69,8 +63,6 @@ public class HistoryViewController {
         leaderView.setFitHeight(30);
         leaderboardButton.setGraphic(leaderView);
 
-
-
         dateColumn.setCellValueFactory(cellData -> {
             LocalDateTime dataFine = cellData.getValue().getDataFine();
             String formattedDate = dataFine.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
@@ -94,52 +86,41 @@ public class HistoryViewController {
             }
         });
 
-        modeColummn.setCellValueFactory(cellData -> {
-            Difficolta difficolta = cellData.getValue().getDifficolta();
-            if(difficolta != null) {
-                return new SimpleStringProperty(difficolta.toString());
-            } else {
-                return new SimpleStringProperty(":/");
-            }
+        // ComboBox difficoltà
+        difficoltaComboBox.getItems().addAll("EASY", "NORMAL", "HARD");
+        difficoltaComboBox.setOnAction(event -> {
+            String selezione = difficoltaComboBox.getValue();
+            loadTable(selezione);
         });
     }
 
-    private void loadStoricoSessioni() {
-    try {
-        // Crea una lista osservabile vuota come default
-        ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList();
-        
-        // Ottiene lo storico
-        StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(url, username, password);
-        List<StoricoSessione> storicoSessioni = dao.selectByUser(utente.getUsername());
-        
-        if (storicoSessioni != null && !storicoSessioni.isEmpty()) {
-            // Carica i documenti solo se abbiamo delle sessioni
-            SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres(url, username, password);
-            for (StoricoSessione sessione : storicoSessioni) {
-                List<Documento> documenti = docDao.selectDocumentsBySession(sessione.getId());
-                if (!documenti.isEmpty()) {
-                    Documento documento = documenti.get(0);
-                    sessione.setLingua(documento.getLingua());
-                    sessione.setDifficolta(documento.getDifficolta());
-                }
-            }
-            observableSessioni.addAll(storicoSessioni);
-        }
-        
-        tableView.setItems(observableSessioni);
-        
-    } catch (SQLException | DBException e) {
-        AlertUtils.mostraAlert(
-            Alert.AlertType.ERROR,
-            "Errore Database",
-            "Impossibile visualizzare lo storico",
-            "Controllare la connessione al database e riprovare."
-        );
-        tableView.setItems(FXCollections.observableArrayList());
-    }
-}
+    private void loadTable(String difficolta) {
+        System.out.println("Carico classifica per difficoltà: " + difficolta);
 
+        Difficolta difficoltaDB = switch (difficolta) {
+            case "EASY" -> Difficolta.FACILE;
+            case "NORMAL" -> Difficolta.INTERMEDIO;
+            case "HARD" -> Difficolta.DIFFICILE;
+            default -> throw new IllegalArgumentException("Difficoltà non valida: " + difficolta);
+        };
+
+        StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(url, username, password);
+
+        List<VoceStorico> storico = null;
+
+        try {
+            storico = dao.selectByLastSessions(utente.getUsername(), difficoltaDB);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Numero risultati: " + storico.size());
+        for (VoceStorico voce : storico) {
+            System.out.println(voce.getDataFine() + "-" + voce.getPunteggio() + "-" + voce.getLingua());
+        }
+
+        tableView.getItems().setAll(storico);
+
+    }
 
 
     public void goToMainMenu(ActionEvent actionEvent) {
@@ -173,6 +154,5 @@ public class HistoryViewController {
     public void setUtente(Utente utente) {
         this.utente = utente;
         System.out.println(utente.getUsername());
-        loadStoricoSessioni();
     }
 }
