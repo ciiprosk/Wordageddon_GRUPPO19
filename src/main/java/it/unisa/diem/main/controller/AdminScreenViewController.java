@@ -103,7 +103,7 @@ public class AdminScreenViewController {
         });
 
         /*imposta l'immagine del tasto indietro*/
-        Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        Image back = new Image(this.getClass().getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
         backView.setFitWidth(30);
         backView.setFitHeight(30);
