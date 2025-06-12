@@ -82,7 +82,7 @@ public class ListTextsController {
                     // 2. Elimina dal database (elimina anche l'analisi tramite ON CASCADE)
                     dao.delete(documento);
 
-                    //3. Elimina il documento stesso
+                    // 3. Elimina il documento stesso
                     documento.eliminaDocumento();
 
                     // 4. Rimuovi dalla lista grafica
