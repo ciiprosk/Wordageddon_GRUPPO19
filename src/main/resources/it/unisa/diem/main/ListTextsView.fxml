@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,15 +10,33 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.ListTextsController">
    <children>
-      <VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="20.0">
+      <VBox alignment="CENTER" prefHeight="800.0" prefWidth="1200.0" spacing="10.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Label text="Available texts">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
             </Label>
-            <ListView fx:id="ListView" maxHeight="500.0" maxWidth="800.0" prefHeight="500.0" prefWidth="800.0" />
-            <Button fx:id="MenuButton" mnemonicParsing="false" onAction="#goToMainMenu" text="Menu" />
+            <ListView fx:id="ListView" maxHeight="493.0" maxWidth="800.0" prefHeight="493.0" prefWidth="800.0" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteDocument" prefHeight="60.0" prefWidth="120.0" text="Delete">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></Button>
+            <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="MenuButton" mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="60.0" prefWidth="120.0" text="Menu">
+                     <HBox.margin>
+                        <Insets right="200.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

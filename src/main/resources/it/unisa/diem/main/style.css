@@ -78,8 +78,13 @@
 }
 
 .combo-box {
-    -fx-background-color: #2e2e2e; /* dark grey background */
-    -fx-border-color: #ffd700; /* yellow border */
+    -fx-background-color: #2e2e2e;
+    -fx-border-color: #ffd700;
+}
+
+.combo-box .list-cell:selected{
+    -fx-background-color: #2e2e2e;
+    -fx-border-color: #ffd700;
 }
 
 .combo-box .text {
@@ -218,4 +223,10 @@
     -fx-background-color: #ffd700;
     -fx-text-fill: #303030;
 }
+
+.list-cell:selected {
+    -fx-background-color: #00071c;
+    -fx-text-fill: gold;
+}
+
 

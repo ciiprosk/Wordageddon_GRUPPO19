@@ -111,7 +111,7 @@
                   <Button onAction="#handleRemove" prefWidth="80.0" text="Remove" />
    </children>
             </HBox>
-            <ListView fx:id="stopwordsListView" prefHeight="170.0" prefWidth="1000.0">
+            <ListView fx:id="stopwordsListView" prefHeight="140.0" prefWidth="1000.0">
                <VBox.margin>
                   <Insets />
                </VBox.margin></ListView>
@@ -178,8 +178,13 @@
             </Button>
          </children>
       </HBox>
-      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="715.0">
+      <HBox alignment="BOTTOM_RIGHT" layoutX="817.0" layoutY="708.0" prefHeight="60.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="690.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="715.0">
          <children>
+            <Button fx:id="listButton" mnemonicParsing="false" onAction="#handleList" prefHeight="60.0" prefWidth="200.0" text="List">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Button>
             <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleConfirm" prefHeight="60.0" prefWidth="200.0" text="Confirm">
                <font>
                   <Font size="25.0" />

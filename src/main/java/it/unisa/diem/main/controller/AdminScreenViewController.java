@@ -231,7 +231,7 @@ public class AdminScreenViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
             Parent root = loader.load();
-            HomeMenuViewController controller = loader.getController();
+            ListTextsController controller = loader.getController();
             controller.setUtente(utente);
 
             Stage stage = (Stage) importButton.getScene().getWindow();
@@ -341,6 +341,10 @@ public class AdminScreenViewController {
         goToListTexts();
     }
 
+    public void handleList(ActionEvent actionEvent) {
+        goToListTexts();
+    }
+
     private void validateConfirmButton() {
         boolean isTitleFilled = !titleField.getText().trim().isEmpty();
         boolean isFileImported = fileImportato != null;
@@ -354,5 +358,6 @@ public class AdminScreenViewController {
         this.utente = utente;
         System.out.println(utente.getUsername());
     }
+
 
 }
