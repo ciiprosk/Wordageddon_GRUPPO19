@@ -328,6 +328,7 @@ public class AdminScreenViewController {
         AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
         try {
             Analisi analisi = new Analisi(documento, stopword);
+            analisi.analizza();
             analisi.caricaAnalisi();
             daoDoc.insert(documento);
             daoAn.insert(analisi);
