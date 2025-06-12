@@ -11,11 +11,13 @@ import java.io.IOException;
 public class DocumentoAnalisiTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("ciao");
-        Documento documento = new Documento("ciao", Lingua.ITA, Difficolta.FACILE);
-        documento.convertiTxtToBin(new File("data/ITA/facile/storiella.txt"));
+        Documento documento = new Documento("diocane", Lingua.ITA, Difficolta.DIFFICILE);
+        documento.convertiTxtToBin(new File("data/ITA/intermedio/principessa.txt"));
         Analisi a=new Analisi(documento);
-        a.frequenzeDocumento();
+        a.analizza();
+        System.out.println(a.getFrequenzeTesto());
         a.caricaAnalisi();
+
     }
 
 }

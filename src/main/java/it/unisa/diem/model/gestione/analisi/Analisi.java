@@ -43,7 +43,7 @@ public class Analisi {
         linguaAnalisi=documento.getLingua();
         difficoltaAnalisi=documento.getDifficolta();
         titolo=documento.getTitolo();
-        pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi+"/"+titolo+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
+        pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi.toString().toLowerCase()+"/"+titolo+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
         if(stopwordAnalisi != null){
             this.stopwordAnalisi=stopwordAnalisi;
         }
@@ -54,7 +54,7 @@ public class Analisi {
         linguaAnalisi = documento.getLingua();
         difficoltaAnalisi = documento.getDifficolta();
         titolo = documento.getTitolo();
-        pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi + "/" + titolo + "_analysis.bin";
+        pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi.toString().toLowerCase() + "/" + titolo + "_analysis.bin";
 
     }
     
@@ -136,7 +136,7 @@ public class Analisi {
      * @throws ClassNotFoundException se si verifica un errore durante il caricamento delle classi
      */
 
-    public Map<String, Integer> frequenzeDocumento() throws IOException, ClassNotFoundException {
+    public Map<String, Integer> analizza() throws IOException, ClassNotFoundException {
         List<String> parole=getWordsDocument(); // mi prendo le parole del documento
 
         frequenzeTesto = new HashMap<>();
@@ -163,6 +163,15 @@ public class Analisi {
     public void caricaAnalisi() throws ClassNotFoundException,IOException  {
         //devo scrivere su file frequenze testi così com'è-> ma devo crittografare le parole
         File file=new File(pathAnalisi);
+        File cartella= file.getParentFile();
+        if(cartella.mkdirs()){
+            System.out.println("cartella creata");
+            System.out.println(cartella.getAbsolutePath());
+        }else{
+            System.out.println("cartella esistente");
+            System.out.println(cartella.getAbsolutePath());
+        }
+
         try(DataOutputStream dos=new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))){
         for(Map.Entry<String, Integer> parola : frequenzeTesto.entrySet()) {
             dos.writeUTF(CryptoAlphabet.cripta(parola.getKey()));

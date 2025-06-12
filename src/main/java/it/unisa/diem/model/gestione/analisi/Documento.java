@@ -34,7 +34,7 @@ public class Documento {
         this.lingua = lingua;
         this.difficolta = difficolta;
         testo=new ArrayList<>();
-        path="data/"+lingua+"/"+difficolta+"/"+titolo+".bin";
+        path="data/"+lingua+"/"+difficolta.toString().toLowerCase()+"/"+titolo+".bin";
     }
 
     public Documento(String titolo, Lingua lingua, Difficolta difficolta, String path) {
@@ -112,6 +112,8 @@ public class Documento {
      */
     public void convertiTxtToBin(File inputFile) throws IOException {
         File outputFile= new File(path);
+        File parent=outputFile.getParentFile();
+        if(parent.mkdirs()) System.out.println("Directory created");
         try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
              DataOutputStream dos = new DataOutputStream(new   BufferedOutputStream(new FileOutputStream(outputFile)))) {
 

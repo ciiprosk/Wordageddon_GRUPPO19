@@ -105,33 +105,40 @@ public class HistoryViewController {
     }
 
     private void loadStoricoSessioni() {
+    try {
+        // Crea una lista osservabile vuota come default
+        ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList();
+        
+        // Ottiene lo storico
         StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(url, username, password);
-        SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres(url, username, password);
-
-        List<StoricoSessione> storicoSessioni = null;
-        try {
-            storicoSessioni = dao.selectByUser(utente.getUsername());
-
+        List<StoricoSessione> storicoSessioni = dao.selectByUser(utente.getUsername());
+        
+        if (storicoSessioni != null && !storicoSessioni.isEmpty()) {
+            // Carica i documenti solo se abbiamo delle sessioni
+            SessioneDocumentoDAOPostgres docDao = new SessioneDocumentoDAOPostgres(url, username, password);
             for (StoricoSessione sessione : storicoSessioni) {
                 List<Documento> documenti = docDao.selectDocumentsBySession(sessione.getId());
-
                 if (!documenti.isEmpty()) {
                     Documento documento = documenti.get(0);
                     sessione.setLingua(documento.getLingua());
                     sessione.setDifficolta(documento.getDifficolta());
-                } else {
-                    sessione.setLingua(null);
-                    sessione.setDifficolta(null);
                 }
             }
-
-        } catch (SQLException | DBException e) {
-            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "DATABASE ERROR", "Impossibile far visualizzare lo storico", "Controllare la connessione al database e riprovare.");
+            observableSessioni.addAll(storicoSessioni);
         }
-
-        ObservableList<StoricoSessione> observableSessioni = FXCollections.observableArrayList(storicoSessioni);
+        
         tableView.setItems(observableSessioni);
+        
+    } catch (SQLException | DBException e) {
+        AlertUtils.mostraAlert(
+            Alert.AlertType.ERROR,
+            "Errore Database",
+            "Impossibile visualizzare lo storico",
+            "Controllare la connessione al database e riprovare."
+        );
+        tableView.setItems(FXCollections.observableArrayList());
     }
+}
 
 
 
