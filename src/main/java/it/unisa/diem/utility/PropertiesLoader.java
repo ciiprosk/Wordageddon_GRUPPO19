@@ -17,6 +17,11 @@ public class PropertiesLoader {
             if(is == null){
                 System.out.println("Config file not found");
             }
+            /*
+            Reads a property list (key and element pairs) from the input byte stream.
+             The input stream is in a simple line-oriented format as specified in load(Reader)
+              and is assumed to use the ISO 8859-1 character encoding;
+             */
             prop.load(is);
         } catch (IOException e) {
             e.printStackTrace();

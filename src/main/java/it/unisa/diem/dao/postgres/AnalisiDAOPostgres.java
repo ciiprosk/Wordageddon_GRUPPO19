@@ -122,8 +122,8 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         String path=rs.getString("percorso");
         String split[]= path.split("[/.]");
         String nomeFile=split[split.length-2];
-        Difficolta difficolta= Difficolta.valueOf(split[split.length-3]);
-        Lingua lingua= Lingua.valueOf(split[split.length-4]);
+        Difficolta difficolta= Difficolta.valueOf(split[split.length-3].toUpperCase());
+        Lingua lingua= Lingua.valueOf(split[split.length-4].toUpperCase());
         a = new Analisi(new Documento(documento,lingua, difficolta), null); //non mi interessano le stopword
         return a;
     }

@@ -60,7 +60,7 @@ public class ReadTextViewController {
 
 
     private void getTextFileNames() {
-        path = "data/"+lingua+"/"+difficolta+"/";
+        path = "data/"+lingua+"/"+difficolta.toString().toLowerCase()+"/";
         List<String> files = new ArrayList<>();
 
         DocumentoDAOPostgres dao = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");

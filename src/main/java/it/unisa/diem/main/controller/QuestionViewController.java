@@ -9,11 +9,14 @@ import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.sessione.DomandaFactory;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.TipoDomanda;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,13 +45,9 @@ public class QuestionViewController {
         List<Analisi> listaAnalisi= new ArrayList<>();
 
         try {
-            Optional<Analisi> analisi1 = dao.selectAnalisiByTitle(primoDocumento.getTitolo());
-            if (analisi1.isPresent()) {
-                listaAnalisi.add(analisi1.get());
-            } else {
-                throw new RuntimeException("Analisi non trovata per titolo: " + primoDocumento.getTitolo());
-            }
-            System.out.println("ciao difficolta: " + difficolta);
+            Analisi analisi = Analisi.leggiAnalisi(primoDocumento);
+
+        System.out.println("ciao difficolta: " + difficolta);
             /*if (difficolta != Difficolta.FACILE) {
                 Optional<Analisi> analisi2 = dao.selectAnalisiByTitle(secondoDocumento.getTitolo());
                 listaAnalisi.add(analisi2.get());
@@ -56,16 +55,11 @@ public class QuestionViewController {
                 throw new RuntimeException("Analisi non trovata per titolo: " + secondoDocumento.getTitolo());
             }*/
 
-        } catch (DBException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Errore nel recupero dati dal database", e);
-        }
+            listaAnalisi.add(analisi);
 
-        try {
-            listaAnalisi.add(dao.selectAnalisiByTitle(primoDocumento.getTitolo()).get());
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) {
+        AlertUtils.mostraAlert(Alert.AlertType.ERROR, null, null, null);
+    }
         /*try {
             listaAnalisi.add(dao.selectAnalisiByTitle(secondoDocumento.getTitolo()).get());
         } catch (DBException e) {
