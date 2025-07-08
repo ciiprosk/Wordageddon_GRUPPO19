@@ -154,12 +154,11 @@ public class Documento {
                }
            }catch(EOFException e){
                dr.testo=parole;
-               return dr;
            }
 
 
         }
-
+        return dr;
     }
 
     /**

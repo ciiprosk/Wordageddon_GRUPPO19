@@ -98,7 +98,7 @@ public class LeaderboardViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
             HomeMenuViewController controller = loader.getController();
-            controller.setUtente(utenteToPass);
+            //controller.setUtente(utenteToPass);
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Caricamento");

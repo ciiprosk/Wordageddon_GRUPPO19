@@ -27,7 +27,7 @@ public class Main extends Application {
 
         primaryStage.getIcons().add(icon);
         try(Connection con= DriverManager.getConnection(url, user, pass)){
-            Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml")); // o LoginView.fxml
+            Parent root = FXMLLoader.load(getClass().getResource("LoginSignUpView.fxml")); // o LoginView.fxml
             primaryStage.setTitle("Wordageddon");
 
             primaryStage.setScene(new Scene(root));

@@ -2,6 +2,7 @@ package it.unisa.diem.main.controller;
 
 import it.unisa.diem.model.gestione.utenti.Ruolo;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.SessionManager;
 import it.unisa.diem.utility.SceneLoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-
 public class HomeMenuViewController {
     @FXML private Button newGameButton;
     @FXML private Button leaderboardButton;
@@ -19,19 +19,17 @@ public class HomeMenuViewController {
     @FXML private Button logOutButton;
     @FXML private Button adminButton;
 
-    private Utente utenteToPass;
     private boolean isAdmin;
 
     @FXML
     public void initialize() {
+        showAdminButton();
     }
 
     public void goToNewGame(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/DifficultySelectionView.fxml"));
             Parent root = loader.load();
-            DifficultySelectionViewController controller = loader.getController();
-            controller.setUtente(utenteToPass);
             Stage stage = (Stage) newGameButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("NEW GAME");
@@ -44,8 +42,6 @@ public class HomeMenuViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LeaderboardView.fxml"));
             Parent root = loader.load();
-            LeaderboardViewController controller = loader.getController();
-            controller.setUtente(utenteToPass);
             Stage stage = (Stage) leaderboardButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Leaderboard");
@@ -58,8 +54,6 @@ public class HomeMenuViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HistoryView.fxml"));
             Parent root = loader.load();
-            HistoryViewController controller = loader.getController();
-            controller.setUtente(utenteToPass);
             Stage stage = (Stage) historyButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("History");
@@ -69,6 +63,7 @@ public class HomeMenuViewController {
     }
 
     public void goToLogIn(ActionEvent actionEvent) {
+        SessionManager.getInstance().logout(); // Logout utente
         SceneLoader.load("LoginView.fxml", logOutButton);
     }
 
@@ -76,8 +71,6 @@ public class HomeMenuViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/AdminScreenView.fxml"));
             Parent root = loader.load();
-            AdminScreenViewController controller = loader.getController();
-            controller.setUtente(utenteToPass);
             Stage stage = (Stage) adminButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Admin");
@@ -87,14 +80,12 @@ public class HomeMenuViewController {
     }
 
     private void showAdminButton() {
-        if(utenteToPass.getRuolo().toString().equals(Ruolo.ADMIN.toString())) { isAdmin = true; }
+        Utente utenteLoggato = SessionManager.getInstance().getUtenteLoggato();
+        if (utenteLoggato != null && utenteLoggato.getRuolo() == Ruolo.ADMIN) {
+            isAdmin = true;
+        }
         adminButton.setVisible(isAdmin);
         adminButton.setManaged(isAdmin);
         adminButton.setDisable(!isAdmin);
-    }
-
-    public void setUtente(Utente utente) {
-        this.utenteToPass = utente;
-        showAdminButton();
     }
 }

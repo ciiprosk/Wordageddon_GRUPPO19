@@ -47,7 +47,7 @@ public class ListTextsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
             HomeMenuViewController controller = loader.getController();
-            controller.setUtente(utente);
+            //controller.setUtente(utente);
             Stage stage = (Stage) MenuButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Caricamento");

@@ -3,15 +3,14 @@ package it.unisa.diem.main.controller;
 import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
-import it.unisa.diem.main.Main;
-import it.unisa.diem.model.gestione.analisi.Analisi;
-import it.unisa.diem.model.gestione.analisi.Difficolta;
-import it.unisa.diem.model.gestione.analisi.Documento;
-import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.model.gestione.analisi.*;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.SessionManager;
+import it.unisa.diem.utility.AlertUtils;
+import it.unisa.diem.utility.PropertiesLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,32 +50,25 @@ public class AdminScreenViewController {
     @FXML private CheckBox checkHard;
     @FXML private Label alertLabel;
 
-    Utente utente;
-
     private StopwordManager stopword;
     private ObservableList<String> observableList;
-    String titolo = null;
-    Lingua lingua;
-    Difficolta difficolta;
+    private String titolo = null;
+    private Lingua lingua;
+    private Difficolta difficolta;
     private File fileImportato;
-
 
     @FXML
     public void initialize() {
-        /*esempio temporaneo*/
+        // esempio temporaneo
         StopwordITA stopwordITA = new StopwordITA();
         stopwordITA.aggiungi("esempio");
-        /*temporaneo*/
 
-        /*disabilita il label di errore*/
         alertLabel.setVisible(false);
         alertLabel.setManaged(false);
 
-        /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopwordITA.getParole());
         stopwordsListView.setItems(observableList);
 
-        /*rende la lista editabile*/
         stopwordsListView.setEditable(true);
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());
         stopwordsListView.setOnEditCommit(event -> {
@@ -102,35 +94,30 @@ public class AdminScreenViewController {
             stopwordsListView.getItems().set(index, newValue);
         });
 
-        /*imposta l'immagine del tasto indietro*/
         Image back = new Image(this.getClass().getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
         backView.setFitWidth(30);
         backView.setFitHeight(30);
         backButton.setGraphic(backView);
 
-        //disabilita del pulsante di conferma
         confirmButton.setDisable(true);
         titleField.textProperty().addListener((obs, oldText, newText) -> validateConfirmButton());
-
     }
 
-    //riempimento lista a seconda della lingua
-    public void listaStopwordIta() {
+    private Utente getUtente() {
+        return SessionManager.getInstance().getUtenteLoggato();
+    }
 
+    public void listaStopwordIta() {
         stopword = new StopwordITA();
         stopword.aggiungi("esempio");
 
-
-        /*disabilita il messaggio di errore*/
         alertLabel.setVisible(false);
         alertLabel.setManaged(false);
 
-        /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopword.getParole());
         stopwordsListView.setItems(observableList);
 
-        /*rende la lista editabile*/
         stopwordsListView.setEditable(true);
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());
         stopwordsListView.setOnEditCommit(event -> {
@@ -141,20 +128,15 @@ public class AdminScreenViewController {
     }
 
     public void listaStopwordEng() {
-        /*esempio temporaneo*/
         stopword = new StopwordENG();
         stopword.aggiungi("example");
-        /*temporaneo*/
 
-        /*disabilita il messaggio di errore*/
         alertLabel.setVisible(false);
         alertLabel.setManaged(false);
 
-        /*imposta le parole della lista di stopword come */
         observableList = FXCollections.observableArrayList(stopword.getParole());
         stopwordsListView.setItems(observableList);
 
-        /*rende la lista editabile*/
         stopwordsListView.setEditable(true);
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());
         stopwordsListView.setOnEditCommit(event -> {
@@ -164,7 +146,6 @@ public class AdminScreenViewController {
         });
     }
 
-    //checklist lingue e difficolta
     @FXML
     private void handleDifficultySelection(ActionEvent event) {
         CheckBox selected = (CheckBox) event.getSource();
@@ -173,17 +154,14 @@ public class AdminScreenViewController {
             if (selected == checkEasy) {
                 checkNormal.setSelected(false);
                 checkHard.setSelected(false);
-
                 difficolta = Difficolta.FACILE;
             } else if (selected == checkNormal) {
                 checkEasy.setSelected(false);
                 checkHard.setSelected(false);
-
                 difficolta = Difficolta.INTERMEDIO;
             } else if (selected == checkHard) {
                 checkEasy.setSelected(false);
                 checkNormal.setSelected(false);
-
                 difficolta = Difficolta.DIFFICILE;
             }
         }
@@ -199,26 +177,21 @@ public class AdminScreenViewController {
                 checkEng.setSelected(false);
                 emptyList();
                 listaStopwordIta();
-
                 lingua = Lingua.ITA;
             } else if (selected == checkEng) {
                 checkIt.setSelected(false);
                 emptyList();
                 listaStopwordEng();
-
                 lingua = Lingua.ENG;
             }
         }
         validateConfirmButton();
     }
 
-    //Pulsante indietro
     public void goToMainMenu(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
-            HomeMenuViewController controller = loader.getController();
-            controller.setUtente(utente);
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Menu");
@@ -232,8 +205,7 @@ public class AdminScreenViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
             Parent root = loader.load();
             ListTextsController controller = loader.getController();
-            controller.setUtente(utente);
-
+            // Usa SessionManager invece di setUtente()
             Stage stage = (Stage) importButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Titles");
@@ -242,10 +214,6 @@ public class AdminScreenViewController {
         }
     }
 
-
-
-
-    //ListView
     @FXML
     private void handleAdd() {
         alertLabel.setVisible(false);
@@ -266,7 +234,6 @@ public class AdminScreenViewController {
             alertLabel.setText("La parola è già presente.");
             alertLabel.setVisible(true);
             alertLabel.setManaged(true);
-            System.out.println("La parola " + text + " è già presente");
         }
     }
 
@@ -284,8 +251,6 @@ public class AdminScreenViewController {
         stopwordsListView.getItems().clear();
     }
 
-
-    //import del file tramite filechooser
     public void handleImport(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona un file TXT da importare");
@@ -302,42 +267,38 @@ public class AdminScreenViewController {
         }
     }
 
-
-
     public void handleConfirm(ActionEvent actionEvent) {
         titolo = titleField.getText().trim();
 
-
-        stopword.getParole().clear(); //senza questo potrebbe riapparire una parola modificata manualmente dall'utente (credo)
+        stopword.getParole().clear();
         for (String parola : stopwordsListView.getItems()) {
             stopword.aggiungi(parola);
         }
 
-
         stopword.caricaStopword(checkArticles.isSelected(), checkPrepositions.isSelected(), checkPronouns.isSelected(), checkToHave.isSelected(), checkToBe.isSelected(), checkCon.isSelected());
-        System.out.println(stopword.getParole());
+
         Documento documento = new Documento(titolo, lingua, difficolta);
 
         try {
             documento.convertiTxtToBin(fileImportato);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        DocumentoDAOPostgres daoDoc = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
-        AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
+        String url = PropertiesLoader.getProperty("database.url");
+        String user = PropertiesLoader.getProperty("database.user");
+        String pass = PropertiesLoader.getProperty("database.password");
+
+        DocumentoDAOPostgres daoDoc = new DocumentoDAOPostgres(url, user, pass);
+        AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres(url, user, pass);
         try {
             Analisi analisi = new Analisi(documento, stopword);
             analisi.analizza();
             analisi.caricaAnalisi();
             daoDoc.insert(documento);
             daoAn.insert(analisi);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (DBException | IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
         goToListTexts();
     }
@@ -354,11 +315,4 @@ public class AdminScreenViewController {
 
         confirmButton.setDisable(!(isTitleFilled && isFileImported && isLanguageSelected && isDifficultySelected));
     }
-
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-        System.out.println(utente.getUsername());
-    }
-
-
 }
