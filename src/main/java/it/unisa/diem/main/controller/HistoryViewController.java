@@ -1,20 +1,20 @@
 package it.unisa.diem.main.controller;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-
 import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
+import it.unisa.diem.main.service.HistoryService;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Lingua;
-import it.unisa.diem.model.gestione.classifica.VoceClassifica;
-import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.sessione.VoceStorico;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
+import it.unisa.diem.utility.SessionManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,31 +25,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HistoryViewController {
     @FXML private Button leaderboardButton;
     @FXML private Button backButton;
 
-        @FXML private TableView<VoceStorico> tableView;
+    @FXML private TableView<VoceStorico> tableView;
     @FXML private TableColumn<VoceStorico, String> dateColumn;
     @FXML private TableColumn<VoceStorico, Integer> scoreColumn;
     @FXML private TableColumn<VoceStorico, String> langColummn;
     @FXML private ComboBox<String> difficoltaComboBox;
 
-
-    private Utente utente;
-    private String url;
-    private String username;
-    private String password;
+    private final StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(
+            PropertiesLoader.getProperty("database.url"),
+            PropertiesLoader.getProperty("database.user"),
+            PropertiesLoader.getProperty("database.password")
+    );
 
     @FXML
     public void initialize() {
-        //sono rosa inizializzo i campi per le query
-        url = PropertiesLoader.getProperty("database.url");
-        username = PropertiesLoader.getProperty("database.user");
-        password = PropertiesLoader.getProperty("database.password");
-
         // Imposta le immagini dei bottoni
         Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
         ImageView backView = new ImageView(back);
@@ -63,14 +60,13 @@ public class HistoryViewController {
         leaderView.setFitHeight(30);
         leaderboardButton.setGraphic(leaderView);
 
+        // Configura colonne
         dateColumn.setCellValueFactory(cellData -> {
             LocalDateTime dataFine = cellData.getValue().getDataFine();
-            String formattedDate = dataFine.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            if(dataFine != null) {
-                return new SimpleStringProperty(formattedDate);
-            }else{
-                return new SimpleStringProperty(":/");
-            }
+            String formattedDate = dataFine != null
+                    ? dataFine.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    : ":/";
+            return new SimpleStringProperty(formattedDate);
         });
 
         scoreColumn.setCellValueFactory(cellData ->
@@ -79,23 +75,23 @@ public class HistoryViewController {
 
         langColummn.setCellValueFactory(cellData -> {
             Lingua lingua = cellData.getValue().getLingua();
-            if(lingua != null) {
-                return new SimpleStringProperty(lingua.toString());
-            } else {
-                return new SimpleStringProperty(":/");
-            }
+            return new SimpleStringProperty(lingua != null ? lingua.toString() : ":/");
         });
 
         // ComboBox difficoltà
         difficoltaComboBox.getItems().addAll("EASY", "NORMAL", "HARD");
         difficoltaComboBox.setOnAction(event -> {
             String selezione = difficoltaComboBox.getValue();
-            loadTable(selezione);
+            loadTableAsync(selezione);
         });
     }
 
-    private void loadTable(String difficolta) {
-        System.out.println("Carico classifica per difficoltà: " + difficolta);
+    private void loadTableAsync(String difficolta) {
+        Utente utente = SessionManager.getInstance().getUtenteLoggato();
+        if (utente == null) {
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore sessione", null, "Utente non loggato.");
+            return;
+        }
 
         Difficolta difficoltaDB = switch (difficolta) {
             case "EASY" -> Difficolta.FACILE;
@@ -104,36 +100,34 @@ public class HistoryViewController {
             default -> throw new IllegalArgumentException("Difficoltà non valida: " + difficolta);
         };
 
-        StoricoSessioneDAOPostgres dao = new StoricoSessioneDAOPostgres(url, username, password);
+        HistoryService service = new HistoryService();
+        service.setParameters(utente.getUsername(), difficoltaDB);
 
-        List<VoceStorico> storico = null;
+        service.setOnSucceeded(event -> {
+            List<VoceStorico> storico = service.getValue();
+            tableView.getItems().setAll(storico);
+        });
 
-        try {
-            storico = dao.selectByLastSessions(utente.getUsername(), difficoltaDB);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Numero risultati: " + storico.size());
-        for (VoceStorico voce : storico) {
-            System.out.println(voce.getDataFine() + "-" + voce.getPunteggio() + "-" + voce.getLingua());
-        }
+        service.setOnFailed(event -> {
+            Throwable e = service.getException();
+            e.printStackTrace();
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore caricamento", null,
+                    "Errore durante il caricamento dello storico:\n" + (e != null ? e.getMessage() : "Errore sconosciuto"));
+        });
 
-        tableView.getItems().setAll(storico);
-
+        service.start();
     }
-
 
     public void goToMainMenu(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
-            HomeMenuViewController controller = loader.getController();
-            //controller.setUtente(utente);
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Caricamento");
+            stage.setTitle("Menu");
         } catch (Exception ex) {
             ex.printStackTrace();
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore", null, "Impossibile caricare la schermata Home.");
         }
     }
 
@@ -141,18 +135,12 @@ public class HistoryViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/LeaderboardView.fxml"));
             Parent root = loader.load();
-            LeaderboardViewController controller = loader.getController();
-            controller.setUtente(utente);
             Stage stage = (Stage) leaderboardButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Caricamento");
+            stage.setTitle("Leaderboard");
         } catch (Exception ex) {
             ex.printStackTrace();
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore", null, "Impossibile caricare la schermata Leaderboard.");
         }
-    }
-
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-        System.out.println(utente.getUsername());
     }
 }

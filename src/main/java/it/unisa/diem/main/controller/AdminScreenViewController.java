@@ -3,6 +3,7 @@ package it.unisa.diem.main.controller;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.main.service.AnalisiService;
 import it.unisa.diem.main.service.DeleteDocumentService;
+import it.unisa.diem.main.service.LoadTitlesService;
 import it.unisa.diem.model.gestione.analisi.*;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
@@ -275,17 +276,7 @@ public class AdminScreenViewController {
 
     // === LIST TEXTS LOGIC ===
     private void loadTitlesAsync() {
-        Service<List<String>> service = new Service<>() {
-            @Override
-            protected Task<List<String>> createTask() {
-                return new Task<>() {
-                    @Override
-                    protected List<String> call() throws Exception {
-                        return dao.selectAllTitles();
-                    }
-                };
-            }
-        };
+        LoadTitlesService service = new LoadTitlesService();
 
         service.setOnSucceeded(event -> {
             List<String> ListDao = service.getValue();
@@ -302,6 +293,7 @@ public class AdminScreenViewController {
 
         service.start();
     }
+
 
     @FXML
     public void deleteDocument(ActionEvent actionEvent) {
