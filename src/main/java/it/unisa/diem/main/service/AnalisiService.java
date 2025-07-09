@@ -33,6 +33,11 @@ public class AnalisiService extends Service<Void> {
                 updateMessage("Inizio conversione file...");
                 documento.convertiTxtToBin(inputFile);
 
+                System.out.println("🔎 Stopword utilizzate per l'analisi:");
+                for (String sw : stopwordManager.getParole()) {
+                    System.out.println(sw);
+                }
+
                 updateMessage("Analisi in corso...");
                 Analisi analisi = new Analisi(documento, stopwordManager);
                 analisi.analizza();

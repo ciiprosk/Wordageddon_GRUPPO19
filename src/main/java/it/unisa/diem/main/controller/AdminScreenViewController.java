@@ -230,13 +230,12 @@ public class AdminScreenViewController {
     public void clearStopwordList() { stopwordsListView.getItems().clear(); }
 
     // === CONFIRM ===
-    @FXML
     public void handleConfirm(ActionEvent actionEvent) {
         titolo = titleField.getText().trim();
 
-        stopword.getParole().clear();
-        stopword.getParole().addAll(stopwordsListView.getItems());
+        stopword.clear();
 
+        // Prima carica le predefinite
         stopword.caricaStopword(
                 checkArticles.isSelected(),
                 checkPrepositions.isSelected(),
@@ -245,6 +244,11 @@ public class AdminScreenViewController {
                 checkToBe.isSelected(),
                 checkCon.isSelected()
         );
+
+        // Poi aggiunge quelle dell'utente
+        for (String s : stopwordsListView.getItems()) {
+            stopword.aggiungi(s);
+        }
 
         Documento documento = new Documento(titolo, lingua, difficolta);
         AnalisiService analisiService = new AnalisiService(documento, stopword, fileImportato);
@@ -258,6 +262,7 @@ public class AdminScreenViewController {
 
         analisiService.start();
     }
+
 
     private void validateConfirmButton() {
         boolean isTitleFilled = !titleField.getText().trim().isEmpty();
