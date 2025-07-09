@@ -64,7 +64,7 @@ public class HomeMenuViewController {
 
     public void goToLogIn(ActionEvent actionEvent) {
         SessionManager.getInstance().logout(); // Logout utente
-        SceneLoader.load("LoginView.fxml", logOutButton);
+        SceneLoader.load("LoginSignUpView.fxml", logOutButton);
     }
 
     public void goToLoadDocument(ActionEvent actionEvent) {
