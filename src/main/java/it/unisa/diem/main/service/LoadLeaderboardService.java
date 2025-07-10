@@ -8,12 +8,14 @@ import it.unisa.diem.utility.PropertiesLoader;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class LoadLeaderboardService extends Service<List<VoceClassifica>> {
+public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceClassifica>>> {
 
     private final StoricoSessioneDAOPostgres dao;
-    private Difficolta difficolta;
+    private String username;
 
     public LoadLeaderboardService() {
         dao = new StoricoSessioneDAOPostgres(
@@ -23,17 +25,22 @@ public class LoadLeaderboardService extends Service<List<VoceClassifica>> {
         );
     }
 
-    public void setDifficolta(Difficolta difficolta) {
-        this.difficolta = difficolta;
-    }
-
     @Override
-    protected Task<List<VoceClassifica>> createTask() {
+    protected Task<Map<Difficolta, List<VoceClassifica>>> createTask() {
         return new Task<>() {
             @Override
-            protected List<VoceClassifica> call() throws DBException {
-                return dao.selectByTopRanking(difficolta);
+            protected Map<Difficolta, List<VoceClassifica>> call() throws DBException {
+                Map<Difficolta, List<VoceClassifica>> risultati = new HashMap<>();
+                for (Difficolta d : Difficolta.values()) {
+                    List<VoceClassifica> lista = dao.selectByTopRanking(d);
+                    risultati.put(d, lista);
+                }
+                return risultati;
             }
         };
+    }
+
+    public Map<Difficolta, List<VoceClassifica>> getValueMap() {
+        return getValue();
     }
 }

@@ -8,13 +8,14 @@ import it.unisa.diem.utility.PropertiesLoader;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class HistoryService extends Service<List<VoceStorico>> {
+public class HistoryService extends Service<Map<Difficolta, List<VoceStorico>>> {
 
     private final StoricoSessioneDAOPostgres dao;
     private String username;
-    private Difficolta difficolta;
 
     public HistoryService() {
         this.dao = new StoricoSessioneDAOPostgres(
@@ -24,18 +25,26 @@ public class HistoryService extends Service<List<VoceStorico>> {
         );
     }
 
-    public void setParameters(String username, Difficolta difficolta) {
+    public void setParameters(String username) {
         this.username = username;
-        this.difficolta = difficolta;
     }
 
     @Override
-    protected Task<List<VoceStorico>> createTask() {
+    protected Task<Map<Difficolta, List<VoceStorico>>> createTask() {
         return new Task<>() {
             @Override
-            protected List<VoceStorico> call() throws DBException {
-                return dao.selectByLastSessions(username, difficolta);
+            protected Map<Difficolta, List<VoceStorico>> call() throws DBException {
+                Map<Difficolta, List<VoceStorico>> risultati = new HashMap<>();
+                for (Difficolta d : Difficolta.values()) {
+                    List<VoceStorico> lista = dao.selectByLastSessions(username, d);
+                    risultati.put(d, lista);
+                }
+                return risultati;
             }
         };
+    }
+
+    public Map<Difficolta, List<VoceStorico>> getValueMap() {
+        return getValue();
     }
 }

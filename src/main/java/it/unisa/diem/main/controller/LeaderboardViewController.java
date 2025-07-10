@@ -16,9 +16,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LeaderboardViewController {
 
@@ -30,7 +33,12 @@ public class LeaderboardViewController {
     @FXML private TableColumn<VoceClassifica, Number> mediaCol;
     @FXML private TableColumn<VoceClassifica, Number> sumCol;
 
+    @FXML private StackPane loadingOverlay;
+    @FXML private ProgressIndicator loadingSpinner;
+    @FXML private Label loadingMessageLabel;
+
     private final LoadLeaderboardService leaderboardService = new LoadLeaderboardService();
+    private final Map<Difficolta, List<VoceClassifica>> leaderboardCache = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -51,34 +59,54 @@ public class LeaderboardViewController {
         mediaCol.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getMediaPunteggio()));
 
         difficoltaComboBox.getItems().addAll("EASY", "NORMAL", "HARD");
-        difficoltaComboBox.setOnAction(event -> {
-            String selezione = difficoltaComboBox.getValue();
-            loadTableAsync(selezione);
-        });
+        difficoltaComboBox.setValue("EASY"); // 🔵 Default
+
+        difficoltaComboBox.setOnAction(event -> updateTableForSelection(difficoltaComboBox.getValue()));
+
+        loadAllLeaderboards();
+    }
+
+    private void loadAllLeaderboards() {
+        showLoadingOverlay("Caricamento classifica...");
 
         leaderboardService.setOnSucceeded(event -> {
-            List<VoceClassifica> top10 = leaderboardService.getValue();
-            leaderboardTable.getItems().setAll(top10);
+            hideLoadingOverlay();
+            Map<Difficolta, List<VoceClassifica>> risultati = leaderboardService.getValueMap();
+            leaderboardCache.putAll(risultati);
+            updateTableForSelection(difficoltaComboBox.getValue());
         });
 
         leaderboardService.setOnFailed(event -> {
+            hideLoadingOverlay();
             Throwable e = leaderboardService.getException();
             e.printStackTrace();
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore", null,
                     "Errore durante il caricamento della leaderboard:\n" + (e != null ? e.getMessage() : "Errore sconosciuto"));
         });
+
+        leaderboardService.start();
     }
 
-    private void loadTableAsync(String difficolta) {
-        Difficolta difficoltaDB = switch (difficolta) {
+
+    private void updateTableForSelection(String difficolta) {
+        Difficolta diff = switch (difficolta) {
             case "EASY" -> Difficolta.FACILE;
             case "NORMAL" -> Difficolta.INTERMEDIO;
             case "HARD" -> Difficolta.DIFFICILE;
             default -> throw new IllegalArgumentException("Difficoltà non valida: " + difficolta);
         };
 
-        leaderboardService.setDifficolta(difficoltaDB);
-        leaderboardService.restart();
+        List<VoceClassifica> lista = leaderboardCache.getOrDefault(diff, List.of());
+        leaderboardTable.getItems().setAll(lista);
+    }
+
+    private void showLoadingOverlay(String message) {
+        loadingMessageLabel.setText(message);
+        loadingOverlay.setVisible(true);
+    }
+
+    private void hideLoadingOverlay() {
+        loadingOverlay.setVisible(false);
     }
 
     public void goToMainMenu(ActionEvent actionEvent) {
