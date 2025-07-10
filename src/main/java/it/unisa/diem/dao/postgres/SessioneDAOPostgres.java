@@ -120,7 +120,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     public void insert(Sessione sessione) throws DBException {
 
         String query = "INSERT INTO sessione " +
-                "(utente, completato, dataInizio, punteggio) " +
+                "(utente, completato, dataInizio, punteggioottenuto) " +
                 "VALUES (?,?,?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -149,9 +149,9 @@ public class SessioneDAOPostgres implements SessioneDAO {
     @Override
     public void update(Sessione sessione) throws DBException {
 
-        String query = "UPDATE sessione " +
-                "SET completato = ?, punteggio = ? " +
-                "WHERE id = ?";
+        String query = "UPDATE sessione \n" +
+                "SET completato = ?, punteggioottenuto = ? \n" +
+                "WHERE id = ?\n";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 

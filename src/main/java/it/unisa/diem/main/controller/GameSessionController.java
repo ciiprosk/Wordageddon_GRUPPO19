@@ -1,5 +1,11 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.dao.postgres.DomandaDAOPostgres;
+import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
+import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
+import it.unisa.diem.exceptions.DBException;
+import it.unisa.diem.main.service.InsertQuestionsService;
+import it.unisa.diem.main.service.InsertSessionService;
 import it.unisa.diem.main.service.LoadAnalysesService;
 import it.unisa.diem.main.service.GenerateQuestionsService;
 import it.unisa.diem.model.gestione.analisi.Analisi;
@@ -7,7 +13,10 @@ import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.sessione.GameSession;
+import it.unisa.diem.model.gestione.sessione.Sessione;
+import it.unisa.diem.model.gestione.sessione.SessioneDocumento;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.SessionManager;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -19,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javafx.animation.KeyFrame;
@@ -71,11 +81,29 @@ public class GameSessionController {
     private LoadAnalysesService loadAnalysesService;
     private GenerateQuestionsService generateQuestionsService;
 
+    private String url;
+    private String user;
+    private String pass;
+
+    private SessioneDAOPostgres sessioneDAO;
+    private SessioneDocumentoDAOPostgres sessioneDocumentoDAO;
+    private DomandaDAOPostgres domandaDAO;
+
+
     // === METODO INITIALIZE ===
     @FXML
     public void initialize() {
+        this.url = PropertiesLoader.getProperty("database.url");
+        this.user = PropertiesLoader.getProperty("database.user");
+        this.pass = PropertiesLoader.getProperty("database.password");
+
+        sessioneDAO = new SessioneDAOPostgres(url, user, pass);
+        sessioneDocumentoDAO = new SessioneDocumentoDAOPostgres(url, user, pass);
+        domandaDAO = new DomandaDAOPostgres(url, user, pass);
+
         setupSelectionPane();
     }
+
 
     // === SETUP SELECTION PANE ===
     private void setupSelectionPane() {
@@ -86,21 +114,38 @@ public class GameSessionController {
     }
 
     private void startNewGame() {
-        currentDocumentIndex = 0;
         currentReadingIndex = 0;
-
 
         Lingua lingua = linguaComboBox.getValue();
         Difficolta difficolta = difficoltaComboBox.getValue();
-        Utente utente = SessionManager.getInstance().getUtenteLoggato(); // Usa SessionManager per l'utente loggato
+        Utente utente = SessionManager.getInstance().getUtenteLoggato();
 
         if (lingua != null && difficolta != null && utente != null) {
             gameSession = new GameSession(utente, lingua, difficolta);
-            loadDocumentsAndAnalyses(lingua, difficolta);
+            Sessione sessione = new Sessione(utente, LocalDateTime.now());
+
+            InsertSessionService insertSessionService = new InsertSessionService(sessioneDAO, sessione);
+
+            insertSessionService.setOnSucceeded(event -> {
+                Sessione insertedSessione = insertSessionService.getValue();
+                System.out.println("✅ Sessione inserita con ID = " + insertedSessione.getId());
+                gameSession.setSessioneId(insertedSessione.getId());
+                loadDocumentsAndAnalyses(lingua, difficolta);
+            });
+
+            insertSessionService.setOnFailed(event -> {
+                Throwable ex = insertSessionService.getException();
+                ex.printStackTrace();
+                showAlert("Errore nella creazione della sessione: " + ex.getMessage());
+            });
+
+            insertSessionService.start();
+
         } else {
             showAlert("Seleziona sia lingua che difficoltà (e assicurati di essere loggato).");
         }
     }
+
 
     // === LOAD DOCUMENTS AND ANALYSES ===
     private void loadDocumentsAndAnalyses(Lingua lingua, Difficolta difficolta) {
@@ -110,7 +155,16 @@ public class GameSessionController {
 
         loadAnalysesService.setOnSucceeded((WorkerStateEvent event) -> {
             List<Analisi> analyses = loadAnalysesService.getValue();
-            gameSession.setAnalyses(analyses); // Salva nella sessione
+            gameSession.setAnalyses(analyses);
+
+            for (Analisi analisi : analyses) {
+                try {
+                    sessioneDocumentoDAO.insert(new SessioneDocumento(gameSession.getSessioneId(), analisi.getTitolo()));
+                } catch (DBException e) {
+                    showAlert("Errore nel salvataggio dei documenti: " + e.getMessage());
+                    return;
+                }
+            }
 
             generateQuestions(analyses, difficolta);
         });
@@ -133,10 +187,37 @@ public class GameSessionController {
         generateQuestionsService.setOnSucceeded(event -> {
             List<Domanda> domande = generateQuestionsService.getValue();
             gameSession.setDomande(domande);
-            gameSession.setCurrentQuestionIndex(0);
-            gameSession.setScore(0);
 
-            showReadingPane();
+            // 🔷 Imposta numero domanda e sessione PRIMA di inserire nel DB
+            int numero = 1;
+            try {
+                Sessione sessioneCorrente = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
+                for (Domanda d : domande) {
+                    d.setNumeroDomanda(numero++);
+                    d.setSessione(sessioneCorrente);
+                }
+            } catch (DBException e) {
+                showAlert("Errore nel recupero della sessione: " + e.getMessage());
+                return;
+            }
+
+            // 🔷 Usa InsertQuestionsService
+            InsertQuestionsService insertQuestionsService = new InsertQuestionsService(domandaDAO, domande);
+
+            insertQuestionsService.setOnSucceeded(ev -> {
+                System.out.println("✅ Domande inserite correttamente nel DB per sessione ID = " + gameSession.getSessioneId());
+                gameSession.setCurrentQuestionIndex(0);
+                gameSession.setScore(0);
+                showReadingPane();
+            });
+
+            insertQuestionsService.setOnFailed(ev -> {
+                Throwable ex = insertQuestionsService.getException();
+                ex.printStackTrace();
+                showAlert("Errore nel salvataggio delle domande: " + ex.getMessage());
+            });
+
+            insertQuestionsService.start();
         });
 
         generateQuestionsService.setOnFailed(event -> {
@@ -147,6 +228,7 @@ public class GameSessionController {
 
         generateQuestionsService.start();
     }
+
 
     // === SHOW READING PANE ===
     private void showReadingPane() {
@@ -228,6 +310,16 @@ public class GameSessionController {
         questionPane.setVisible(false);
         resultPane.setVisible(true);
         scoreLabel.setText("Punteggio: " + gameSession.getScore() + "/" + gameSession.getDomande().size());
+        try {
+            Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
+            sessione.setCompletato(true);
+            sessione.setPunteggio(gameSession.getScore());
+            sessioneDAO.update(sessione);
+        } catch (DBException e) {
+            showAlert("Errore nel salvataggio del punteggio: " + e.getMessage());
+        }
+        System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
+
     }
 
     private void showAlert(String msg) {

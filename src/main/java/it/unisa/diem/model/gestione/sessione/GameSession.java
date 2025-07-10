@@ -12,6 +12,8 @@ public class GameSession {
     private Utente utente;
     private Lingua lingua;
     private Difficolta difficolta;
+    private long sessioneId;
+
 
     private List<Analisi> analyses;
     private List<Domanda> domande;
@@ -92,5 +94,13 @@ public class GameSession {
 
     public void incrementScore() {
         score++;
+    }
+
+    public long getSessioneId() {
+        return sessioneId;
+    }
+
+    public void setSessioneId(long sessioneId) {
+        this.sessioneId = sessioneId;
     }
 }

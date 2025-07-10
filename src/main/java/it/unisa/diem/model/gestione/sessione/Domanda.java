@@ -108,6 +108,15 @@ public class Domanda {
 
     }
 
+    public void setSessione(Sessione sessione) {
+        this.sessione = sessione;
+    }
+
+    public void setNumeroDomanda(int numeroDomanda) {
+        this.numeroDomanda = numeroDomanda;
+    }
+
+
     @Override
     public int hashCode() {
         return Long.hashCode(this.getId());
