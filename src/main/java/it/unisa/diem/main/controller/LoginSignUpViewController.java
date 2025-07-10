@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -39,6 +40,11 @@ public class LoginSignUpViewController {
     @FXML private PasswordField signUpConfirmField;
     @FXML private Label passwordMismatchLabel, passwordValidationLabel, mailInUseLabel, usernameInUseLabel;
     @FXML private Button signUpButton;
+    @FXML private StackPane loadingOverlay;
+    @FXML private ProgressIndicator loadingSpinner;
+    @FXML private Label loadingMessageLabel;
+
+
 
     private String url;
     private String user;
@@ -61,6 +67,22 @@ public class LoginSignUpViewController {
         signUpPasswordField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
         signUpConfirmField.textProperty().addListener((obs, oldVal, newVal) -> validateSignUpForm());
         validateSignUpForm();
+
+        //evito di avere un campo con focus di default. rischiavo di ostruire la leggibilità
+        loginPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obsWin, oldWin, newWin) -> {
+                    if (newWin != null) {
+                        newWin.focusedProperty().addListener((obsFocus, wasFocused, isFocused) -> {
+                            if (isFocused) {
+                                // Richiedi focus al pannello root, non ai campi
+                                loginPane.requestFocus();
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     // 🔵 Switch methods
@@ -68,12 +90,14 @@ public class LoginSignUpViewController {
     private void showSignUpPane() {
         loginPane.setVisible(false);
         signUpPane.setVisible(true);
+        signUpPane.requestFocus();
     }
 
     @FXML
     private void showLoginPane() {
         signUpPane.setVisible(false);
         loginPane.setVisible(true);
+        loginPane.requestFocus();
     }
 
     // 🔵 Login logic
@@ -84,11 +108,13 @@ public class LoginSignUpViewController {
 
         incorrectLabel.setVisible(false);
         loginButton.setDisable(true);
+        showLoadingOverlayWithMessage("Accesso in corso..."); // 🔵 Mostra caricamento con messaggio
 
         UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(url, user, pass);
         LoginService service = new LoginService(username, password, utentePostgres);
 
         service.setOnSucceeded(event -> {
+            hideLoadingOverlay();
             loginButton.setDisable(false);
             Utente utente = service.getValue();
 
@@ -97,18 +123,20 @@ public class LoginSignUpViewController {
                 return;
             }
 
-            // Login success
             SessionManager.getInstance().login(utente);
             goToHomeMenu();
         });
 
         service.setOnFailed(event -> {
+            hideLoadingOverlay();
             loginButton.setDisable(false);
             incorrectLabel.setVisible(true);
         });
 
         service.start();
     }
+
+
 
 
     private void validateLoginForm() {
@@ -133,9 +161,12 @@ public class LoginSignUpViewController {
         SignUpService service = new SignUpService(email, username, password, utentePostgres);
 
         signUpButton.setDisable(true);
+        showLoadingOverlayWithMessage("Registrazione in corso..."); // 🔵 Mostra caricamento con messaggio
 
         service.setOnSucceeded(event -> {
+            hideLoadingOverlay();
             signUpButton.setDisable(false);
+
             if (service.isEmailInUse()) {
                 mailInUseLabel.setVisible(true);
                 mailInUseLabel.setManaged(true);
@@ -149,8 +180,7 @@ public class LoginSignUpViewController {
             }
 
             if (service.getValue()) {
-                // Registrazione avvenuta con successo
-                clearSignUpFields();  // ✅ svuota i campi
+                clearSignUpFields();
                 showLoginPane();
             } else {
                 AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile contattare il database!");
@@ -158,12 +188,16 @@ public class LoginSignUpViewController {
         });
 
         service.setOnFailed(event -> {
+            hideLoadingOverlay();
             signUpButton.setDisable(false);
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "ERRORE DATABASE", null, "Impossibile completare la registrazione!");
         });
 
         service.start();
     }
+
+
+
 
 
 
@@ -249,5 +283,21 @@ public class LoginSignUpViewController {
         signUpPasswordField.clear();
         signUpConfirmField.clear();
     }
+
+    private void showLoadingOverlay() {
+        loadingMessageLabel.setText("");
+        loadingOverlay.setVisible(true);
+    }
+
+    private void showLoadingOverlayWithMessage(String message) {
+        loadingMessageLabel.setText(message);
+        loadingOverlay.setVisible(true);
+    }
+
+    private void hideLoadingOverlay() {
+        loadingOverlay.setVisible(false);
+    }
+
+
 
 }
