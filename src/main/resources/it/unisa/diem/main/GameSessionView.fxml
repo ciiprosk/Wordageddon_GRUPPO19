@@ -32,6 +32,7 @@
     <!-- === Question Pane === -->
     <AnchorPane fx:id="questionPane" prefWidth="800" prefHeight="600" visible="false">
         <VBox spacing="15" alignment="CENTER" AnchorPane.topAnchor="50" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
+            <Label fx:id="questionTimerLabel" text="15" style="-fx-font-size: 16px;"/>
             <Label fx:id="questionLabel" text="Question Text" wrapText="true" style="-fx-font-size: 16px;"/>
             <Button fx:id="answerButton1" text="Answer 1" prefWidth="300"/>
             <Button fx:id="answerButton2" text="Answer 2" prefWidth="300"/>
@@ -42,9 +43,27 @@
 
     <!-- === Result Pane === -->
     <AnchorPane fx:id="resultPane" prefWidth="800" prefHeight="600" visible="false">
-        <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="150" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
+        <VBox spacing="20" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
             <Label fx:id="scoreLabel" text="Your Score" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <!-- 🔷 Riepilogo domande con ScrollPane -->
+            <ScrollPane fitToWidth="true" prefHeight="400">
+                <VBox fx:id="reviewBox" spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                </VBox>
+            </ScrollPane>
+
             <Button fx:id="backToMenuButton" text="Back to Menu" onAction="#handleBackToMenu" prefWidth="150"/>
+        </VBox>
+    </AnchorPane>
+
+    <!-- === Overlay di caricamento === -->
+    <AnchorPane fx:id="loadingOverlay" visible="false" style="-fx-background-color: rgba(0,0,0,0.3);" pickOnBounds="true">
+        <VBox alignment="CENTER" spacing="10" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <ProgressIndicator fx:id="loadingSpinner"/>
+            <Label fx:id="loadingMessageLabel" text="Caricamento in corso..." style="-fx-text-fill: white; -fx-font-size: 16px;"/>
         </VBox>
     </AnchorPane>
 

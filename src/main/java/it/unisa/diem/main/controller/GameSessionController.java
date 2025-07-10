@@ -33,6 +33,7 @@ import java.util.List;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -64,10 +65,18 @@ public class GameSessionController {
     @FXML private Button answerButton2;
     @FXML private Button answerButton3;
     @FXML private Button answerButton4;
+    @FXML private Label questionTimerLabel;
+
 
     // === ResultPane controls ===
     @FXML private Label scoreLabel;
     @FXML private Button backToMenuButton;
+    @FXML private VBox reviewBox;
+    @FXML private AnchorPane loadingOverlay;
+    @FXML private ProgressIndicator loadingSpinner;
+    @FXML private Label loadingMessageLabel;
+
+
 
     // === ATTRIBUTI ===
     private GameSession gameSession;
@@ -88,6 +97,11 @@ public class GameSessionController {
     private SessioneDAOPostgres sessioneDAO;
     private SessioneDocumentoDAOPostgres sessioneDocumentoDAO;
     private DomandaDAOPostgres domandaDAO;
+
+    private Timeline questionTimer;
+    private int questionTimeRemaining;
+
+
 
 
     // === METODO INITIALIZE ===
@@ -121,6 +135,8 @@ public class GameSessionController {
         Utente utente = SessionManager.getInstance().getUtenteLoggato();
 
         if (lingua != null && difficolta != null && utente != null) {
+            showLoadingOverlayWithMessage("Caricamento dei testi in corso..."); // 🔷 Mostra loading
+
             gameSession = new GameSession(utente, lingua, difficolta);
             Sessione sessione = new Sessione(utente, LocalDateTime.now());
 
@@ -134,6 +150,7 @@ public class GameSessionController {
             });
 
             insertSessionService.setOnFailed(event -> {
+                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
                 Throwable ex = insertSessionService.getException();
                 ex.printStackTrace();
                 showAlert("Errore nella creazione della sessione: " + ex.getMessage());
@@ -161,6 +178,7 @@ public class GameSessionController {
                 try {
                     sessioneDocumentoDAO.insert(new SessioneDocumento(gameSession.getSessioneId(), analisi.getTitolo()));
                 } catch (DBException e) {
+                    hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
                     showAlert("Errore nel salvataggio dei documenti: " + e.getMessage());
                     return;
                 }
@@ -170,6 +188,7 @@ public class GameSessionController {
         });
 
         loadAnalysesService.setOnFailed(event -> {
+            hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
             Throwable ex = loadAnalysesService.getException();
             ex.printStackTrace();
             showAlert("Errore durante il caricamento dei testi: " + ex.getMessage());
@@ -197,14 +216,15 @@ public class GameSessionController {
                     d.setSessione(sessioneCorrente);
                 }
             } catch (DBException e) {
+                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
                 showAlert("Errore nel recupero della sessione: " + e.getMessage());
                 return;
             }
 
-            // 🔷 Usa InsertQuestionsService
             InsertQuestionsService insertQuestionsService = new InsertQuestionsService(domandaDAO, domande);
 
             insertQuestionsService.setOnSucceeded(ev -> {
+                hideLoadingOverlay(); // 🔷 Nascondi quando finito
                 System.out.println("✅ Domande inserite correttamente nel DB per sessione ID = " + gameSession.getSessioneId());
                 gameSession.setCurrentQuestionIndex(0);
                 gameSession.setScore(0);
@@ -212,6 +232,7 @@ public class GameSessionController {
             });
 
             insertQuestionsService.setOnFailed(ev -> {
+                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
                 Throwable ex = insertQuestionsService.getException();
                 ex.printStackTrace();
                 showAlert("Errore nel salvataggio delle domande: " + ex.getMessage());
@@ -221,6 +242,7 @@ public class GameSessionController {
         });
 
         generateQuestionsService.setOnFailed(event -> {
+            hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
             Throwable ex = generateQuestionsService.getException();
             ex.printStackTrace();
             showAlert("Errore durante la generazione delle domande: " + ex.getMessage());
@@ -286,10 +308,55 @@ public class GameSessionController {
             answerButton4.setText(opzioni.get(3));
 
             setAnswerHandlers(domanda);
+
+            startQuestionTimer(); // 🔷 Avvia timer per questa domanda
         } else {
-            showResultPane();
+            showLoadingOverlayWithMessage("Sto analizzando le risposte...");
+
+            // 🔷 Attendi 1 secondo prima di mostrare i risultati
+            Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+                hideLoadingOverlay();
+                showResultPane();
+            }));
+            delayTimeline.setCycleCount(1);
+            delayTimeline.play();
         }
     }
+
+    private void startQuestionTimer() {
+        questionTimeRemaining = 15; // tempo limite per domanda
+        updateQuestionTimerLabel();
+
+        if (questionTimer != null) {
+            questionTimer.stop();
+        }
+
+        questionTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            questionTimeRemaining--;
+            updateQuestionTimerLabel();
+
+            if (questionTimeRemaining <= 0) {
+                questionTimer.stop();
+                handleAnswerTimeout(); // 🔷 Scadenza tempo = nessuna risposta
+            }
+        }));
+
+        questionTimer.setCycleCount(Timeline.INDEFINITE);
+        questionTimer.play();
+    }
+
+    private void handleAnswerTimeout() {
+        Domanda domanda = gameSession.getCurrentQuestion();
+        handleAnswer("NESSUNA RISPOSTA", domanda);
+    }
+
+
+    private void updateQuestionTimerLabel() {
+        questionTimerLabel.setText(String.valueOf(questionTimeRemaining));
+    }
+
+
+
 
     private void setAnswerHandlers(Domanda domanda) {
         answerButton1.setOnAction(e -> handleAnswer(answerButton1.getText(), domanda));
@@ -299,6 +366,12 @@ public class GameSessionController {
     }
 
     private void handleAnswer(String rispostaUtente, Domanda domanda) {
+        if (questionTimer != null) {
+            questionTimer.stop(); // 🔷 Stoppa timer alla risposta
+        }
+
+        domanda.setRispostaUtente(rispostaUtente);
+
         if (domanda.verificaRisposta(rispostaUtente)) {
             gameSession.incrementScore();
         }
@@ -306,10 +379,31 @@ public class GameSessionController {
         loadNextQuestion();
     }
 
+
     private void showResultPane() {
+        hideLoadingOverlay(); // 🔷 Nascondi overlay prima di mostrare i risultati
+
         questionPane.setVisible(false);
         resultPane.setVisible(true);
         scoreLabel.setText("Punteggio: " + gameSession.getScore() + "/" + gameSession.getDomande().size());
+
+        reviewBox.getChildren().clear();
+        for (Domanda d : gameSession.getDomande()) {
+            Label questionText = new Label("Domanda: " + d.getTestoDomanda());
+            String rispostaUtente = d.getRispostaUtente();
+            String rispostaCorretta = d.getRispostaCorretta();
+
+            Label rispostaLabel;
+            if (d.verificaRisposta(rispostaUtente)) {
+                rispostaLabel = new Label("Risposta data: " + rispostaUtente + " ✔️");
+                reviewBox.getChildren().addAll(questionText, rispostaLabel);
+            } else {
+                rispostaLabel = new Label("Risposta data: " + rispostaUtente + " ❌");
+                Label correttaLabel = new Label("Risposta corretta: " + rispostaCorretta);
+                reviewBox.getChildren().addAll(questionText, rispostaLabel, correttaLabel);
+            }
+        }
+
         try {
             Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
             sessione.setCompletato(true);
@@ -318,9 +412,11 @@ public class GameSessionController {
         } catch (DBException e) {
             showAlert("Errore nel salvataggio del punteggio: " + e.getMessage());
         }
-        System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
 
+        System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
     }
+
+
 
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -329,6 +425,12 @@ public class GameSessionController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
+    private void showLoadingOverlayWithMessage(String message) {
+        loadingMessageLabel.setText(message);
+        loadingOverlay.setVisible(true);
+    }
+
 
     private void setupReadingTimer() {
         Difficolta diff = gameSession.getDifficolta();
@@ -382,5 +484,11 @@ public class GameSessionController {
             ex.printStackTrace();
         }
     }
+
+
+    private void hideLoadingOverlay() {
+        loadingOverlay.setVisible(false);
+    }
+
 
 }
