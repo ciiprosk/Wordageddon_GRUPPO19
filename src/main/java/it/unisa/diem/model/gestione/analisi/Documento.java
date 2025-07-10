@@ -168,13 +168,25 @@ public class Documento {
      * @param filename il percorso del file
      * @param dr il documento da popolare con gli attributi estratti
      */
-    private static void getAttributes(String filename, Documento dr){ // ricavo gli attributi dalla cartella in cui si trova
-        String[] split= filename.split("[/.]");
-        dr.titolo=split[split.length-2];
-        dr.difficolta=Difficolta.valueOf(split[split.length-3].toUpperCase());
-        dr.lingua=Lingua.valueOf(split[split.length-4].toUpperCase());
-        dr.path=filename;
+    private static void getAttributes(String filename, Documento dr){
+        System.out.println("DEBUG - Filename ricevuto: " + filename);
+
+        String[] split = filename.split("[/.]");
+        System.out.println("DEBUG - Split length: " + split.length);
+        for(int i=0; i<split.length; i++){
+            System.out.println("DEBUG - split[" + i + "] = " + split[i]);
+        }
+
+        if(split.length < 4){
+            throw new IllegalArgumentException("Path non valido: " + filename + " - Split length: " + split.length);
+        }
+
+        dr.titolo = split[split.length - 2];
+        dr.difficolta = Difficolta.valueOf(split[split.length - 3].toUpperCase());
+        dr.lingua = Lingua.valueOf(split[split.length - 4].toUpperCase());
+        dr.path = filename;
     }
+
 
 
     /**

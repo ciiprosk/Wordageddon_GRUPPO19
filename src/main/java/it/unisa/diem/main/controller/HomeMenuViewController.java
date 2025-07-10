@@ -28,7 +28,7 @@ public class HomeMenuViewController {
 
     public void goToNewGame(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/DifficultySelectionView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/GameSessionView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) newGameButton.getScene().getWindow();
             stage.setScene(new Scene(root));
