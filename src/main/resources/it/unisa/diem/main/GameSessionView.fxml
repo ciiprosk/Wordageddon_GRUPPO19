@@ -3,67 +3,105 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
 
-<StackPane fx:id="rootStackPane" xmlns:fx="http://javafx.com/fxml" fx:controller="it.unisa.diem.main.controller.GameSessionController">
+<StackPane fx:id="rootStackPane" xmlns:fx="http://javafx.com/fxml" fx:controller="it.unisa.diem.main.controller.GameSessionController" stylesheets="@style.css" prefWidth="1200" prefHeight="800">
 
     <!-- === Selection Pane === -->
-    <AnchorPane fx:id="selectionPane" prefWidth="800" prefHeight="600">
-        <Button fx:id="backButton" text="&#60;" onAction="#handleBackToMenu"
-                AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
-                style="-fx-font-size: 18px;"/>
-        <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
-            <Label text="Select Language and Difficulty"/>
-            <ComboBox fx:id="linguaComboBox" promptText="Select Language" prefWidth="200"/>
-            <ComboBox fx:id="difficoltaComboBox" promptText="Select Difficulty" prefWidth="200"/>
-            <Button fx:id="startGameButton" text="Start Game" prefWidth="150"/>
+    <AnchorPane fx:id="selectionPane" prefWidth="1200" prefHeight="800">
+        <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="60.0" prefWidth="60.0">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+
+        <VBox spacing="30" alignment="CENTER" AnchorPane.topAnchor="150" AnchorPane.leftAnchor="300" AnchorPane.rightAnchor="300">
+            <Label text="Select Language and Difficulty" style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
+            <ComboBox fx:id="linguaComboBox" promptText="Select Language" prefWidth="400" style="-fx-font-size: 20px;"/>
+            <ComboBox fx:id="difficoltaComboBox" promptText="Select Difficulty" prefWidth="400" style="-fx-font-size: 20px;"/>
+            <Button fx:id="startGameButton" text="Start Game" prefWidth="300" style="-fx-font-size: 25px;"/>
         </VBox>
     </AnchorPane>
 
     <!-- === Reading Pane === -->
-    <AnchorPane fx:id="readingPane" prefWidth="800" prefHeight="600" visible="false">
-        <VBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="50">
-            <Label fx:id="textTitleLabel" text="Document Title" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <TextArea fx:id="textBodyArea" editable="false" wrapText="true" prefHeight="300"/>
-            <Label fx:id="timerLabel" text="00:00" style="-fx-font-size: 16px;"/>
-            <Button fx:id="continueButton" text="Continue" prefWidth="120"/>
+    <AnchorPane fx:id="readingPane" prefWidth="1200" prefHeight="800" visible="false">
+        <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button fx:id="backButtonReading" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="60.0" prefWidth="60.0">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+
+        <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" AnchorPane.bottomAnchor="100">
+            <Label fx:id="textTitleLabel" text="Document Title" style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+            <TextArea fx:id="textBodyArea" editable="false" wrapText="true" prefHeight="400" prefWidth="900" style="-fx-font-size: 18px;"/>
+            <Label fx:id="timerLabel" text="00:00" style="-fx-font-size: 20px;"/>
+            <Button fx:id="continueButton" text="Continue" prefWidth="200" style="-fx-font-size: 25px;"/>
         </VBox>
     </AnchorPane>
 
     <!-- === Question Pane === -->
-    <AnchorPane fx:id="questionPane" prefWidth="800" prefHeight="600" visible="false">
-        <VBox spacing="15" alignment="CENTER" AnchorPane.topAnchor="50" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
-            <Label fx:id="questionTimerLabel" text="15" style="-fx-font-size: 16px;"/>
-            <Label fx:id="questionLabel" text="Question Text" wrapText="true" style="-fx-font-size: 16px;"/>
-            <Button fx:id="answerButton1" text="Answer 1" prefWidth="300"/>
-            <Button fx:id="answerButton2" text="Answer 2" prefWidth="300"/>
-            <Button fx:id="answerButton3" text="Answer 3" prefWidth="300"/>
-            <Button fx:id="answerButton4" text="Answer 4" prefWidth="300"/>
+    <AnchorPane fx:id="questionPane" prefWidth="1200" prefHeight="800" visible="false">
+        <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button fx:id="backButtonQuestion" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="60.0" prefWidth="60.0">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
+
+        <VBox spacing="20" alignment="CENTER" AnchorPane.topAnchor="100" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200">
+            <Label fx:id="questionTimerLabel" text="15" style="-fx-font-size: 25px;"/>
+            <Label fx:id="questionLabel" text="Question Text" wrapText="true" style="-fx-font-size: 22px;" prefWidth="800"/>
+            <Button fx:id="answerButton1" text="Answer 1" prefWidth="500" style="-fx-font-size: 20px;"/>
+            <Button fx:id="answerButton2" text="Answer 2" prefWidth="500" style="-fx-font-size: 20px;"/>
+            <Button fx:id="answerButton3" text="Answer 3" prefWidth="500" style="-fx-font-size: 20px;"/>
+            <Button fx:id="answerButton4" text="Answer 4" prefWidth="500" style="-fx-font-size: 20px;"/>
         </VBox>
     </AnchorPane>
 
     <!-- === Result Pane === -->
-    <AnchorPane fx:id="resultPane" prefWidth="800" prefHeight="600" visible="false">
-        <VBox spacing="20" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.bottomAnchor="20">
-            <Label fx:id="scoreLabel" text="Your Score" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <AnchorPane fx:id="resultPane" prefWidth="1200" prefHeight="800" visible="false">
+        <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Button fx:id="backButtonResult" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="60.0" prefWidth="60.0">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Button>
+            </children>
+        </HBox>
 
-            <!-- 🔷 Riepilogo domande con ScrollPane -->
-            <ScrollPane fitToWidth="true" prefHeight="400">
-                <VBox fx:id="reviewBox" spacing="10">
+        <VBox spacing="30" alignment="TOP_CENTER" AnchorPane.topAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="50">
+            <Label fx:id="scoreLabel" text="Your Score" style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
+
+            <!-- Riepilogo domande con ScrollPane -->
+            <ScrollPane fitToWidth="true" prefHeight="500" prefWidth="900">
+                <VBox fx:id="reviewBox" spacing="15">
                     <padding>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
                 </VBox>
             </ScrollPane>
 
-            <Button fx:id="backToMenuButton" text="Back to Menu" onAction="#handleBackToMenu" prefWidth="150"/>
+            <Button fx:id="backToMenuButton" text="Back to Menu" onAction="#handleBackToMenu" prefWidth="300" style="-fx-font-size: 25px;"/>
         </VBox>
     </AnchorPane>
 
     <!-- === Overlay di caricamento === -->
     <AnchorPane fx:id="loadingOverlay" visible="false" style="-fx-background-color: rgba(0,0,0,0.3);" pickOnBounds="true">
-        <VBox alignment="CENTER" spacing="10" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-            <ProgressIndicator fx:id="loadingSpinner"/>
-            <Label fx:id="loadingMessageLabel" text="Caricamento in corso..." style="-fx-text-fill: white; -fx-font-size: 16px;"/>
+        <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <ProgressIndicator fx:id="loadingSpinner" progress="-1" prefWidth="80" prefHeight="80"/>
+            <Label fx:id="loadingMessageLabel" text="Caricamento in corso..." style="-fx-text-fill: white; -fx-font-size: 25px;"/>
         </VBox>
     </AnchorPane>
 
