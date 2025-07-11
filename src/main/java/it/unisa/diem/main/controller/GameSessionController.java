@@ -117,6 +117,8 @@ public class GameSessionController {
 
     private Timeline questionTimer;
     private int questionTimeRemaining;
+    private boolean sessioneCompletata = false;
+
 
 
 
@@ -153,6 +155,10 @@ public class GameSessionController {
         homeView2.setFitWidth(30);
         homeView2.setFitHeight(30);
         backButtonReading.setGraphic(homeView2);
+
+        backButtonReading.setOnAction(this::handleBackToHomeWithConfirmation);
+        backButtonQuestion.setOnAction(this::handleBackToHomeWithConfirmation);
+
 
 
 
@@ -362,6 +368,43 @@ public class GameSessionController {
         generateQuestionsService.start();
     }
 
+    @FXML
+    private void handleBackToHomeWithConfirmation(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm exit");
+        alert.setHeaderText("Quit the game?");
+        alert.setContentText("If you quit now, your game will be deleted. Do you really want to go back to home?");
+
+        ButtonType siButton = new ButtonType("Yes, quit");
+        ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(siButton, noButton);
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == siButton) {
+                showLoadingOverlayWithMessage("Tornando alla home...");
+                deleteGameSessionFromDB();
+
+                Timeline delay = new Timeline(new KeyFrame(Duration.seconds(0.5), e -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+                        Parent root = loader.load();
+
+                        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                        stage.setTitle("Menu");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        hideLoadingOverlay();
+                    }
+                }));
+                delay.play();
+
+            }
+        });
+    }
+
+
 
     // === SHOW READING PANE ===
     private void showReadingPane() {
@@ -392,24 +435,20 @@ public class GameSessionController {
     }
 
     public void deleteGameSessionFromDB() {
-        if (gameSession != null && isGameStarted) {
+        if (gameSession != null && !sessioneCompletata) {
             try {
-                // 🔷 Elimina domande associate
                 domandaDAO.deleteBySessioneId(gameSession.getSessioneId());
-
-                // 🔷 Elimina sessioneDocumento associati
                 sessioneDocumentoDAO.deleteBySessioneId(gameSession.getSessioneId());
-
-                // 🔷 Elimina la sessione stessa
                 sessioneDAO.delete(gameSession.getSessioneId());
-
-                System.out.println("✅ Sessione eliminata dal DB (ID: " + gameSession.getSessioneId() + ")");
+                System.out.println("✅ Sessione eliminata con successo");
             } catch (DBException e) {
-                e.printStackTrace();
-                System.out.println("❌ Errore nell'eliminazione della sessione dal DB: " + e.getMessage());
+                System.err.println("Errore durante la cancellazione della sessione: " + e.getMessage());
             }
+        } else {
+            System.out.println("ℹ️ Sessione completata, nessuna eliminazione necessaria");
         }
     }
+
 
 
 
@@ -519,6 +558,7 @@ public class GameSessionController {
 
         questionPane.setVisible(false);
         resultPane.setVisible(true);
+        sessioneCompletata = true;
         scoreLabel.setText("Punteggio: " + gameSession.getScore() + "/" + gameSession.getDomande().size());
 
         reviewBox.getChildren().clear();
