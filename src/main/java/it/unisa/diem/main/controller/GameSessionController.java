@@ -4,6 +4,7 @@ import it.unisa.diem.dao.postgres.DomandaDAOPostgres;
 import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
+import it.unisa.diem.main.Main;
 import it.unisa.diem.main.service.InsertQuestionsService;
 import it.unisa.diem.main.service.InsertSessionService;
 import it.unisa.diem.main.service.LoadAnalysesService;
@@ -25,6 +26,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -76,7 +79,9 @@ public class GameSessionController {
     @FXML private ProgressIndicator loadingSpinner;
     @FXML private Label loadingMessageLabel;
 
-
+    // === Altri pulsanti ===
+    @FXML private Button backButtonReading;
+    @FXML private Button backButtonQuestion;
 
     // === ATTRIBUTI ===
     private GameSession gameSession;
@@ -107,6 +112,28 @@ public class GameSessionController {
     // === METODO INITIALIZE ===
     @FXML
     public void initialize() {
+
+        Image back = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(30);
+        backView.setFitHeight(30);
+        backButton.setGraphic(backView);
+
+        Image home = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+
+        ImageView homeView1 = new ImageView(home);
+        homeView1.setFitWidth(30);
+        homeView1.setFitHeight(30);
+        backButtonQuestion.setGraphic(homeView1);
+
+        ImageView homeView2 = new ImageView(home);
+        homeView2.setFitWidth(30);
+        homeView2.setFitHeight(30);
+        backButtonReading.setGraphic(homeView2);
+
+
+
+
         this.url = PropertiesLoader.getProperty("database.url");
         this.user = PropertiesLoader.getProperty("database.user");
         this.pass = PropertiesLoader.getProperty("database.password");
