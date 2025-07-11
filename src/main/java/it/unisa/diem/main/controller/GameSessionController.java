@@ -119,7 +119,7 @@ public class GameSessionController {
         backView.setFitHeight(30);
         backButton.setGraphic(backView);
 
-        Image home = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        Image home = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/home.png"));
 
         ImageView homeView1 = new ImageView(home);
         homeView1.setFitWidth(30);
