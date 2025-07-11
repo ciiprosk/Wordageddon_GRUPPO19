@@ -190,6 +190,26 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    public void delete(long sessioneId) throws DBException {
+        String query = "DELETE FROM sessione WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement cmd = connection.prepareStatement(query)) {
+
+            cmd.setLong(1, sessioneId);
+
+            int lines = cmd.executeUpdate();
+            if (lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
+
+            System.out.println("✅ Sessione eliminata: ID = " + sessioneId);
+
+        } catch (SQLException e) {
+            throw new DBException("Errore: impossibile eliminare la sessione " + sessioneId + "!", e);
+        }
+    }
+
+
     private Sessione getSession(ResultSet rs) throws SQLException, DBException {
 
         Sessione sessione = null;

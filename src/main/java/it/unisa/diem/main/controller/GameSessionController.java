@@ -83,12 +83,24 @@ public class GameSessionController {
     @FXML private Button backButtonReading;
     @FXML private Button backButtonQuestion;
 
+    @FXML private AnchorPane loadingPane;
+    @FXML private Label loadingInstructionLabel;
+    @FXML private Label difficultyMessageLabel;
+    @FXML private ProgressBar loadingProgressBar;
+
+    @FXML private Button instructionsToggleButton;
+    @FXML private TextArea instructionsTextArea;
+
+
+
     // === ATTRIBUTI ===
     private GameSession gameSession;
     private Timeline readingTimer;
     private int readingTimeSeconds;
     private int currentDocumentIndex;
     private int currentReadingIndex = 0;
+    private boolean isGameStarted = false;
+
 
 
     // === SERVICES ===
@@ -107,6 +119,17 @@ public class GameSessionController {
     private int questionTimeRemaining;
 
 
+
+    //singleton ottengo l’istanza attiva se la schermata di gioco è stata caricata.
+    private static GameSessionController instance;
+
+    public GameSessionController() {
+        instance = this;
+    }
+
+    public static GameSessionController getInstance() {
+        return instance;
+    }
 
 
     // === METODO INITIALIZE ===
@@ -148,11 +171,31 @@ public class GameSessionController {
 
     // === SETUP SELECTION PANE ===
     private void setupSelectionPane() {
+        instructionsTextArea.setText(
+                "Here are the instructions:\n" +
+                        "1. Select language and difficulty.\n" +
+                        "2. Read the texts carefully.\n" +
+                        "3. Answer each question within the time limit.\n" +
+                        "4. Review your results at the end."
+        );
         linguaComboBox.getItems().addAll(Lingua.values());
         difficoltaComboBox.getItems().addAll(Difficolta.values());
 
         startGameButton.setOnAction(e -> startNewGame());
+        instructionsToggleButton.setOnAction(e -> toggleInstructions());
     }
+
+    private void toggleInstructions() {
+        boolean currentlyVisible = instructionsTextArea.isVisible();
+        instructionsTextArea.setVisible(!currentlyVisible);
+
+        if (currentlyVisible) {
+            instructionsToggleButton.setText("Show Instructions");
+        } else {
+            instructionsToggleButton.setText("Hide Instructions");
+        }
+    }
+
 
     private void startNewGame() {
         currentReadingIndex = 0;
@@ -162,7 +205,9 @@ public class GameSessionController {
         Utente utente = SessionManager.getInstance().getUtenteLoggato();
 
         if (lingua != null && difficolta != null && utente != null) {
-            showLoadingOverlayWithMessage("Caricamento dei testi in corso..."); // 🔷 Mostra loading
+            boolean singleText = difficolta == Difficolta.FACILE;
+            showLoadingScreen(difficolta, singleText);
+
 
             gameSession = new GameSession(utente, lingua, difficolta);
             Sessione sessione = new Sessione(utente, LocalDateTime.now());
@@ -224,6 +269,45 @@ public class GameSessionController {
         loadAnalysesService.start();
     }
 
+    private void showLoadingScreen(Difficolta difficolta, boolean singleText) {
+        selectionPane.setVisible(false);
+        readingPane.setVisible(false);
+        questionPane.setVisible(false);
+        resultPane.setVisible(false);
+        loadingOverlay.setVisible(false);
+
+        loadingPane.setVisible(true);
+
+        String instruction = singleText ?
+                "Read the proposed text carefully and answer the questions.\nIt will not be possible to reconsult the text!" :
+                "Read the proposed texts carefully and answer the questions.\nIt will not be possible to reconsult the texts!";
+        loadingInstructionLabel.setText(instruction);
+
+        String diffMsg = switch (difficolta) {
+            case FACILE -> "It will be easy.";
+            case INTERMEDIO -> "It will be a balanced challenge.";
+            case DIFFICILE -> "Good luck. It's not going to be easy.";
+        };
+        difficultyMessageLabel.setText(diffMsg);
+
+        loadingProgressBar.setProgress(0);
+
+        // Simulazione caricamento
+        Timeline progressTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.05), e -> {
+                    double progress = loadingProgressBar.getProgress();
+                    loadingProgressBar.setProgress(progress + 0.01);
+                })
+        );
+        progressTimeline.setCycleCount(100);
+        progressTimeline.setOnFinished(e -> {
+            loadingPane.setVisible(false);
+            showReadingPane();
+        });
+        progressTimeline.play();
+    }
+
+
     // === GENERATE QUESTIONS ===
     private void generateQuestions(List<Analisi> analyses, Difficolta difficolta) {
         generateQuestionsService = new GenerateQuestionsService();
@@ -281,6 +365,8 @@ public class GameSessionController {
 
     // === SHOW READING PANE ===
     private void showReadingPane() {
+        isGameStarted = true;
+
         selectionPane.setVisible(false);
         readingPane.setVisible(true);
 
@@ -304,6 +390,27 @@ public class GameSessionController {
             }
         });
     }
+
+    public void deleteGameSessionFromDB() {
+        if (gameSession != null && isGameStarted) {
+            try {
+                // 🔷 Elimina domande associate
+                domandaDAO.deleteBySessioneId(gameSession.getSessioneId());
+
+                // 🔷 Elimina sessioneDocumento associati
+                sessioneDocumentoDAO.deleteBySessioneId(gameSession.getSessioneId());
+
+                // 🔷 Elimina la sessione stessa
+                sessioneDAO.delete(gameSession.getSessioneId());
+
+                System.out.println("✅ Sessione eliminata dal DB (ID: " + gameSession.getSessioneId() + ")");
+            } catch (DBException e) {
+                e.printStackTrace();
+                System.out.println("❌ Errore nell'eliminazione della sessione dal DB: " + e.getMessage());
+            }
+        }
+    }
+
 
 
     private void handleReadingComplete() {
@@ -499,11 +606,12 @@ public class GameSessionController {
 
     @FXML
     private void handleBackToMenu(ActionEvent event) {
+        deleteGameSessionFromDB(); // 🔷 Cancella sessione se partita iniziata
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
 
-            // Recupera lo stage dal bottone che ha generato l'evento
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Menu");
@@ -511,6 +619,7 @@ public class GameSessionController {
             ex.printStackTrace();
         }
     }
+
 
 
     private void hideLoadingOverlay() {

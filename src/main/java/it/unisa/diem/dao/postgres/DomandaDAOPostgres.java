@@ -235,4 +235,21 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
     }
 
+    public void deleteBySessioneId(long sessioneId) throws DBException {
+        String query = "DELETE FROM DOMANDA WHERE id_sessione = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement cmd = connection.prepareStatement(query)) {
+
+            cmd.setLong(1, sessioneId);
+
+            int lines = cmd.executeUpdate();
+            System.out.println("✅ Domande eliminate: " + lines);
+
+        } catch (SQLException e) {
+            throw new DBException("Errore: impossibile eliminare le domande della sessione " + sessioneId + "!", e);
+        }
+    }
+
+
 }
