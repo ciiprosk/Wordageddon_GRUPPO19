@@ -9,7 +9,6 @@ class it.unisa.diem.model.gestione.sessione.DomandaFactory {
 - Domanda generaDomandaAssenza()
 }
 
-
 class it.unisa.diem.utility.SessionManager {
 - {static} SessionManager instance
 - Utente utenteLoggato
@@ -19,7 +18,6 @@ class it.unisa.diem.utility.SessionManager {
 + void logout()
 + boolean isLoggedIn()
 }
-
 
 class it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres {
 - String url
@@ -38,7 +36,6 @@ class it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres {
 - Sessione getSession(long)
 - VoceStorico getLastSessions(ResultSet)
 }
-
 
 class it.unisa.diem.exceptions.DeleteException {
 }
@@ -65,7 +62,6 @@ class it.unisa.diem.model.gestione.analisi.Documento {
 + String toString()
 }
 
-
 class it.unisa.diem.main.service.LoginService {
 - String username
 - String password
@@ -73,12 +69,10 @@ class it.unisa.diem.main.service.LoginService {
 # Task<Utente> createTask()
 }
 
-
 class it.unisa.diem.main.service.LoadTitlesService {
 - DocumentoDAOPostgres dao
 # Task<List<String>> createTask()
 }
-
 
 class it.unisa.diem.main.service.InsertQuestionsService {
 - DomandaDAOPostgres domandaDAO
@@ -86,11 +80,10 @@ class it.unisa.diem.main.service.InsertQuestionsService {
 # Task<Boolean> createTask()
 }
 
-
 enum it.unisa.diem.utility.TipoDomanda {
 +  FREQUENZA
 +  CONFRONTO
-+  ASSOCIAZIONE
++  ASSOCIAZIONI
 +  ASSENZA
 }
 
@@ -116,29 +109,11 @@ class it.unisa.diem.model.gestione.sessione.Sessione {
 + int hashCode()
 }
 
-
 interface it.unisa.diem.dao.interfacce.AnalisiDAO {
 ~ Optional<Analisi> selectAnalisiByTitle(String)
 ~ void insert(Analisi)
 ~ void delete(Analisi)
 }
-
-class it.unisa.diem.main.controller.HomeMenuViewController {
-- Button newGameButton
-- Button leaderboardButton
-- Button historyButton
-- Button logOutButton
-- Button adminButton
-- boolean isAdmin
-+ void initialize()
-+ void goToNewGame(ActionEvent)
-+ void goToLeaderboard(ActionEvent)
-+ void goToHistory(ActionEvent)
-+ void goToLogIn(ActionEvent)
-+ void goToLoadDocument(ActionEvent)
-- void showAdminButton()
-}
-
 
 class it.unisa.diem.model.gestione.classifica.VoceClassifica {
 - String username
@@ -149,7 +124,6 @@ class it.unisa.diem.model.gestione.classifica.VoceClassifica {
 + double getMediaPunteggio()
 }
 
-
 class it.unisa.diem.model.gestione.sessione.SessioneDocumento {
 - long idSessione
 - String nomeDocumento
@@ -158,7 +132,6 @@ class it.unisa.diem.model.gestione.sessione.SessioneDocumento {
 + boolean equals(Object)
 + int hashCode()
 }
-
 
 class it.unisa.diem.test.Test {
 + {static} void main(String[])
@@ -184,35 +157,12 @@ class it.unisa.diem.model.gestione.analisi.stopword.StopwordITA {
 # String[] getConnettiviCongiunzioni()
 }
 
-class it.unisa.diem.main.controller.HistoryViewController {
-- Button leaderboardButton
-- Button backButton
-- TableView<VoceStorico> tableView
-- TableColumn<VoceStorico,String> dateColumn
-- TableColumn<VoceStorico,Integer> scoreColumn
-- TableColumn<VoceStorico,String> langColummn
-- ComboBox<String> difficoltaComboBox
-- StackPane loadingOverlay
-- ProgressIndicator loadingSpinner
-- Label loadingMessageLabel
-- Map<Difficolta,List<VoceStorico>> storicoPerDifficolta
-+ void initialize()
-- void loadAllHistory()
-- void updateTableForSelection(String)
-+ void goToMainMenu(ActionEvent)
-+ void goToLeaderboard(ActionEvent)
-- void showLoadingOverlayWithMessage(String)
-- void hideLoadingOverlay()
-}
-
-
 class it.unisa.diem.utility.CryptoAlphabet {
 + {static} String alphabet
 - {static} String alfabeto_cifrato
 + {static} String cripta(String)
 + {static} String decripta(String)
 }
-
 
 abstract class it.unisa.diem.model.gestione.analisi.stopword.StopwordManager {
 - Documento documento
@@ -234,7 +184,6 @@ abstract class it.unisa.diem.model.gestione.analisi.stopword.StopwordManager {
 + void clear()
 + String toString()
 }
-
 
 class it.unisa.diem.model.gestione.analisi.stopword.StopwordENG {
 # String[] getArticoli()
@@ -264,7 +213,6 @@ class it.unisa.diem.model.gestione.sessione.VoceStorico {
 + Lingua getLingua()
 }
 
-
 class it.unisa.diem.dao.postgres.DocumentoDAOPostgres {
 - String url
 - String user
@@ -280,7 +228,6 @@ class it.unisa.diem.dao.postgres.DocumentoDAOPostgres {
 - void setDocumentForDelete(PreparedStatement,Documento)
 }
 
-
 class it.unisa.diem.main.service.SignUpService {
 - String email
 - String username
@@ -293,7 +240,6 @@ class it.unisa.diem.main.service.SignUpService {
 # Task<Boolean> createTask()
 }
 
-
 class it.unisa.diem.main.service.AnalisiService {
 - Documento documento
 - StopwordManager stopwordManager
@@ -301,14 +247,12 @@ class it.unisa.diem.main.service.AnalisiService {
 # Task<Void> createTask()
 }
 
-
 class it.unisa.diem.main.service.DeleteDocumentService {
 - DocumentoDAOPostgres dao
 - String selectedTitle
 + void setSelectedTitle(String)
 # Task<Void> createTask()
 }
-
 
 class it.unisa.diem.test.DocumentoAnalisiTest {
 + {static} void main(String[])
@@ -327,226 +271,11 @@ class it.unisa.diem.model.gestione.utenti.SicurezzaPassword {
 + {static} boolean verificaPassword(String,String,byte[])
 }
 
-
-class it.unisa.diem.main.controller.AdminScreenViewController {
-- {static} Logger LOGGER
-- AnchorPane adminPane
-- AnchorPane listPane
-- Button importButton
-- Button backButton
-- ListView<String> stopwordsListView
-- TextField inputField
-- CheckBox checkArticles
-- Button confirmButton
-- TextField titleField
-- CheckBox checkIt
-- Label alertLabel
-- StopwordManager stopword
-- ObservableList<String> observableList
-- String titolo
-- Lingua lingua
-- Difficolta difficolta
-- File fileImportato
-- ListView<String> ListView
-- ObservableList<String> titoliList
-- DocumentoDAOPostgres dao
-+ void initialize()
-- void setupStopwordList(StopwordManager)
-- String validateStopword(String)
-- void showAlert(String)
-- void hideAlert()
-+ void loadStopwordsITA()
-+ void loadStopwordsENG()
-- void handleDifficultySelection(ActionEvent)
-- void handleLanguageSelection(ActionEvent)
-+ void handleImport(ActionEvent)
-- void handleAdd()
-+ void handleRemove(ActionEvent)
-+ void clearStopwordList()
-+ void handleConfirm(ActionEvent)
-- void validateConfirmButton()
-- void loadTitlesAsync()
-+ void deleteDocument(ActionEvent)
-- void showListPane()
-- void showAdminPane()
-+ void goToMainMenu(ActionEvent)
-- Utente getUtente()
-}
-
-
-interface it.unisa.diem.dao.interfacce.ReadOnlyDAO {
-~ List<T> selectAll()
-~ Optional<T> selectById(long)
-}
-
-interface it.unisa.diem.dao.interfacce.DAO {
-~ List<T> selectAll()
-~ void insert(T)
-~ void update(T)
-~ void delete(T)
-}
-
-class it.unisa.diem.main.service.LoadAnalysesService {
-- Lingua lingua
-- Difficolta difficolta
-+ void setLingua(Lingua)
-+ void setDifficolta(Difficolta)
-# Task<List<Analisi>> createTask()
-- String convertAnalysisToDataPath(String)
-}
-
-
-class it.unisa.diem.main.service.HistoryService {
-- StoricoSessioneDAOPostgres dao
-- String username
-+ void setParameters(String)
-# Task<Map<Difficolta,List<VoceStorico>>> createTask()
-+ Map<Difficolta,List<VoceStorico>> getValueMap()
-}
-
-
-class it.unisa.diem.dao.postgres.DomandaDAOPostgres {
-- String url
-- String user
-- String pass
-- SessioneDAOPostgres sessioneDAO
-+ Optional<Domanda> selectById(long)
-+ List<Domanda> selectAll()
-+ void insert(Domanda)
-+ void update(Domanda)
-+ void delete(Domanda)
-- Domanda getQuestion(ResultSet)
-- Sessione getSession(long)
-- void setQuestionForInsert(PreparedStatement,Domanda)
-- void setQuestionForUpdate(PreparedStatement,Domanda)
-- void setQuestionForDelete(PreparedStatement,Domanda)
-+ void deleteBySessioneId(long)
-}
-
-
-interface it.unisa.diem.dao.interfacce.SessioneDAO {
-~ Optional<Sessione> selectByUser(String)
-~ Optional<Sessione> selectById(long)
-}
-
-class it.unisa.diem.dao.postgres.SessioneDAOPostgres {
-- String url
-- String user
-- String pass
-- UtenteDAOPostgres utenteDAO
-+ UtenteDAOPostgres getUtenteDAO()
-+ Optional<Sessione> selectById(long)
-+ Optional<Sessione> selectByUser(String)
-+ List<Sessione> selectAll()
-+ void insert(Sessione)
-+ void update(Sessione)
-+ void delete(Sessione)
-+ void delete(long)
-- Sessione getSession(ResultSet)
-- Utente getUser(String)
-- void setSessionForInsert(PreparedStatement,Sessione)
-- void setSessionForUpdate(PreparedStatement,Sessione)
-- void setSessionForDelete(PreparedStatement,Sessione)
-}
-
-
-class it.unisa.diem.main.Main {
-+ void start(Stage)
-+ {static} void main(String[])
-}
-
-class it.unisa.diem.model.gestione.utenti.Utente {
-- String username
-- String email
-- String hashedPassword
-- Ruolo ruolo
-- byte[] salt
-+ String getUsername()
-+ void setUsername(String)
-+ void setEmail(String)
-+ void setHashedPassword(String)
-+ void setRuolo(Ruolo)
-+ String getEmail()
-+ String getHashedPassword()
-+ Ruolo getRuolo()
-+ byte[] getSalt()
-+ boolean equals(Object)
-+ String toString()
-}
-
-
-enum it.unisa.diem.model.gestione.analisi.Difficolta {
-+  FACILE
-+  INTERMEDIO
-+  DIFFICILE
-}
-
-class it.unisa.diem.test.StopwordTest {
-+ {static} void main(String[])
-}
-
-class it.unisa.diem.main.service.InsertSessionService {
-- SessioneDAOPostgres sessioneDAO
-- Sessione sessione
-# Task<Sessione> createTask()
-}
-
-
-interface it.unisa.diem.dao.interfacce.DocumentoDAO {
-~ Optional<Documento> selectByTitle(String)
-~ List<String> selectAllTitles()
-~ List<String> selectTitlesByLangAndDif(Lingua,Difficolta)
-}
-
-class it.unisa.diem.main.controller.LeaderboardViewController {
-- Button historyButton
-- Button backButton
-- ComboBox<String> difficoltaComboBox
-- TableView<VoceClassifica> leaderboardTable
-- TableColumn<VoceClassifica,String> usernameCol
-- TableColumn<VoceClassifica,Number> mediaCol
-- TableColumn<VoceClassifica,Number> sumCol
-- StackPane loadingOverlay
-- ProgressIndicator loadingSpinner
-- Label loadingMessageLabel
-- LoadLeaderboardService leaderboardService
-- Map<Difficolta,List<VoceClassifica>> leaderboardCache
-+ void initialize()
-- void loadAllLeaderboards()
-- void updateTableForSelection(String)
-- void showLoadingOverlay(String)
-- void hideLoadingOverlay()
-+ void goToMainMenu(ActionEvent)
-+ void goToHistory(ActionEvent)
-}
-
-
-class it.unisa.diem.dao.postgres.UtenteDAOPostgres {
-- String url
-- String user
-- String pass
-+ boolean emailAlreadyExists(String)
-+ boolean usernameAlreadyExists(String)
-+ Optional<Utente> selectByUsername(String)
-+ List<Utente> selectAll()
-+ void insert(Utente)
-+ void update(Utente)
-+ void update(String,Utente)
-+ void delete(Utente)
-- Utente getUser(ResultSet)
-- void setUserForInsert(PreparedStatement,Utente)
-- void setUserForUpdate(PreparedStatement,Utente)
-- void setUserForUpdate(PreparedStatement,String,Utente)
-- void setUserForDelete(PreparedStatement,Utente)
-}
-
-
 class it.unisa.diem.utility.PropertiesLoader {
 - {static} Properties prop
 + {static} void init()
 + {static} String getProperty(String)
 }
-
 
 enum it.unisa.diem.model.gestione.analisi.Lingua {
 +  ITA
@@ -585,7 +314,6 @@ class it.unisa.diem.model.gestione.sessione.GameSession {
 + void setSessioneId(long)
 }
 
-
 class it.unisa.diem.utility.SceneLoader {
 + {static} void load(String,Control)
 }
@@ -618,43 +346,6 @@ class it.unisa.diem.model.gestione.sessione.Domanda {
 + int hashCode()
 }
 
-
-class it.unisa.diem.main.controller.LoginSignUpViewController {
-- VBox loginPane
-- VBox signUpPane
-- TextField loginUsernameField
-- PasswordField loginPasswordField
-- Label incorrectLabel
-- Button loginButton
-- TextField signUpEmailField
-- TextField signUpUsernameField
-- PasswordField signUpPasswordField
-- PasswordField signUpConfirmField
-- Label passwordMismatchLabel
-- Button signUpButton
-- StackPane loadingOverlay
-- ProgressIndicator loadingSpinner
-- Label loadingMessageLabel
-- String url
-- String user
-- String pass
-+ void initialize()
-- void showSignUpPane()
-- void showLoginPane()
-- void handleLogin()
-- void validateLoginForm()
-- void handleSignUp()
-- void validateSignUpForm()
-- boolean isEmailValida(String)
-- void goToHomeMenu()
-- {static} void mostraAlert(Alert.AlertType,String,String,String)
-- void clearSignUpFields()
-- void showLoadingOverlay()
-- void showLoadingOverlayWithMessage(String)
-- void hideLoadingOverlay()
-}
-
-
 class it.unisa.diem.exceptions.DBException {
 }
 class it.unisa.diem.main.service.LoadLeaderboardService {
@@ -663,7 +354,6 @@ class it.unisa.diem.main.service.LoadLeaderboardService {
 # Task<Map<Difficolta,List<VoceClassifica>>> createTask()
 + Map<Difficolta,List<VoceClassifica>> getValueMap()
 }
-
 
 class it.unisa.diem.dao.postgres.AnalisiDAOPostgres {
 - String url
@@ -675,7 +365,6 @@ class it.unisa.diem.dao.postgres.AnalisiDAOPostgres {
 + void delete(Analisi)
 - Analisi getAnalisi(ResultSet)
 }
-
 
 class it.unisa.diem.model.gestione.analisi.Analisi {
 - Documento documento
@@ -698,7 +387,6 @@ class it.unisa.diem.model.gestione.analisi.Analisi {
 + String toString()
 }
 
-
 class it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres {
 - String url
 - String user
@@ -711,7 +399,6 @@ class it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres {
 - SessioneDocumento getSessionDocument(ResultSet)
 + void deleteBySessioneId(long)
 }
-
 
 class it.unisa.diem.model.gestione.sessione.StoricoSessione {
 - LocalDateTime dataFine
@@ -727,88 +414,70 @@ class it.unisa.diem.model.gestione.sessione.StoricoSessione {
 + void setDifficolta(Difficolta)
 }
 
+class it.unisa.diem.main.Main {
++ void start(Stage)
++ {static} void main(String[])
+}
 
-class it.unisa.diem.main.controller.GameSessionController {
-- StackPane rootStackPane
-- AnchorPane selectionPane
-- AnchorPane readingPane
-- AnchorPane questionPane
-- AnchorPane resultPane
-- ComboBox<Lingua> linguaComboBox
-- ComboBox<String> difficoltaComboBox
-- Button startGameButton
-- Label textTitleLabel
-- TextArea textBodyArea
-- Label timerLabel
-- Button continueButton
-- Label questionLabel
-- Button answerButton1
-- Button answerButton2
-- Button answerButton3
-- Button answerButton4
-- Label questionTimerLabel
-- Label scoreLabel
-- Button backToMenuButton
-- VBox reviewBox
-- AnchorPane loadingOverlay
-- ProgressIndicator loadingSpinner
-- Label loadingMessageLabel
-- Button backButtonReading
-- Button backButtonQuestion
-- AnchorPane loadingPane
-- Label loadingInstructionLabel
-- Label difficultyMessageLabel
-- ProgressBar loadingProgressBar
-- Button instructionsToggleButton
-- TextArea instructionsTextArea
-- GameSession gameSession
-- Timeline readingTimer
-- int readingTimeSeconds
-- int currentDocumentIndex
-- int currentReadingIndex
-- boolean isGameStarted
-- LoadAnalysesService loadAnalysesService
-- GenerateQuestionsService generateQuestionsService
+class it.unisa.diem.model.gestione.utenti.Utente {
+- String username
+- String email
+- String hashedPassword
+- Ruolo ruolo
+- byte[] salt
++ String getUsername()
++ void setUsername(String)
++ void setEmail(String)
++ void setHashedPassword(String)
++ void setRuolo(Ruolo)
++ String getEmail()
++ String getHashedPassword()
++ Ruolo getRuolo()
++ byte[] getSalt()
++ boolean equals(Object)
++ String toString()
+}
+
+enum it.unisa.diem.model.gestione.analisi.Difficolta {
++  FACILE
++  INTERMEDIO
++  DIFFICILE
+}
+
+class it.unisa.diem.test.StopwordTest {
++ {static} void main(String[])
+}
+
+class it.unisa.diem.main.service.InsertSessionService {
+- SessioneDAOPostgres sessioneDAO
+- Sessione sessione
+# Task<Sessione> createTask()
+}
+
+interface it.unisa.diem.dao.interfacce.DocumentoDAO {
+~ Optional<Documento> selectByTitle(String)
+~ List<String> selectAllTitles()
+~ List<String> selectTitlesByLangAndDif(Lingua,Difficolta)
+}
+
+class it.unisa.diem.dao.postgres.UtenteDAOPostgres {
 - String url
 - String user
 - String pass
-- SessioneDAOPostgres sessioneDAO
-- SessioneDocumentoDAOPostgres sessioneDocumentoDAO
-- DomandaDAOPostgres domandaDAO
-- Timeline questionTimer
-- int questionTimeRemaining
-- boolean sessioneCompletata
-- {static} GameSessionController instance
-+ {static} GameSessionController getInstance()
-+ void initialize()
-- void setupSelectionPane()
-- void toggleInstructions()
-- void startNewGame()
-- Difficolta convertStringToDifficolta(String)
-- void loadDocumentsAndAnalyses(Lingua,Difficolta)
-- void showLoadingScreen(Difficolta,boolean)
-- void generateQuestions(List<Analisi>,Difficolta)
-- void handleBackToHomeWithConfirmation(ActionEvent)
-- void showReadingPane()
-+ void deleteGameSessionFromDB()
-- void handleReadingComplete()
-- void showQuestionPane()
-- void loadNextQuestion()
-- void startQuestionTimer()
-- void handleAnswerTimeout()
-- void updateQuestionTimerLabel()
-- void setAnswerHandlers(Domanda)
-- void handleAnswer(String,Domanda)
-- void showResultPane()
-- void showAlert(String)
-- void showLoadingOverlayWithMessage(String)
-- void setupReadingTimer()
-- void updateTimerLabel()
-- void stopReadingTimer()
-- void handleBackToMenu(ActionEvent)
-- void hideLoadingOverlay()
++ boolean emailAlreadyExists(String)
++ boolean usernameAlreadyExists(String)
++ Optional<Utente> selectByUsername(String)
++ List<Utente> selectAll()
++ void insert(Utente)
++ void update(Utente)
++ void update(String,Utente)
++ void delete(Utente)
+- Utente getUser(ResultSet)
+- void setUserForInsert(PreparedStatement,Utente)
+- void setUserForUpdate(PreparedStatement,Utente)
+- void setUserForUpdate(PreparedStatement,String,Utente)
+- void setUserForDelete(PreparedStatement,Utente)
 }
-
 
 class it.unisa.diem.main.service.GenerateQuestionsService {
 - List<Analisi> analyses
@@ -817,9 +486,6 @@ class it.unisa.diem.main.service.GenerateQuestionsService {
 + void setDifficolta(Difficolta)
 # Task<List<Domanda>> createTask()
 }
-
-
-
 
 it.unisa.diem.dao.interfacce.StoricoSessioneDAO <|.. it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres
 it.unisa.diem.exceptions.RuntimeException <|-- it.unisa.diem.exceptions.DeleteException
