@@ -164,24 +164,27 @@ public class GameSessionController {
                     if (newWindow != null) {
                         Stage stage = (Stage) newWindow;
                         stage.setOnCloseRequest(event -> {
-                            event.consume(); // blocca la chiusura finché non confermi
+                            if (isGameStarted && !sessioneCompletata) { // Controlla se il gioco è iniziato e non è completato
+                                event.consume(); // blocca la chiusura finché non confermi
 
-                            // Mostra alert di conferma
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setTitle("Confirm exit");
-                            alert.setHeaderText("Quit the game?");
-                            alert.setContentText("If you quit now, your game will be deleted. Do you really want to exit?");
+                                // Mostra alert di conferma
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Confirm exit");
+                                alert.setHeaderText("Quit the game?");
+                                alert.setContentText("If you quit now, your game will be deleted. Do you really want to exit?");
 
-                            ButtonType siButton = new ButtonType("Yes, quit");
-                            ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
-                            alert.getButtonTypes().setAll(siButton, noButton);
+                                ButtonType siButton = new ButtonType("Yes, quit");
+                                ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
+                                alert.getButtonTypes().setAll(siButton, noButton);
 
-                            alert.showAndWait().ifPresent(response -> {
-                                if (response == siButton) {
-                                    deleteGameSessionFromDB();  // elimina sessione se serve
-                                    stage.close();
-                                }
-                            });
+                                alert.showAndWait().ifPresent(response -> {
+                                    if (response == siButton) {
+                                        deleteGameSessionFromDB();  // elimina sessione se serve
+                                        stage.close();
+                                    }
+                                });
+                            }
+                            // Se il gioco non è iniziato o è già completato, chiudi normalmente
                         });
                     }
                 });
