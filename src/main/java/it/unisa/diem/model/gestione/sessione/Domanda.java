@@ -16,6 +16,8 @@ public class Domanda {
     private final TipoDomanda tipo;
     private List<String> opzioni;  // 4 opzioni di risposta
     private final String rispostaCorretta;
+    private String rispostaUtente;
+
     private int tempoLimiteSecondi;
 
     public Domanda(Sessione sessione, int numeroDomanda, String testoDomanda, TipoDomanda tipo, List<String> opzioni, String rispostaCorretta) {
@@ -107,6 +109,23 @@ public class Domanda {
         return this.getId() == domanda.getId();
 
     }
+
+    public void setSessione(Sessione sessione) {
+        this.sessione = sessione;
+    }
+
+    public void setNumeroDomanda(int numeroDomanda) {
+        this.numeroDomanda = numeroDomanda;
+    }
+
+    public String getRispostaUtente() {
+        return rispostaUtente;
+    }
+
+    public void setRispostaUtente(String rispostaUtente) {
+        this.rispostaUtente = rispostaUtente;
+    }
+
 
     @Override
     public int hashCode() {

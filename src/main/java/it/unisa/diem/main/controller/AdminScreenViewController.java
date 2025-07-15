@@ -1,19 +1,21 @@
 package it.unisa.diem.main.controller;
 
-import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
-import it.unisa.diem.exceptions.DBException;
-import it.unisa.diem.main.Main;
-import it.unisa.diem.model.gestione.analisi.Analisi;
-import it.unisa.diem.model.gestione.analisi.Difficolta;
-import it.unisa.diem.model.gestione.analisi.Documento;
-import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.main.service.AnalisiService;
+import it.unisa.diem.main.service.DeleteDocumentService;
+import it.unisa.diem.main.service.LoadTitlesService;
+import it.unisa.diem.model.gestione.analisi.*;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
+import it.unisa.diem.utility.PropertiesLoader;
+import it.unisa.diem.utility.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,171 +25,140 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdminScreenViewController {
 
+    private static final Logger LOGGER = Logger.getLogger(AdminScreenViewController.class.getName());
+
+    // === PANES ===
+    @FXML private AnchorPane adminPane;
+    @FXML private AnchorPane listPane;
+
+    // === ADMIN SCREEN FIELDS ===
     @FXML private Button importButton;
-    @FXML private Button backButton;
+    @FXML private Button backButton, backButtonList;
     @FXML private ListView<String> stopwordsListView;
     @FXML private TextField inputField;
-    @FXML private CheckBox checkArticles;
-    @FXML private CheckBox checkPrepositions;
-    @FXML private CheckBox checkToBe;
-    @FXML private CheckBox checkToHave;
-    @FXML private CheckBox checkCon;
-    @FXML private CheckBox checkPronouns;
+    @FXML private CheckBox checkArticles, checkPrepositions, checkToBe, checkToHave, checkCon, checkPronouns;
     @FXML private Button confirmButton;
     @FXML private TextField titleField;
-    @FXML private CheckBox checkIt;
-    @FXML private CheckBox checkEng;
-    @FXML private CheckBox checkEasy;
-    @FXML private CheckBox checkNormal;
-    @FXML private CheckBox checkHard;
-    @FXML private Label alertLabel;
-
-    Utente utente;
+    @FXML private CheckBox checkIt, checkEng, checkEasy, checkNormal, checkHard;
+    @FXML private Label alertLabel, importedFileLabel;
 
     private StopwordManager stopword;
     private ObservableList<String> observableList;
-    String titolo = null;
-    Lingua lingua;
-    Difficolta difficolta;
+    private String titolo = null;
+    private Lingua lingua;
+    private Difficolta difficolta;
     private File fileImportato;
 
+    // === LIST TEXTS FIELDS ===
+    @FXML private ListView<String> ListView;
+    private ObservableList<String> titoliList;
 
+    private final DocumentoDAOPostgres dao = new DocumentoDAOPostgres(
+            PropertiesLoader.getProperty("database.url"),
+            PropertiesLoader.getProperty("database.user"),
+            PropertiesLoader.getProperty("database.password")
+    );
+
+    // === INITIALIZE ===
     @FXML
     public void initialize() {
-        /*esempio temporaneo*/
-        StopwordITA stopwordITA = new StopwordITA();
-        stopwordITA.aggiungi("esempio");
-        /*temporaneo*/
+        // Setup Admin Screen
+        hideAlert();
+        importedFileLabel.setVisible(false);
 
-        /*disabilita il label di errore*/
-        alertLabel.setVisible(false);
-        alertLabel.setManaged(false);
+        Image back = new Image(getClass().getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
+        ImageView backView = new ImageView(back);
+        backView.setFitWidth(30);
+        backView.setFitHeight(30);
+        backButton.setGraphic(backView);
 
-        /*imposta le parole della lista di stopword come */
-        observableList = FXCollections.observableArrayList(stopwordITA.getParole());
+        // Setup freccia back anche su listPane
+        ImageView backViewList = new ImageView(back);
+        backViewList.setFitWidth(30);
+        backViewList.setFitHeight(30);
+        backButtonList.setGraphic(backViewList);
+
+        confirmButton.setDisable(true);
+        titleField.textProperty().addListener((obs, oldText, newText) -> validateConfirmButton());
+
+        // Load titles immediately (first load)
+        loadTitlesAsync();
+    }
+
+    // === STOPWORDS ===
+    private void setupStopwordList(StopwordManager stopwordManager) {
+        this.stopword = stopwordManager;
+        hideAlert();
+
+        observableList = FXCollections.observableArrayList(stopword.getParole());
         stopwordsListView.setItems(observableList);
 
-        /*rende la lista editabile*/
         stopwordsListView.setEditable(true);
         stopwordsListView.setCellFactory(TextFieldListCell.forListView());
         stopwordsListView.setOnEditCommit(event -> {
             int index = event.getIndex();
             String newValue = event.getNewValue().trim();
 
-            if (newValue.isEmpty()) {
-                alertLabel.setText("Non si possono inserire parole vuote.");
-                alertLabel.setVisible(true);
-                alertLabel.setManaged(true);
+            String validationMsg = validateStopword(newValue);
+            if (validationMsg != null) {
+                showAlert(validationMsg);
                 return;
             }
 
-            if (newValue.contains(" ")) {
-                alertLabel.setText("Le parole non possono contenere spazi.");
-                alertLabel.setVisible(true);
-                alertLabel.setManaged(true);
-                return;
-            }
-
-            alertLabel.setVisible(false);
-            alertLabel.setManaged(false);
+            hideAlert();
             stopwordsListView.getItems().set(index, newValue);
         });
-
-        /*imposta l'immagine del tasto indietro*/
-        Image back = new Image(this.getClass().getClassLoader().getResourceAsStream("immagini/yellowbackarrow.png"));
-        ImageView backView = new ImageView(back);
-        backView.setFitWidth(30);
-        backView.setFitHeight(30);
-        backButton.setGraphic(backView);
-
-        //disabilita del pulsante di conferma
-        confirmButton.setDisable(true);
-        titleField.textProperty().addListener((obs, oldText, newText) -> validateConfirmButton());
-
     }
 
-    //riempimento lista a seconda della lingua
-    public void listaStopwordIta() {
+    private String validateStopword(String word) {
+        if (word.isEmpty()) {
+            return "Non si possono inserire parole vuote.";
+        }
+        if (word.contains(" ")) {
+            return "Le parole non possono contenere spazi.";
+        }
+        return null;
+    }
 
-        stopword = new StopwordITA();
-        stopword.aggiungi("esempio");
+    private void showAlert(String msg) {
+        alertLabel.setText(msg);
+        alertLabel.setVisible(true);
+        alertLabel.setManaged(true);
+    }
 
-
-        /*disabilita il messaggio di errore*/
+    private void hideAlert() {
         alertLabel.setVisible(false);
         alertLabel.setManaged(false);
-
-        /*imposta le parole della lista di stopword come */
-        observableList = FXCollections.observableArrayList(stopword.getParole());
-        stopwordsListView.setItems(observableList);
-
-        /*rende la lista editabile*/
-        stopwordsListView.setEditable(true);
-        stopwordsListView.setCellFactory(TextFieldListCell.forListView());
-        stopwordsListView.setOnEditCommit(event -> {
-            int index = event.getIndex();
-            String newValue = event.getNewValue();
-            stopwordsListView.getItems().set(index, newValue);
-        });
     }
 
-    public void listaStopwordEng() {
-        /*esempio temporaneo*/
-        stopword = new StopwordENG();
-        stopword.aggiungi("example");
-        /*temporaneo*/
+    // === LOAD STOPWORDS ===
+    public void loadStopwordsITA() { setupStopwordList(new StopwordITA()); }
+    public void loadStopwordsENG() { setupStopwordList(new StopwordENG()); }
 
-        /*disabilita il messaggio di errore*/
-        alertLabel.setVisible(false);
-        alertLabel.setManaged(false);
-
-        /*imposta le parole della lista di stopword come */
-        observableList = FXCollections.observableArrayList(stopword.getParole());
-        stopwordsListView.setItems(observableList);
-
-        /*rende la lista editabile*/
-        stopwordsListView.setEditable(true);
-        stopwordsListView.setCellFactory(TextFieldListCell.forListView());
-        stopwordsListView.setOnEditCommit(event -> {
-            int index = event.getIndex();
-            String newValue = event.getNewValue();
-            stopwordsListView.getItems().set(index, newValue);
-        });
-    }
-
-    //checklist lingue e difficolta
     @FXML
     private void handleDifficultySelection(ActionEvent event) {
         CheckBox selected = (CheckBox) event.getSource();
-
         if (selected.isSelected()) {
-            if (selected == checkEasy) {
-                checkNormal.setSelected(false);
-                checkHard.setSelected(false);
+            checkEasy.setSelected(selected == checkEasy);
+            checkNormal.setSelected(selected == checkNormal);
+            checkHard.setSelected(selected == checkHard);
 
-                difficolta = Difficolta.FACILE;
-            } else if (selected == checkNormal) {
-                checkEasy.setSelected(false);
-                checkHard.setSelected(false);
-
-                difficolta = Difficolta.INTERMEDIO;
-            } else if (selected == checkHard) {
-                checkEasy.setSelected(false);
-                checkNormal.setSelected(false);
-
-                difficolta = Difficolta.DIFFICILE;
-            }
+            difficolta = selected == checkEasy ? Difficolta.FACILE :
+                    selected == checkNormal ? Difficolta.INTERMEDIO :
+                            Difficolta.DIFFICILE;
         }
-
         validateConfirmButton();
     }
 
@@ -195,84 +166,61 @@ public class AdminScreenViewController {
     private void handleLanguageSelection(ActionEvent event) {
         CheckBox selected = (CheckBox) event.getSource();
         if (selected.isSelected()) {
+            checkIt.setSelected(selected == checkIt);
+            checkEng.setSelected(selected == checkEng);
+
+            clearStopwordList();
             if (selected == checkIt) {
-                checkEng.setSelected(false);
-                emptyList();
-                listaStopwordIta();
-
+                loadStopwordsITA();
                 lingua = Lingua.ITA;
-            } else if (selected == checkEng) {
-                checkIt.setSelected(false);
-                emptyList();
-                listaStopwordEng();
-
+            } else {
+                loadStopwordsENG();
                 lingua = Lingua.ENG;
             }
         }
         validateConfirmButton();
     }
 
-    //Pulsante indietro
-    public void goToMainMenu(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
-            Parent root = loader.load();
-            HomeMenuViewController controller = loader.getController();
-            controller.setUtente(utente);
-            Stage stage = (Stage) backButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Menu");
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    // === IMPORT / ADD / REMOVE ===
+    @FXML
+    public void handleImport(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleziona un file TXT da importare");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File di testo", "*.txt"));
+
+        Window stage = importButton.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            fileImportato = selectedFile;
+            importedFileLabel.setText("Selected: " + selectedFile.getName());
+            importedFileLabel.setVisible(true);
+            validateConfirmButton();
         }
     }
 
-    private void goToListTexts() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/ListTextsView.fxml"));
-            Parent root = loader.load();
-            ListTextsController controller = loader.getController();
-            controller.setUtente(utente);
-
-            Stage stage = (Stage) importButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Titles");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-
-
-    //ListView
     @FXML
     private void handleAdd() {
-        alertLabel.setVisible(false);
-        alertLabel.setManaged(false);
+        hideAlert();
         String text = inputField.getText().trim();
 
-        if (text.contains(" ")) {
-            alertLabel.setText("Le parole non possono contenere spazi.");
-            alertLabel.setVisible(true);
-            alertLabel.setManaged(true);
+        String validationMsg = validateStopword(text);
+        if (validationMsg != null) {
+            showAlert(validationMsg);
             return;
         }
 
-        if (!text.isEmpty() && !stopwordsListView.getItems().contains(text)) {
+        if (!stopwordsListView.getItems().contains(text)) {
             stopwordsListView.getItems().add(text);
             inputField.clear();
-        } else if (stopwordsListView.getItems().contains(text)) {
-            alertLabel.setText("La parola è già presente.");
-            alertLabel.setVisible(true);
-            alertLabel.setManaged(true);
-            System.out.println("La parola " + text + " è già presente");
+        } else {
+            showAlert("La parola è già presente.");
         }
     }
 
+    @FXML
     public void handleRemove(ActionEvent actionEvent) {
-        alertLabel.setVisible(false);
-        alertLabel.setManaged(false);
+        hideAlert();
         String text = inputField.getText().trim();
         if (!text.isEmpty()) {
             stopwordsListView.getItems().remove(text);
@@ -280,71 +228,42 @@ public class AdminScreenViewController {
         }
     }
 
-    public void emptyList() {
-        stopwordsListView.getItems().clear();
-    }
+    public void clearStopwordList() { stopwordsListView.getItems().clear(); }
 
-
-    //import del file tramite filechooser
-    public void handleImport(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleziona un file TXT da importare");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("File di testo", "*.txt")
-        );
-
-        Window stage = importButton.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            fileImportato = selectedFile;
-            validateConfirmButton();
-        }
-    }
-
-
-
+    // === CONFIRM ===
     public void handleConfirm(ActionEvent actionEvent) {
         titolo = titleField.getText().trim();
 
+        stopword.clear();
 
-        stopword.getParole().clear(); //senza questo potrebbe riapparire una parola modificata manualmente dall'utente (credo)
-        for (String parola : stopwordsListView.getItems()) {
-            stopword.aggiungi(parola);
+        // Prima carica le predefinite
+        stopword.caricaStopword(
+                checkArticles.isSelected(),
+                checkPrepositions.isSelected(),
+                checkPronouns.isSelected(),
+                checkToHave.isSelected(),
+                checkToBe.isSelected(),
+                checkCon.isSelected()
+        );
+
+        // Poi aggiunge quelle dell'utente
+        for (String s : stopwordsListView.getItems()) {
+            stopword.aggiungi(s);
         }
 
-
-        stopword.caricaStopword(checkArticles.isSelected(), checkPrepositions.isSelected(), checkPronouns.isSelected(), checkToHave.isSelected(), checkToBe.isSelected(), checkCon.isSelected());
-        System.out.println(stopword.getParole());
         Documento documento = new Documento(titolo, lingua, difficolta);
+        AnalisiService analisiService = new AnalisiService(documento, stopword, fileImportato);
 
-        try {
-            documento.convertiTxtToBin(fileImportato);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
+        analisiService.setOnSucceeded(event -> showListPane());
+        analisiService.setOnFailed(event -> {
+            Throwable e = analisiService.getException();
+            LOGGER.log(Level.SEVERE, "Errore Analisi", e);
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore Analisi", null, "Si è verificato un errore durante l'analisi o l'inserimento nel database.\n" + e.getMessage());
+        });
 
-        DocumentoDAOPostgres daoDoc = new DocumentoDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
-        AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres("jdbc:postgresql://database-1.czikiq82wrwk.eu-west-2.rds.amazonaws.com:5432/Wordageddon", "postgres", "Farinotta01_");
-        try {
-            Analisi analisi = new Analisi(documento, stopword);
-            analisi.analizza();
-            analisi.caricaAnalisi();
-            daoDoc.insert(documento);
-            daoAn.insert(analisi);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        goToListTexts();
+        analisiService.start();
     }
 
-    public void handleList(ActionEvent actionEvent) {
-        goToListTexts();
-    }
 
     private void validateConfirmButton() {
         boolean isTitleFilled = !titleField.getText().trim().isEmpty();
@@ -355,10 +274,82 @@ public class AdminScreenViewController {
         confirmButton.setDisable(!(isTitleFilled && isFileImported && isLanguageSelected && isDifficultySelected));
     }
 
-    public void setUtente(Utente utente) {
-        this.utente = utente;
-        System.out.println(utente.getUsername());
+    // === LIST TEXTS LOGIC ===
+    private void loadTitlesAsync() {
+        LoadTitlesService service = new LoadTitlesService();
+
+        service.setOnSucceeded(event -> {
+            List<String> ListDao = service.getValue();
+            titoliList = FXCollections.observableArrayList(ListDao);
+            ListView.setItems(titoliList);
+        });
+
+        service.setOnFailed(event -> {
+            Throwable e = service.getException();
+            e.printStackTrace();
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore", null,
+                    "Errore durante il caricamento dei titoli:\n" + (e != null ? e.getMessage() : "Errore sconosciuto"));
+        });
+
+        service.start();
     }
 
 
+    @FXML
+    public void deleteDocument(ActionEvent actionEvent) {
+        String selectedTitle = ListView.getSelectionModel().getSelectedItem();
+
+        if (selectedTitle == null) {
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null, "Seleziona un documento da eliminare.");
+            return;
+        }
+
+        DeleteDocumentService deleteService = new DeleteDocumentService(dao);
+        deleteService.setSelectedTitle(selectedTitle);
+
+        deleteService.setOnSucceeded(event -> {
+            titoliList.remove(selectedTitle);
+            AlertUtils.mostraAlert(Alert.AlertType.INFORMATION, "Successo", null, "Documento eliminato correttamente.");
+        });
+
+        deleteService.setOnFailed(event -> {
+            Throwable e = deleteService.getException();
+            e.printStackTrace();
+            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore eliminazione", null,
+                    "Errore durante l'eliminazione del documento:\n" + (e != null ? e.getMessage() : "Errore sconosciuto"));
+        });
+
+        deleteService.start();
+    }
+
+    // === NAVIGATION ===
+    @FXML
+    private void showListPane() {
+        adminPane.setVisible(false);
+        listPane.setVisible(true);
+        loadTitlesAsync(); // Ricarica ogni volta che si apre la lista
+    }
+
+    @FXML
+    private void showAdminPane() {
+        listPane.setVisible(false);
+        adminPane.setVisible(true);
+    }
+
+    @FXML
+    public void goToMainMenu(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu");
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error loading HomeMenuView", ex);
+        }
+    }
+
+    private Utente getUtente() {
+        return SessionManager.getInstance().getUtenteLoggato();
+    }
 }

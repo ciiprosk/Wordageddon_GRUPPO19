@@ -115,7 +115,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
     }
 
-    public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws SQLException {
+    public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws DBException {
         List<VoceStorico> storico = new ArrayList<>();
 
         String query = "SELECT ss.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
@@ -137,10 +137,14 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
             while (rs.next()) {
                 storico.add(getLastSessions(rs));
             }
+
+        } catch (SQLException e) {
+            throw new DBException("Errore durante la selectByLastSessions: " + e.getMessage(), e);
         }
 
         return storico;
     }
+
 
 
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {

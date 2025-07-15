@@ -84,7 +84,12 @@ public abstract class StopwordManager {
 
         };
     }
-        @Override
+
+    public void clear() {
+        parole.clear();
+    }
+
+    @Override
         public String toString() {
             return getClass().getSimpleName() + "{" + "parole=" + parole + '}';
         }

@@ -89,9 +89,8 @@ public class DomandaDAOPostgres implements DomandaDAO {
     @Override
     public void insert(Domanda domanda) throws DBException {
 
-        String query = "INSERT INTO DOMANDA " +
-                "(id_sessione, numeroDomanda, rispostaCorretta, testo, time_stop, tipoDomanda) " +
-                "VALUES (?,?,?,?,?,?)";
+        String query = "INSERT INTO DOMANDA (id_sessione, numeroDomanda, rispostaCorretta, testo, time_stop, \"tipoDomanda\") VALUES (?,?,?,?,?,?)";
+
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -216,7 +215,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
         cmd.setTime(5, Time.valueOf(tempo));
 
-        cmd.setString(6, domanda.getTipo().name());
+        cmd.setObject(6, domanda.getTipo().name(), java.sql.Types.OTHER);
 
     }
 
@@ -235,5 +234,22 @@ public class DomandaDAOPostgres implements DomandaDAO {
         cmd.setLong(1, domanda.getId());
 
     }
+
+    public void deleteBySessioneId(long sessioneId) throws DBException {
+        String query = "DELETE FROM DOMANDA WHERE id_sessione = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement cmd = connection.prepareStatement(query)) {
+
+            cmd.setLong(1, sessioneId);
+
+            int lines = cmd.executeUpdate();
+            System.out.println("✅ Domande eliminate: " + lines);
+
+        } catch (SQLException e) {
+            throw new DBException("Errore: impossibile eliminare le domande della sessione " + sessioneId + "!", e);
+        }
+    }
+
 
 }

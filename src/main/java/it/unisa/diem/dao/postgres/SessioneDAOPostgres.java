@@ -120,7 +120,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     public void insert(Sessione sessione) throws DBException {
 
         String query = "INSERT INTO sessione " +
-                "(utente, completato, dataInizio, punteggio) " +
+                "(utente, completato, dataInizio, punteggioottenuto) " +
                 "VALUES (?,?,?,?)";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -149,9 +149,9 @@ public class SessioneDAOPostgres implements SessioneDAO {
     @Override
     public void update(Sessione sessione) throws DBException {
 
-        String query = "UPDATE sessione " +
-                "SET completato = ?, punteggio = ? " +
-                "WHERE id = ?";
+        String query = "UPDATE sessione \n" +
+                "SET completato = ?, punteggioottenuto = ? \n" +
+                "WHERE id = ?\n";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass);
 
@@ -189,6 +189,26 @@ public class SessioneDAOPostgres implements SessioneDAO {
         }
 
     }
+
+    public void delete(long sessioneId) throws DBException {
+        String query = "DELETE FROM sessione WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement cmd = connection.prepareStatement(query)) {
+
+            cmd.setLong(1, sessioneId);
+
+            int lines = cmd.executeUpdate();
+            if (lines == 0)
+                throw new DBException("Errore: nessuna riga modificata");
+
+            System.out.println("✅ Sessione eliminata: ID = " + sessioneId);
+
+        } catch (SQLException e) {
+            throw new DBException("Errore: impossibile eliminare la sessione " + sessioneId + "!", e);
+        }
+    }
+
 
     private Sessione getSession(ResultSet rs) throws SQLException, DBException {
 
