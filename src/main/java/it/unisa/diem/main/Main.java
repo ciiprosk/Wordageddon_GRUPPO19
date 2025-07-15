@@ -3,6 +3,7 @@ package it.unisa.diem.main;
 import it.unisa.diem.main.controller.GameSessionController;
 import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,15 +20,11 @@ import java.sql.SQLException;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Verifico la connessione al db -> in caso di errori mando alert
-        String url = PropertiesLoader.getProperty("database.url");
-        String user = PropertiesLoader.getProperty("database.user");
-        String pass = PropertiesLoader.getProperty("database.password");
 
         Image icon = new Image(Main.class.getClassLoader().getResourceAsStream("immagini/icon.png"));
         primaryStage.getIcons().add(icon);
 
-        try (Connection con = DriverManager.getConnection(url, user, pass)) {
+        try (Connection con = ConnectionManager.getConnection()) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginSignUpView.fxml"));
             Parent root = loader.load();
 

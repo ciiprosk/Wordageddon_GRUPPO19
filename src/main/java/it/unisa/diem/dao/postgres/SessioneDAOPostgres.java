@@ -28,11 +28,11 @@ public class SessioneDAOPostgres implements SessioneDAO {
         this.url = url;
         this.user = user;
         this.pass = pass;
-        this.utenteDAO = new UtenteDAOPostgres(url, user, pass);
+        this.utenteDAO = new UtenteDAOPostgres();
     }
 
-    public SessioneDAOPostgres(UtenteDAO utenteDAO) {
-        this.utenteDAO = utenteDAO;
+    public SessioneDAOPostgres() {
+        this.utenteDAO = new UtenteDAOPostgres();
     }
 
     public UtenteDAO getUtenteDAO() {
@@ -288,7 +288,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 "ORDER BY s.dataFine DESC " +
                 "LIMIT 10";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
             cmd.setObject(1, difficolta.name(), Types.OTHER);

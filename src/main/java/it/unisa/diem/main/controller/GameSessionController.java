@@ -153,15 +153,8 @@ public class GameSessionController {
         backButtonQuestion.setOnAction(this::handleBackToHomeWithConfirmation);
 
 
-
-
-
-        this.url = PropertiesLoader.getProperty("database.url");
-        this.user = PropertiesLoader.getProperty("database.user");
-        this.pass = PropertiesLoader.getProperty("database.password");
-
-        sessioneDAO = new SessioneDAOPostgres(url, user, pass);
-        sessioneDocumentoDAO = new SessioneDocumentoDAOPostgres(url, user, pass);
+        sessioneDAO = new SessioneDAOPostgres();
+        sessioneDocumentoDAO = new SessioneDocumentoDAOPostgres();
 
         setupSelectionPane();
 
