@@ -306,35 +306,10 @@ public class GameSessionController {
 
         loadingProgressBar.setProgress(0);
 
-        long startTime = System.currentTimeMillis(); // 🕒 tempo inizio
-
-        Timeline progressTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.05), e -> {
-                    double progress = loadingProgressBar.getProgress();
-                    loadingProgressBar.setProgress(progress + 0.01);
-                })
-        );
-        progressTimeline.setCycleCount(100); // dura 5 secondi (0.05 * 100 = 5s)
-
-        progressTimeline.setOnFinished(e -> {
-            long elapsed = System.currentTimeMillis() - startTime;
-            long minDisplayTime = 3000; // millisecondi minimo di visibilità: 1.5 secondi
-
-            long remainingTime = minDisplayTime - elapsed;
-            if (remainingTime > 0) {
-                new Timeline(new KeyFrame(Duration.millis(remainingTime), ev -> {
-                    if (onComplete != null) {
-                        onComplete.run();
-                    }
-                })).play();
-            } else {
-                if (onComplete != null) {
-                    onComplete.run();
-                }
-            }
-        });
-
-        progressTimeline.play();
+        loadingProgressBar.setProgress(-1); // Modalità "indeterminate"
+        if (onComplete != null) {
+            onComplete.run(); // Esegui direttamente il caricamento dei testi
+        }
     }
 
 
@@ -351,7 +326,8 @@ public class GameSessionController {
             gameSession.setDomande(domande); // salva in memoria
 
             loadingPane.setVisible(false);
-
+            // NON avviare subito InsertQuestionsService
+            // showReadingPane(); oppure il flusso successivo
             hideLoadingOverlay();
             showReadingPane();
         });
