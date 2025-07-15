@@ -26,6 +26,7 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
         return new Task<>() {
             @Override
             protected List<Analisi> call() throws Exception {
+                System.out.println("CIAO SONO QUI");
                 List<Analisi> analyses = new ArrayList<>();
                 String folderPath = "analysis/" + lingua + "/" + difficolta.toString().toLowerCase();
                 File folder = new File(folderPath);

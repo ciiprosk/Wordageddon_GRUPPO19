@@ -209,29 +209,29 @@ public class GameSessionController {
 
         if (lingua != null && difficolta != null && utente != null) {
             boolean singleText = difficolta == Difficolta.FACILE;
-            showLoadingScreen(difficolta, singleText);
+            showLoadingScreen(difficolta, singleText, () -> {
+                gameSession = new GameSession(utente, lingua, difficolta);
+                Sessione sessione = new Sessione(utente, LocalDateTime.now());
 
+                InsertSessionService insertSessionService = new InsertSessionService(sessioneDAO, sessione);
 
-            gameSession = new GameSession(utente, lingua, difficolta);
-            Sessione sessione = new Sessione(utente, LocalDateTime.now());
+                insertSessionService.setOnSucceeded(event -> {
+                    Sessione insertedSessione = insertSessionService.getValue();
+                    System.out.println("✅ Sessione inserita con ID = " + insertedSessione.getId());
+                    gameSession.setSessioneId(insertedSessione.getId());
+                    loadDocumentsAndAnalyses(lingua, difficolta);
+                });
 
-            InsertSessionService insertSessionService = new InsertSessionService(sessioneDAO, sessione);
+                insertSessionService.setOnFailed(event -> {
+                    hideLoadingOverlay();
+                    Throwable ex = insertSessionService.getException();
+                    ex.printStackTrace();
+                    showAlert("Errore nella creazione della sessione: " + ex.getMessage());
+                });
 
-            insertSessionService.setOnSucceeded(event -> {
-                Sessione insertedSessione = insertSessionService.getValue();
-                System.out.println("✅ Sessione inserita con ID = " + insertedSessione.getId());
-                gameSession.setSessioneId(insertedSessione.getId());
-                loadDocumentsAndAnalyses(lingua, difficolta);
+                insertSessionService.start();
             });
 
-            insertSessionService.setOnFailed(event -> {
-                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
-                Throwable ex = insertSessionService.getException();
-                ex.printStackTrace();
-                showAlert("Errore nella creazione della sessione: " + ex.getMessage());
-            });
-
-            insertSessionService.start();
 
         } else {
             showAlert("Seleziona sia lingua che difficoltà (e assicurati di essere loggato).");
@@ -249,38 +249,31 @@ public class GameSessionController {
             List<Analisi> analyses = loadAnalysesService.getValue();
             gameSession.setAnalyses(analyses);
 
-            // 🔢 Contatore per tenere traccia dei completamenti
-            final int totalAnalisi = analyses.size();
-            final int[] completati = {0}; // usiamo array per poterlo modificare dentro lambda
-
-            if (totalAnalisi == 0) {
+            if (analyses.isEmpty()) {
                 generateQuestions(analyses, difficolta);
                 return;
             }
 
-            for (Analisi analisi : analyses) {
-                SessioneDocumento sd = new SessioneDocumento(gameSession.getSessioneId(), analisi.getTitolo());
-                InsertSessioneDocumentoService insertService = new InsertSessioneDocumentoService(sessioneDocumentoDAO, sd, gameSession, analisi);
+            InsertAllSessioneDocumentiService insertAllService =
+                    new InsertAllSessioneDocumentiService(analyses, sessioneDocumentoDAO,
+                            gameSession.getSessioneId(), gameSession);
 
-                insertService.setOnSucceeded(ev -> {
-                    completati[0]++;
-                    if (completati[0] == totalAnalisi) {
-                        generateQuestions(analyses, difficolta); // ✅ quando tutte completate
-                    }
-                });
+            insertAllService.setOnSucceeded(e -> {
+                generateQuestions(analyses, difficolta); // ✅ Dopo aver inserito tutti i documenti
+            });
 
-                insertService.setOnFailed(ev -> {
-                    hideLoadingOverlay();
-                    Throwable ex = insertService.getException();
-                    showAlert("Errore nel salvataggio dei documenti: " + ex.getMessage());
-                    // ❌ Interrompe la catena se c’è un errore
-                });
+            insertAllService.setOnFailed(e -> {
+                hideLoadingOverlay();
+                Throwable ex = insertAllService.getException();
+                ex.printStackTrace();
+                showAlert("Errore nel salvataggio dei documenti: " + ex.getMessage());
+            });
 
-                insertService.start();
-            }
+            insertAllService.start();
         });
+
         loadAnalysesService.setOnFailed(event -> {
-            hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
+            hideLoadingOverlay();
             Throwable ex = loadAnalysesService.getException();
             ex.printStackTrace();
             showAlert("Errore durante il caricamento dei testi: " + ex.getMessage());
@@ -289,7 +282,8 @@ public class GameSessionController {
         loadAnalysesService.start();
     }
 
-    private void showLoadingScreen(Difficolta difficolta, boolean singleText) {
+
+    private void showLoadingScreen(Difficolta difficolta, boolean singleText, Runnable onComplete) {
         selectionPane.setVisible(false);
         readingPane.setVisible(false);
         questionPane.setVisible(false);
@@ -312,7 +306,6 @@ public class GameSessionController {
 
         loadingProgressBar.setProgress(0);
 
-        // Simulazione caricamento visuale (non logica!)
         Timeline progressTimeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.05), e -> {
                     double progress = loadingProgressBar.getProgress();
@@ -321,10 +314,14 @@ public class GameSessionController {
         );
         progressTimeline.setCycleCount(100);
         progressTimeline.setOnFinished(e -> {
-            loadingPane.setVisible(false); // ✅ Non avvia la lettura qui
+         //   loadingPane.setVisible(false);
+            if (onComplete != null) {
+                onComplete.run();
+            }
         });
         progressTimeline.play();
     }
+
 
 
 
@@ -336,44 +333,16 @@ public class GameSessionController {
 
         generateQuestionsService.setOnSucceeded(event -> {
             List<Domanda> domande = generateQuestionsService.getValue();
-            gameSession.setDomande(domande);
+            gameSession.setDomande(domande); // salva in memoria
 
-            // 🔷 Imposta numero domanda e sessione PRIMA di inserire nel DB
-            int numero = 1;
-            try {
-                Sessione sessioneCorrente = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
-                for (Domanda d : domande) {
-                    d.setNumeroDomanda(numero++);
-                    d.setSessione(sessioneCorrente);
-                }
-            } catch (DBException e) {
-                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
-                showAlert("Errore nel recupero della sessione: " + e.getMessage());
-                return;
-            }
-
-            InsertQuestionsService insertQuestionsService = new InsertQuestionsService(domandaDAO, domande);
-
-            insertQuestionsService.setOnSucceeded(ev -> {
-                hideLoadingOverlay(); // 🔷 Nascondi quando finito
-                System.out.println("✅ Domande inserite correttamente nel DB per sessione ID = " + gameSession.getSessioneId());
-                gameSession.setCurrentQuestionIndex(0);
-                gameSession.setScore(0);
-                showReadingPane();
-            });
-
-            insertQuestionsService.setOnFailed(ev -> {
-                hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
-                Throwable ex = insertQuestionsService.getException();
-                ex.printStackTrace();
-                showAlert("Errore nel salvataggio delle domande: " + ex.getMessage());
-            });
-
-            insertQuestionsService.start();
+            // NON avviare subito InsertQuestionsService
+            // showReadingPane(); oppure il flusso successivo
+            hideLoadingOverlay();
+            showReadingPane();
         });
 
         generateQuestionsService.setOnFailed(event -> {
-            hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
+            hideLoadingOverlay();
             Throwable ex = generateQuestionsService.getException();
             ex.printStackTrace();
             showAlert("Errore durante la generazione delle domande: " + ex.getMessage());
@@ -381,6 +350,7 @@ public class GameSessionController {
 
         generateQuestionsService.start();
     }
+
 
     @FXML
     private void handleBackToHomeWithConfirmation(ActionEvent event) {
@@ -422,6 +392,8 @@ public class GameSessionController {
 
     // === SHOW READING PANE ===
     private void showReadingPane() {
+        loadingPane.setVisible(false);
+
         isGameStarted = true;
 
         selectionPane.setVisible(false);
@@ -592,15 +564,35 @@ public class GameSessionController {
             }
         }
 
-        try {
-            Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
-            sessione.setCompletato(true);
-            sessione.setPunteggio(gameSession.getScore());
-            sessioneDAO.update(sessione);
-            System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
-        } catch (DBException e) {
-            showAlert("Errore nel salvataggio del punteggio: " + e.getMessage());
-        }
+
+
+        UpdateSessionService uss = new UpdateSessionService(sessioneDAO, gameSession);
+        uss.setOnSucceeded(event -> {
+            System.out.println("Sessione aggiornata");
+            // Ora inserisci domande nel DB
+
+            Sessione sessione = new Sessione(gameSession.getSessioneId());
+            for (Domanda d : gameSession.getDomande()) {
+                d.setSessione(sessione);
+            }
+
+            InsertQuestionsService insertQuestionsService = new InsertQuestionsService(domandaDAO, gameSession.getDomande());
+            insertQuestionsService.setOnSucceeded(ev -> {
+                System.out.println("Domande inserite nel DB correttamente");
+            });
+            insertQuestionsService.setOnFailed(ev -> {
+                Throwable ex = insertQuestionsService.getException();
+                ex.printStackTrace();
+                showAlert("Errore durante il salvataggio delle domande: " + ex.getMessage());
+            });
+            insertQuestionsService.start();
+        });
+        uss.setOnFailed(event -> {
+            Throwable ex = uss.getException();
+            ex.printStackTrace();
+            showAlert("Errore durante l'aggiornamento della sessione: " + ex.getMessage());
+        });
+        uss.start();
 
 
     }

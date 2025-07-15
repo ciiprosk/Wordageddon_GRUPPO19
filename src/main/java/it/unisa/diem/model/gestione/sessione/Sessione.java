@@ -37,6 +37,15 @@ public class Sessione {
 
     }
 
+    public Sessione(long id) {
+        this.id = id;
+        this.utente = null;
+        this.inizio = null;
+        this.completato = false;
+        this.punteggio = 0;
+    }
+
+
     //getter e setter
     public Utente getUtente() {
         return utente;
