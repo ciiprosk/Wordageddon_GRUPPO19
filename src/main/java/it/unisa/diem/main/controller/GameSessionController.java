@@ -53,7 +53,7 @@ public class GameSessionController {
 
     // === SelectionPane controls ===
     @FXML private ComboBox<Lingua> linguaComboBox;
-    @FXML private ComboBox<Difficolta> difficoltaComboBox;
+    @FXML private ComboBox<String> difficoltaComboBox;
     @FXML private Button startGameButton, backButton;
 
     // === ReadingPane controls ===
@@ -184,8 +184,10 @@ public class GameSessionController {
                         "3. Answer each question within the time limit.\n" +
                         "4. Review your results at the end."
         );
+
         linguaComboBox.getItems().addAll(Lingua.values());
-        difficoltaComboBox.getItems().addAll(Difficolta.values());
+
+        difficoltaComboBox.getItems().addAll("EASY", "NORMAL", "HARD");
 
         startGameButton.setOnAction(e -> startNewGame());
         instructionsToggleButton.setOnAction(e -> toggleInstructions());
@@ -207,13 +209,14 @@ public class GameSessionController {
         currentReadingIndex = 0;
 
         Lingua lingua = linguaComboBox.getValue();
-        Difficolta difficolta = difficoltaComboBox.getValue();
+        String difficoltaString = difficoltaComboBox.getValue();
         Utente utente = SessionManager.getInstance().getUtenteLoggato();
 
-        if (lingua != null && difficolta != null && utente != null) {
+        if (lingua != null && difficoltaString != null && utente != null) {
+            // Converti la stringa in enum Difficolta
+            Difficolta difficolta = convertStringToDifficolta(difficoltaString);
             boolean singleText = difficolta == Difficolta.FACILE;
             showLoadingScreen(difficolta, singleText);
-
 
             gameSession = new GameSession(utente, lingua, difficolta);
             Sessione sessione = new Sessione(utente, LocalDateTime.now());
@@ -238,6 +241,15 @@ public class GameSessionController {
 
         } else {
             showAlert("Seleziona sia lingua che difficoltà (e assicurati di essere loggato).");
+        }
+    }
+
+    private Difficolta convertStringToDifficolta(String difficoltaString) {
+        switch(difficoltaString.toUpperCase()) {
+            case "EASY": return Difficolta.FACILE;
+            case "NORMAL": return Difficolta.INTERMEDIO;
+            case "HARD": return Difficolta.DIFFICILE;
+            default: return Difficolta.INTERMEDIO; // Default se non riconosciuto
         }
     }
 
