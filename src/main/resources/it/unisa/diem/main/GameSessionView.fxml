@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="rootStackPane" prefHeight="800" prefWidth="1200" stylesheets="@style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="it.unisa.diem.main.controller.GameSessionController">
+<StackPane fx:id="rootStackPane" prefHeight="800" prefWidth="1200" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.GameSessionController">
     <children>
 
         <!-- === Selection Pane === -->
@@ -28,16 +28,23 @@
                         <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Select Language and Difficulty" />
                         <ComboBox fx:id="linguaComboBox" prefWidth="400" promptText="Select Language" style="-fx-font-size: 20px;" />
                         <ComboBox fx:id="difficoltaComboBox" prefWidth="400" promptText="Select Difficulty" style="-fx-font-size: 20px;" />
-                        <Button fx:id="instructionsToggleButton" text="Show Instructions" prefWidth="300" style="-fx-font-size: 20px;" />
+                        <Button fx:id="instructionsToggleButton" prefWidth="300" style="-fx-font-size: 20px;" text="Show Instructions" />
 
-                        <TextArea fx:id="instructionsTextArea" editable="false" wrapText="true" visible="false" prefWidth="500" prefHeight="200" style="-fx-font-size: 16px;">
+                        <TextArea fx:id="instructionsTextArea" editable="false" prefHeight="200" prefWidth="500" style="-fx-font-size: 16px;" visible="false" wrapText="true">
                             <text>
-                                Here are the instructions:&#10;
-                                1. Select language and difficulty.&#10;
-                                2. Read the texts carefully.&#10;
-                                3. Answer each question within the time limit.&#10;
+                                Here are the instructions:
+
+                                1. Select language and difficulty.
+
+                                2. Read the texts carefully.
+
+                                3. Answer each question within the time limit.
+
                                 4. Review your results at the end.
                             </text>
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </VBox.margin>
                         </TextArea>
                         <Button fx:id="startGameButton" prefWidth="300" style="-fx-font-size: 25px;" text="Start Game" />
                     </children>
@@ -61,7 +68,7 @@
                 <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="100">
                     <children>
                         <Label fx:id="textTitleLabel" style="-fx-font-size: 25px; -fx-font-weight: bold;" text="Document Title" />
-                        <TextArea fx:id="textBodyArea" editable="false" prefHeight="400" prefWidth="900" style="-fx-font-size: 18px;" wrapText="true" />
+                        <TextArea fx:id="textBodyArea" editable="false" prefHeight="400" prefWidth="900" style="-fx-font-size: 24px;" wrapText="true" />
                         <Label fx:id="timerLabel" style="-fx-font-size: 20px;" text="00:00" />
                         <Button fx:id="continueButton" prefWidth="200" style="-fx-font-size: 25px;" text="Continue" />
                     </children>
@@ -137,14 +144,14 @@
         <!-- === New Loading Pane === -->
         <AnchorPane fx:id="loadingPane" prefHeight="800" prefWidth="1200" visible="false">
             <children>
-                <VBox alignment="CENTER" spacing="30" AnchorPane.topAnchor="150" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
+                <VBox alignment="CENTER" spacing="30" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="150">
                     <children>
-                        <Label fx:id="loadingInstructionLabel" style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-alignment: center;" wrapText="true" text="Instructions here" />
+                        <Label fx:id="loadingInstructionLabel" style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-alignment: center;" text="Instructions here" wrapText="true" />
                         <Label fx:id="difficultyMessageLabel" style="-fx-font-size: 20px; -fx-text-fill: #ffd700;" text="Difficulty message here" />
                     </children>
                 </VBox>
 
-                <ProgressBar fx:id="loadingProgressBar" prefHeight="30" prefWidth="800" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" progress="0.0" />
+                <ProgressBar fx:id="loadingProgressBar" prefHeight="30" prefWidth="800" progress="0.0" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" />
             </children>
         </AnchorPane>
 

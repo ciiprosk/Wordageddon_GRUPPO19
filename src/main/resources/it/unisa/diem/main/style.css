@@ -128,7 +128,7 @@
 }
 
 .text-area {
-    -fx-text-fill: #ffd700;
+    -fx-text-fill: white;
     -fx-background-color: #2e2e2e;
     -fx-control-inner-background: #2e2e2e;
     -fx-border-color: #ffd700;
