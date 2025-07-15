@@ -645,8 +645,13 @@ public class GameSessionController {
 
     @FXML
     private void handleBackToMenu(ActionEvent event) {
-        deleteGameSessionFromDB(); // 🔷 Cancella sessione se partita iniziata
-
+        if (isGameStarted && !sessioneCompletata) {
+            deleteGameSessionFromDB();
+        }
+        
+        isGameStarted = false;  // Resetta lo stato
+        sessioneCompletata = false;  // Resetta lo stato
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();

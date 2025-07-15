@@ -28,11 +28,20 @@ public class HomeMenuViewController {
 
     public void goToNewGame(ActionEvent actionEvent) {
         try {
+            // Reset dell'istanza precedente di GameSessionController se esiste
+            if (GameSessionController.getInstance() != null) {
+                GameSessionController.getInstance().deleteGameSessionFromDB();
+            }
+        
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/GameSessionView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) newGameButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("NEW GAME");
+        
+            // Rimuovi eventuali handler di chiusura precedenti
+            stage.setOnCloseRequest(null);
+        
         } catch (Exception ex) {
             ex.printStackTrace();
         }
