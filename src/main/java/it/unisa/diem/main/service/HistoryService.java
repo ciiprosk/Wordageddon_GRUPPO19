@@ -1,7 +1,6 @@
 package it.unisa.diem.main.service;
 
-import it.unisa.diem.dao.interfacce.StoricoSessioneDAO;
-import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
+import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.sessione.VoceStorico;
@@ -15,18 +14,15 @@ import java.util.Map;
 
 public class HistoryService extends Service<Map<Difficolta, List<VoceStorico>>> {
 
-    private final StoricoSessioneDAOPostgres dao;
+    private final SessioneDAOPostgres dao;
     private String username;
 
     public HistoryService() {
-        this.dao= new StoricoSessioneDAOPostgres();
-        /*
-        this.dao = new StoricoSessioneDAOPostgres(
+        this.dao = new SessioneDAOPostgres(
                 PropertiesLoader.getProperty("database.url"),
                 PropertiesLoader.getProperty("database.user"),
                 PropertiesLoader.getProperty("database.password")
         );
-        */
     }
 
     public void setParameters(String username) {

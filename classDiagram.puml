@@ -1,0 +1,521 @@
+@startuml
+class it.unisa.diem.model.gestione.sessione.DomandaFactory {
+~ List<Domanda> listaDomande
+~ List<Analisi> listaAnalisi
++ List<Domanda> generaDomande(Difficolta)
+- Domanda generaDomandaFrequenza()
+- Domanda generaDomandaConfronto()
+- Domanda generaDomandaAssociazione()
+- Domanda generaDomandaAssenza()
+}
+
+class it.unisa.diem.utility.SessionManager {
+- {static} SessionManager instance
+- Utente utenteLoggato
++ {static} SessionManager getInstance()
++ void login(Utente)
++ Utente getUtenteLoggato()
++ void logout()
++ boolean isLoggedIn()
+}
+
+class it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres {
+- String url
+- String user
+- String pass
+- SessioneDAOPostgres sessioneDAO
+- UtenteDAOPostgres utenteDAO
++ SessioneDAOPostgres getSessioneDAO()
++ List<StoricoSessione> selectByUser(String)
++ Optional<StoricoSessione> selectById(long)
++ List<StoricoSessione> selectAll()
++ List<VoceStorico> selectByLastSessions(String,Difficolta)
++ List<VoceClassifica> selectByTopRanking(Difficolta)
+- VoceClassifica getLeaderboard(ResultSet)
+- StoricoSessione getSessionHistory(ResultSet)
+- Sessione getSession(long)
+- VoceStorico getLastSessions(ResultSet)
+}
+
+class it.unisa.diem.exceptions.DeleteException {
+}
+interface it.unisa.diem.dao.interfacce.SessioneDocumentoDAO {
+~ List<Documento> selectDocumentsBySession(long)
+}
+
+class it.unisa.diem.model.gestione.analisi.Documento {
+- String titolo
+- Lingua lingua
+- Difficolta difficolta
+- String path
+- List<String> testo
++ String getTitolo()
++ Lingua getLingua()
++ String getPath()
++ void setPath(String)
++ Difficolta getDifficolta()
++ List<String> getTesto()
++ void convertiTxtToBin(File)
++ {static} Documento leggiDocumento(String)
+- {static} void getAttributes(String,Documento)
++ void eliminaDocumento()
++ String toString()
+}
+
+class it.unisa.diem.main.service.LoginService {
+- String username
+- String password
+- UtenteDAOPostgres utentePostgres
+# Task<Utente> createTask()
+}
+
+class it.unisa.diem.main.service.LoadTitlesService {
+- DocumentoDAOPostgres dao
+# Task<List<String>> createTask()
+}
+
+class it.unisa.diem.main.service.InsertQuestionsService {
+- DomandaDAOPostgres domandaDAO
+- List<Domanda> domande
+# Task<Boolean> createTask()
+}
+
+enum it.unisa.diem.utility.TipoDomanda {
++  FREQUENZA
++  CONFRONTO
++  ASSOCIAZIONI
++  ASSENZA
+}
+
+class it.unisa.diem.test.DatabaseTest {
++ {static} void main(String[])
+}
+
+class it.unisa.diem.model.gestione.sessione.Sessione {
+- long id
+- Utente utente
+- boolean completato
+- LocalDateTime inizio
+- int punteggio
++ Utente getUtente()
++ LocalDateTime getInizio()
++ long getId()
++ int getPunteggio()
++ void setId(long)
++ void setPunteggio(int)
++ boolean isCompletato()
++ void setCompletato(boolean)
++ boolean equals(Object)
++ int hashCode()
+}
+
+interface it.unisa.diem.dao.interfacce.AnalisiDAO {
+~ Optional<Analisi> selectAnalisiByTitle(String)
+~ void insert(Analisi)
+~ void delete(Analisi)
+}
+
+class it.unisa.diem.model.gestione.classifica.VoceClassifica {
+- String username
+- double mediaPunteggio
+- int sommaPunteggio
++ String getUsername()
++ int getSommaPunteggio()
++ double getMediaPunteggio()
+}
+
+class it.unisa.diem.model.gestione.sessione.SessioneDocumento {
+- long idSessione
+- String nomeDocumento
++ long getIdSessione()
++ String getNomeDocumento()
++ boolean equals(Object)
++ int hashCode()
+}
+
+class it.unisa.diem.test.Test {
++ {static} void main(String[])
+}
+
+interface it.unisa.diem.dao.interfacce.StoricoSessioneDAO {
+~ List<StoricoSessione> selectByUser(String)
+}
+
+interface it.unisa.diem.dao.interfacce.UtenteDAO {
+~ boolean emailAlreadyExists(String)
+~ boolean usernameAlreadyExists(String)
+~ Optional<Utente> selectByUsername(String)
+~ void update(String,Utente)
+}
+
+class it.unisa.diem.model.gestione.analisi.stopword.StopwordITA {
+# String[] getArticoli()
+# String[] getPreposizioni()
+# String[] getPronomi()
+# String[] getVerbiAvere()
+# String[] getVerbiEssere()
+# String[] getConnettiviCongiunzioni()
+}
+
+class it.unisa.diem.utility.CryptoAlphabet {
++ {static} String alphabet
+- {static} String alfabeto_cifrato
++ {static} String cripta(String)
++ {static} String decripta(String)
+}
+
+abstract class it.unisa.diem.model.gestione.analisi.stopword.StopwordManager {
+- Documento documento
+# Set<String> parole
++ Documento getDocumento()
++ void aggiungi(String)
++ List<String> getParole()
++ void rimuovi(String)
++ void modifica(String,String)
++ void caricaStopword(boolean,boolean,boolean,boolean,boolean,boolean)
+- void aggiungiArray(String[])
+# {abstract}String[] getArticoli()
+# {abstract}String[] getPreposizioni()
+# {abstract}String[] getPronomi()
+# {abstract}String[] getVerbiAvere()
+# {abstract}String[] getVerbiEssere()
+# {abstract}String[] getConnettiviCongiunzioni()
++ String[] getPunteggiatura()
++ void clear()
++ String toString()
+}
+
+class it.unisa.diem.model.gestione.analisi.stopword.StopwordENG {
+# String[] getArticoli()
+# String[] getPreposizioni()
+# String[] getPronomi()
+# String[] getVerbiAvere()
+# String[] getVerbiEssere()
+# String[] getConnettiviCongiunzioni()
+}
+
+class it.unisa.diem.utility.AlertUtils {
++ {static} void mostraAlert(Alert.AlertType,String,String,String)
+}
+
+interface it.unisa.diem.dao.interfacce.NotEditableDAO {
+~ List<T> selectAll()
+~ void insert(T)
+~ void delete(T)
+}
+
+class it.unisa.diem.model.gestione.sessione.VoceStorico {
+- LocalDateTime dataFine
+- int punteggio
+- Lingua lingua
++ LocalDateTime getDataFine()
++ int getPunteggio()
++ Lingua getLingua()
+}
+
+class it.unisa.diem.dao.postgres.DocumentoDAOPostgres {
+- String url
+- String user
+- String pass
++ Optional<Documento> selectByTitle(String)
++ List<Documento> selectAll()
++ List<String> selectAllTitles()
++ List<String> selectTitlesByLangAndDif(Lingua,Difficolta)
++ void insert(Documento)
++ void delete(Documento)
+- Documento getDocument(ResultSet)
+- void setDocumentForInsert(PreparedStatement,Documento)
+- void setDocumentForDelete(PreparedStatement,Documento)
+}
+
+class it.unisa.diem.main.service.SignUpService {
+- String email
+- String username
+- String password
+- UtenteDAOPostgres utentePostgres
+- boolean emailInUse
+- boolean usernameInUse
++ boolean isEmailInUse()
++ boolean isUsernameInUse()
+# Task<Boolean> createTask()
+}
+
+class it.unisa.diem.main.service.AnalisiService {
+- Documento documento
+- StopwordManager stopwordManager
+- File inputFile
+# Task<Void> createTask()
+}
+
+class it.unisa.diem.main.service.DeleteDocumentService {
+- DocumentoDAOPostgres dao
+- String selectedTitle
++ void setSelectedTitle(String)
+# Task<Void> createTask()
+}
+
+class it.unisa.diem.test.DocumentoAnalisiTest {
++ {static} void main(String[])
+}
+
+enum it.unisa.diem.model.gestione.utenti.Ruolo {
++  USER
++  ADMIN
+}
+
+class it.unisa.diem.model.gestione.utenti.SicurezzaPassword {
+- {static} int ITERATION_COUNT
+- {static} int KEY_LENGTH
++ {static} String hashPassword(String,byte[])
++ {static} byte[] generaSalt()
++ {static} boolean verificaPassword(String,String,byte[])
+}
+
+class it.unisa.diem.utility.PropertiesLoader {
+- {static} Properties prop
++ {static} void init()
++ {static} String getProperty(String)
+}
+
+enum it.unisa.diem.model.gestione.analisi.Lingua {
++  ITA
++  ENG
+}
+
+interface it.unisa.diem.dao.interfacce.DomandaDAO {
+~ Optional<Domanda> selectById(long)
+}
+
+class it.unisa.diem.model.gestione.sessione.GameSession {
+- Utente utente
+- Lingua lingua
+- Difficolta difficolta
+- long sessioneId
+- List<Analisi> analyses
+- List<Domanda> domande
+- int currentQuestionIndex
+- int score
++ Utente getUtente()
++ Lingua getLingua()
++ Difficolta getDifficolta()
++ List<Analisi> getAnalyses()
++ void setAnalyses(List<Analisi>)
++ List<Domanda> getDomande()
++ void setDomande(List<Domanda>)
++ int getCurrentQuestionIndex()
++ void setCurrentQuestionIndex(int)
++ int getScore()
++ void setScore(int)
++ Domanda getCurrentQuestion()
++ boolean hasNextQuestion()
++ void incrementQuestionIndex()
++ void incrementScore()
++ long getSessioneId()
++ void setSessioneId(long)
+}
+
+class it.unisa.diem.utility.SceneLoader {
++ {static} void load(String,Control)
+}
+
+class it.unisa.diem.model.gestione.sessione.Domanda {
+- long id
+- Sessione sessione
+- int numeroDomanda
+- String testoDomanda
+- TipoDomanda tipo
+- List<String> opzioni
+- String rispostaCorretta
+- String rispostaUtente
+- int tempoLimiteSecondi
++ String getTestoDomanda()
++ TipoDomanda getTipo()
++ List<String> getOpzioni()
++ String getRispostaCorretta()
++ int getTempoLimiteSecondi()
++ boolean verificaRisposta(String)
++ long getId()
++ Sessione getSessione()
++ int getNumeroDomanda()
++ void setId(long)
++ boolean equals(Object)
++ void setSessione(Sessione)
++ void setNumeroDomanda(int)
++ String getRispostaUtente()
++ void setRispostaUtente(String)
++ int hashCode()
+}
+
+class it.unisa.diem.exceptions.DBException {
+}
+class it.unisa.diem.main.service.LoadLeaderboardService {
+- StoricoSessioneDAOPostgres dao
+- String username
+# Task<Map<Difficolta,List<VoceClassifica>>> createTask()
++ Map<Difficolta,List<VoceClassifica>> getValueMap()
+}
+
+class it.unisa.diem.dao.postgres.AnalisiDAOPostgres {
+- String url
+- String user
+- String password
++ Optional<Analisi> selectAnalisiByTitle(String)
++ List<Analisi> selectAll()
++ void insert(Analisi)
++ void delete(Analisi)
+- Analisi getAnalisi(ResultSet)
+}
+
+class it.unisa.diem.model.gestione.analisi.Analisi {
+- Documento documento
+- Map<String,Integer> frequenzeTesto
+- Lingua linguaAnalisi
+- Difficolta difficoltaAnalisi
+- String titolo
+- StopwordManager stopwordAnalisi
+- String pathAnalisi
++ Documento getDocumento()
++ String getTitolo()
++ String getPathAnalisi()
++ Map<String,Integer> getFrequenzeTesto()
+- List<String> getWordsDocument()
++ Map<String,Integer> analizza()
++ void caricaAnalisi()
++ {static} Analisi leggiAnalisi(Documento)
+- {static} String recuperaAnalisiPath(Documento)
++ void eliminaAnalisi()
++ String toString()
+}
+
+class it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres {
+- String url
+- String user
+- String pass
++ List<Documento> selectDocumentsBySession(long)
++ List<SessioneDocumento> selectAll()
++ void insert(SessioneDocumento)
++ void delete(SessioneDocumento)
+- Documento getDocument(ResultSet)
+- SessioneDocumento getSessionDocument(ResultSet)
++ void deleteBySessioneId(long)
+}
+
+class it.unisa.diem.model.gestione.sessione.StoricoSessione {
+- LocalDateTime dataFine
+- Lingua lingua
+- Difficolta difficolta
++ LocalDateTime getDataFine()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
++ Lingua getLingua()
++ void setLingua(Lingua)
++ Difficolta getDifficolta()
++ void setDifficolta(Difficolta)
+}
+
+class it.unisa.diem.main.Main {
++ void start(Stage)
++ {static} void main(String[])
+}
+
+class it.unisa.diem.model.gestione.utenti.Utente {
+- String username
+- String email
+- String hashedPassword
+- Ruolo ruolo
+- byte[] salt
++ String getUsername()
++ void setUsername(String)
++ void setEmail(String)
++ void setHashedPassword(String)
++ void setRuolo(Ruolo)
++ String getEmail()
++ String getHashedPassword()
++ Ruolo getRuolo()
++ byte[] getSalt()
++ boolean equals(Object)
++ String toString()
+}
+
+enum it.unisa.diem.model.gestione.analisi.Difficolta {
++  FACILE
++  INTERMEDIO
++  DIFFICILE
+}
+
+class it.unisa.diem.test.StopwordTest {
++ {static} void main(String[])
+}
+
+class it.unisa.diem.main.service.InsertSessionService {
+- SessioneDAOPostgres sessioneDAO
+- Sessione sessione
+# Task<Sessione> createTask()
+}
+
+interface it.unisa.diem.dao.interfacce.DocumentoDAO {
+~ Optional<Documento> selectByTitle(String)
+~ List<String> selectAllTitles()
+~ List<String> selectTitlesByLangAndDif(Lingua,Difficolta)
+}
+
+class it.unisa.diem.dao.postgres.UtenteDAOPostgres {
+- String url
+- String user
+- String pass
++ boolean emailAlreadyExists(String)
++ boolean usernameAlreadyExists(String)
++ Optional<Utente> selectByUsername(String)
++ List<Utente> selectAll()
++ void insert(Utente)
++ void update(Utente)
++ void update(String,Utente)
++ void delete(Utente)
+- Utente getUser(ResultSet)
+- void setUserForInsert(PreparedStatement,Utente)
+- void setUserForUpdate(PreparedStatement,Utente)
+- void setUserForUpdate(PreparedStatement,String,Utente)
+- void setUserForDelete(PreparedStatement,Utente)
+}
+
+class it.unisa.diem.main.service.GenerateQuestionsService {
+- List<Analisi> analyses
+- Difficolta difficolta
++ void setAnalyses(List<Analisi>)
++ void setDifficolta(Difficolta)
+# Task<List<Domanda>> createTask()
+}
+
+it.unisa.diem.dao.interfacce.StoricoSessioneDAO <|.. it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres
+it.unisa.diem.exceptions.RuntimeException <|-- it.unisa.diem.exceptions.DeleteException
+it.unisa.diem.dao.interfacce.NotEditableDAO <|-- it.unisa.diem.dao.interfacce.SessioneDocumentoDAO
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.LoginService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.LoadTitlesService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.InsertQuestionsService
+it.unisa.diem.dao.interfacce.NotEditableDAO <|-- it.unisa.diem.dao.interfacce.AnalisiDAO
+it.unisa.diem.dao.interfacce.ReadOnlyDAO <|-- it.unisa.diem.dao.interfacce.StoricoSessioneDAO
+it.unisa.diem.dao.interfacce.DAO <|-- it.unisa.diem.dao.interfacce.UtenteDAO
+it.unisa.diem.model.gestione.analisi.stopword.StopwordManager <|-- it.unisa.diem.model.gestione.analisi.stopword.StopwordITA
+it.unisa.diem.model.gestione.analisi.stopword.StopwordManager <|-- it.unisa.diem.model.gestione.analisi.stopword.StopwordENG
+it.unisa.diem.dao.interfacce.DocumentoDAO <|.. it.unisa.diem.dao.postgres.DocumentoDAOPostgres
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.SignUpService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.AnalisiService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.DeleteDocumentService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.LoadAnalysesService
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.HistoryService
+it.unisa.diem.dao.interfacce.DomandaDAO <|.. it.unisa.diem.dao.postgres.DomandaDAOPostgres
+it.unisa.diem.dao.interfacce.DAO <|-- it.unisa.diem.dao.interfacce.SessioneDAO
+it.unisa.diem.dao.interfacce.SessioneDAO <|.. it.unisa.diem.dao.postgres.SessioneDAOPostgres
+javafx.application.Application <|-- it.unisa.diem.main.Main
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.InsertSessionService
+it.unisa.diem.dao.interfacce.NotEditableDAO <|-- it.unisa.diem.dao.interfacce.DocumentoDAO
+it.unisa.diem.dao.interfacce.UtenteDAO <|.. it.unisa.diem.dao.postgres.UtenteDAOPostgres
+it.unisa.diem.dao.interfacce.DAO <|-- it.unisa.diem.dao.interfacce.DomandaDAO
+it.unisa.diem.exceptions.Exception <|-- it.unisa.diem.exceptions.DBException
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.LoadLeaderboardService
+it.unisa.diem.dao.interfacce.AnalisiDAO <|.. it.unisa.diem.dao.postgres.AnalisiDAOPostgres
+it.unisa.diem.dao.interfacce.SessioneDocumentoDAO <|.. it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres
+it.unisa.diem.model.gestione.sessione.Sessione <|-- it.unisa.diem.model.gestione.sessione.StoricoSessione
+javafx.concurrent.Service <|-- it.unisa.diem.main.service.GenerateQuestionsService
+@enduml

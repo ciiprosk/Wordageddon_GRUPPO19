@@ -13,8 +13,8 @@ public class Sessione {
 
     private long id;
     private final Utente utente;
-    private boolean completato;
     private final LocalDateTime inizio;
+    private LocalDateTime fine;
     private int punteggio;
 
 
@@ -23,17 +23,17 @@ public class Sessione {
         this.utente = utente;
         this.inizio = inizio;
         this.punteggio = 0;
-        this.completato = false;
+        this.fine = LocalDateTime.now();
 
     }
 
-    public Sessione (long id, Utente utente, LocalDateTime inizio, int punteggio, boolean completato) {
+    public Sessione (long id, Utente utente, LocalDateTime inizio, int punteggio, LocalDateTime fine) {
 
         this.id = id;
         this.utente = utente;
         this.inizio = inizio;
         this.punteggio = punteggio;
-        this.completato = completato;
+        this.fine = fine;
 
     }
 
@@ -41,7 +41,7 @@ public class Sessione {
         this.id = id;
         this.utente = null;
         this.inizio = null;
-        this.completato = false;
+        this.fine = null;
         this.punteggio = 0;
     }
 
@@ -63,6 +63,8 @@ public class Sessione {
         return punteggio;
     }
 
+    public LocalDateTime getFine() {return fine;}
+
     public void setId(long id) {
         this.id = id;
     }
@@ -71,19 +73,7 @@ public class Sessione {
         this.punteggio = punteggio;
     }
 
-    public boolean isCompletato() {
-        return completato;
-    }
-
-
-    public void setCompletato(boolean completato) {
-
-        if (this.completato)    //se la sessione era già completata, non cambia nulla
-            return;
-
-        this.completato = completato;
-
-    }
+    public void setFine(LocalDateTime fine) {this.fine = fine;}
 
     @Override
     public boolean equals(Object o) {

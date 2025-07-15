@@ -1,6 +1,6 @@
 package it.unisa.diem.main.service;
 
-import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
+import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.classifica.VoceClassifica;
@@ -14,19 +14,15 @@ import java.util.Map;
 
 public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceClassifica>>> {
 
-    private final StoricoSessioneDAOPostgres dao;
+    private final SessioneDAOPostgres dao;
     private String username;
 
     public LoadLeaderboardService() {
-        dao = new StoricoSessioneDAOPostgres();
-        /*
-        dao = new StoricoSessioneDAOPostgres(
+        dao = new SessioneDAOPostgres(
                 PropertiesLoader.getProperty("database.url"),
                 PropertiesLoader.getProperty("database.user"),
                 PropertiesLoader.getProperty("database.password")
         );
-
-         */
     }
 
     @Override

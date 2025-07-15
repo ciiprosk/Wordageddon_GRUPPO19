@@ -7,6 +7,8 @@ import it.unisa.diem.model.gestione.sessione.Sessione;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
+import java.time.LocalDateTime;
+
 public class UpdateSessionService extends Service<Void> {
     /*
 
@@ -36,7 +38,7 @@ public class UpdateSessionService extends Service<Void> {
             protected Void call() throws Exception {
                 try {
                     Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
-                    sessione.setCompletato(true);
+                    sessione.setFine(LocalDateTime.now());
                     sessione.setPunteggio(gameSession.getScore());
                     sessioneDAO.update(sessione);
                 }catch (DBException e){

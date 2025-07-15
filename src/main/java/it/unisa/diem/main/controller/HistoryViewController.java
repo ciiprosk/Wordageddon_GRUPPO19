@@ -1,6 +1,5 @@
 package it.unisa.diem.main.controller;
 
-import it.unisa.diem.dao.postgres.StoricoSessioneDAOPostgres;
 import it.unisa.diem.main.Main;
 import it.unisa.diem.main.service.HistoryService;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
