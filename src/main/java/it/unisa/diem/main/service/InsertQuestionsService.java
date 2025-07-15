@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.DomandaDAO;
 import it.unisa.diem.dao.postgres.DomandaDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.sessione.Domanda;
@@ -10,10 +11,10 @@ import java.util.List;
 
 public class InsertQuestionsService extends Service<Boolean> {
 
-    private final DomandaDAOPostgres domandaDAO;
+    private final DomandaDAO domandaDAO;
     private final List<Domanda> domande;
 
-    public InsertQuestionsService(DomandaDAOPostgres domandaDAO, List<Domanda> domande) {
+    public InsertQuestionsService(DomandaDAO domandaDAO, List<Domanda> domande) {
         this.domandaDAO = domandaDAO;
         this.domande = domande;
     }

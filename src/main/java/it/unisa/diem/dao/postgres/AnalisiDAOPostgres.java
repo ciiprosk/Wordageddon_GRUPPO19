@@ -7,6 +7,7 @@ import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,12 +26,13 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         this.password = pass;
     }
 
+    public AnalisiDAOPostgres() {}
     @Override
     public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException{
         Optional<Analisi> analisi = Optional.empty();
         //query: la query fa una select per nome analisi
         String query= "SELECT * FROM analisi where nome = ?";
-        try(Connection conn=DriverManager.getConnection(url, user, password);
+        try(Connection conn=ConnectionManager.getConnection();
              PreparedStatement ps= conn.prepareStatement(query);){
              ps.setString(1, titolo);
              ResultSet rs= ps.executeQuery();
@@ -69,7 +71,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     public List<Analisi> selectAll() throws DBException{
         List<Analisi> analisi=  new ArrayList<>();
         String query = "SELECT * FROM analisi";
-        try(Connection con = DriverManager.getConnection(url, user, password);
+        try(Connection con = ConnectionManager.getConnection();
             Statement st=con.createStatement();){
             ResultSet rs=st.executeQuery(query);
             while(rs.next()){
@@ -86,7 +88,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     public void insert(Analisi analisi) throws DBException{
         //1. preparo query
         String query = "INSERT INTO analisi (nome, documento, percorso) VALUES (?, ?, ?)";
-        try(Connection con = DriverManager.getConnection(url,user, password);
+        try(Connection con = ConnectionManager.getConnection();
             PreparedStatement ps = con.prepareStatement(query);){
             ps.setString(1, analisi.getTitolo());
             ps.setString(2, analisi.getDocumento().getTitolo());
@@ -104,7 +106,7 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
     public void delete(Analisi analisi) throws DBException {
         //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
         String query = "DELETE FROM analisi WHERE nome = ?";
-        try(Connection con= DriverManager.getConnection(url, user, password);
+        try(Connection con= ConnectionManager.getConnection();
         PreparedStatement ps = con.prepareStatement(query);){
             ps.setString(1, analisi.getTitolo());
             int lines= ps.executeUpdate();

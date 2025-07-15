@@ -4,6 +4,8 @@ import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.utenti.Ruolo;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,22 +13,23 @@ import java.util.Optional;
 
 public class UtenteDAOPostgres implements UtenteDAO {
 
-    private final String url;
-    private final String user;
-    private final String pass;
+    private String url;
+    private String user;
+    private String pass;
 
     public UtenteDAOPostgres(String url, String user, String pass) {
         this.url = url;
         this.user = user;
         this.pass = pass;
     }
+    public UtenteDAOPostgres() {}
 
     @Override
     public boolean emailAlreadyExists(String email) throws SQLException, DBException {
 
         String query = "SELECT COUNT(*) FROM utente WHERE email = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -59,7 +62,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
         String query = "SELECT COUNT(*) FROM utente WHERE username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ) {
 
@@ -93,7 +96,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
         String query = "SELECT * FROM utente WHERE username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -123,7 +126,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
         String query = "SELECT * FROM utente";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -146,7 +149,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
         String query = "INSERT INTO utente (username,email,password,salt,ruolo) " +
                 "VALUES (?,?,?,?,?)";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -169,7 +172,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
                 "SET email=?, password=?, ruolo=? " +
                 "WHERE username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
                  PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -192,7 +195,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
                 "SET username=?, email=?, password=?, ruolo=? " +
                 "WHERE username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement
                      (query)){
@@ -214,7 +217,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
         String query = "DELETE FROM utente WHERE username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
             PreparedStatement cmd = connection.prepareStatement (query) ){
 

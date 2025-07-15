@@ -1,11 +1,13 @@
 package it.unisa.diem.dao.postgres;
 import it.unisa.diem.dao.interfacce.DAO;
 import it.unisa.diem.dao.interfacce.DomandaDAO;
+import it.unisa.diem.dao.interfacce.SessioneDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.TipoDomanda;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.time.LocalTime;
@@ -16,10 +18,10 @@ import java.util.Optional;
 
 public class DomandaDAOPostgres implements DomandaDAO {
 
-    private final String url;
-    private final String user;
-    private final String pass;
-    private final SessioneDAOPostgres sessioneDAO;
+    private  String url;
+    private  String user;
+    private  String pass;
+    private  SessioneDAO sessioneDAO;
 
     public DomandaDAOPostgres(String url, String user, String pass) {
 
@@ -29,6 +31,9 @@ public class DomandaDAOPostgres implements DomandaDAO {
         this.sessioneDAO = new SessioneDAOPostgres(url, user, pass);
 
     }
+    public DomandaDAOPostgres(SessioneDAO sessioneDAO) {
+        this.sessioneDAO = sessioneDAO;
+    }
 
     @Override
     public Optional<Domanda> selectById(long id) throws DBException {
@@ -37,9 +42,9 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
         String query = "SELECT * FROM Domanda WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
-            PreparedStatement cmd = connection.prepareStatement (query) ) {
+             PreparedStatement cmd = connection.prepareStatement (query) ) {
 
             cmd.setLong(1, id);
 
@@ -68,7 +73,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
         String query = "SELECT * FROM Domanda";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -92,7 +97,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
         String query = "INSERT INTO DOMANDA (id_sessione, numeroDomanda, rispostaCorretta, testo, time_stop, \"tipoDomanda\") VALUES (?,?,?,?,?,?)";
 
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query, Statement.RETURN_GENERATED_KEYS) ){
 
@@ -122,7 +127,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
                 "SET time_stop = ? " +
                 "WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -146,7 +151,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
 
         String query = "DELETE FROM DOMANDA WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
@@ -238,7 +243,7 @@ public class DomandaDAOPostgres implements DomandaDAO {
     public void deleteBySessioneId(long sessioneId) throws DBException {
         String query = "DELETE FROM DOMANDA WHERE id_sessione = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
             cmd.setLong(1, sessioneId);

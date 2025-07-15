@@ -1,5 +1,6 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.service.LoginService;
@@ -109,8 +110,8 @@ public class LoginSignUpViewController {
         incorrectLabel.setVisible(false);
         loginButton.setDisable(true);
         showLoadingOverlayWithMessage("Accesso in corso..."); // 🔵 Mostra caricamento con messaggio
-
-        UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(url, user, pass);
+        UtenteDAO utentePostgres = new UtenteDAOPostgres();
+       // UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(url, user, pass);
         LoginService service = new LoginService(username, password, utentePostgres);
 
         service.setOnSucceeded(event -> {
@@ -156,8 +157,8 @@ public class LoginSignUpViewController {
         String email = signUpEmailField.getText().trim();
         String username = signUpUsernameField.getText().trim();
         String password = signUpPasswordField.getText();
-
-        UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(url, user, pass);
+        UtenteDAO utentePostgres = new UtenteDAOPostgres();
+        //UtenteDAOPostgres utentePostgres = new UtenteDAOPostgres(url, user, pass);
         SignUpService service = new SignUpService(email, username, password, utentePostgres);
 
         signUpButton.setDisable(true);

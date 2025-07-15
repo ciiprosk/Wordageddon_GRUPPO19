@@ -1,5 +1,7 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.AnalisiDAO;
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
 import it.unisa.diem.dao.postgres.AnalisiDAOPostgres;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
@@ -48,8 +50,10 @@ public class AnalisiService extends Service<Void> {
                 String user = PropertiesLoader.getProperty("database.user");
                 String pass = PropertiesLoader.getProperty("database.password");
 
-                DocumentoDAOPostgres daoDoc = new DocumentoDAOPostgres(url, user, pass);
-                AnalisiDAOPostgres daoAn = new AnalisiDAOPostgres(url, user, pass);
+                DocumentoDAO daoDoc = new DocumentoDAOPostgres();
+                AnalisiDAO daoAn = new AnalisiDAOPostgres();
+                //DocumentoDAO daoDoc = new DocumentoDAOPostgres(url, user, pass);
+                //AnalisiDAO daoAn = new AnalisiDAOPostgres(url, user, pass);
 
                 daoDoc.insert(documento);
                 daoAn.insert(analisi);

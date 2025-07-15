@@ -1,5 +1,6 @@
 package it.unisa.diem.main.controller;
 
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.main.service.AnalisiService;
 import it.unisa.diem.main.service.DeleteDocumentService;
@@ -65,11 +66,14 @@ public class AdminScreenViewController {
     @FXML private ListView<String> ListView;
     private ObservableList<String> titoliList;
 
+    /*
     private final DocumentoDAOPostgres dao = new DocumentoDAOPostgres(
             PropertiesLoader.getProperty("database.url"),
             PropertiesLoader.getProperty("database.user"),
             PropertiesLoader.getProperty("database.password")
     );
+    */
+    private final DocumentoDAO dao = new DocumentoDAOPostgres();
 
     // === INITIALIZE ===
     @FXML

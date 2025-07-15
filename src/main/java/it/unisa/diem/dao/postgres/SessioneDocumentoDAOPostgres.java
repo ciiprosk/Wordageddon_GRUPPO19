@@ -8,6 +8,7 @@ import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.SessioneDocumento;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,15 +17,17 @@ import java.util.Optional;
 
 public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
-    private final String url;
-    private final String user;
-    private final String pass;
+    private  String url;
+    private  String user;
+    private  String pass;
 
     public SessioneDocumentoDAOPostgres(String url, String user, String pass) {
         this.url = url;
         this.user = user;
         this.pass = pass;
     }
+
+    public SessioneDocumentoDAOPostgres() {}
 
     @Override
     public List<Documento> selectDocumentsBySession(long idSessione) throws DBException {
@@ -35,7 +38,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
                 "FROM sessionedocumento s JOIN documento d ON s.documento = d.nome " +
                 "WHERE sessione = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -64,7 +67,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
         String query = "SELECT * FROM sessionedocumento";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -91,7 +94,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
         String query = "INSERT INTO SESSIONEDOCUMENTO VALUES(?,?)";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -114,7 +117,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
         String query = "DELETE FROM SESSIONEDOCUMENTO WHERE sessione=? AND documento=?";
 
-        try(Connection connection = DriverManager.getConnection(url, user, pass);
+        try(Connection connection = ConnectionManager.getConnection();
 
             PreparedStatement cmd = connection.prepareStatement(query)){
 
@@ -165,7 +168,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
     public void deleteBySessioneId(long sessioneId) throws DBException {
         String query = "DELETE FROM SESSIONEDOCUMENTO WHERE sessione = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
             cmd.setLong(1, sessioneId);

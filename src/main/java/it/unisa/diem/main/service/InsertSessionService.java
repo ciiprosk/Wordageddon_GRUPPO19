@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.SessioneDAO;
 import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.sessione.Sessione;
@@ -8,10 +9,10 @@ import javafx.concurrent.Task;
 
 public class InsertSessionService extends Service<Sessione> {
 
-    private SessioneDAOPostgres sessioneDAO;
+    private SessioneDAO sessioneDAO;
     private Sessione sessione;
 
-    public InsertSessionService(SessioneDAOPostgres sessioneDAO, Sessione sessione) {
+    public InsertSessionService(SessioneDAO sessioneDAO, Sessione sessione) {
         this.sessioneDAO = sessioneDAO;
         this.sessione = sessione;
     }

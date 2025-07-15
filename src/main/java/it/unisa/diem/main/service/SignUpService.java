@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.utenti.Utente;
@@ -13,12 +14,12 @@ public class SignUpService extends Service<Boolean> {
     private final String email;
     private final String username;
     private final String password;
-    private final UtenteDAOPostgres utentePostgres;
+    private final UtenteDAO utentePostgres;
 
     private boolean emailInUse = false;
     private boolean usernameInUse = false;
 
-    public SignUpService(String email, String username, String password, UtenteDAOPostgres utentePostgres) {
+    public SignUpService(String email, String username, String password, UtenteDAO utentePostgres) {
         this.email = email;
         this.username = username;
         this.password = password;

@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Analisi;
@@ -11,10 +12,10 @@ import java.util.Optional;
 
 public class DeleteDocumentService extends Service<Void> {
 
-    private final DocumentoDAOPostgres dao;
+    private final DocumentoDAO dao;
     private String selectedTitle;
 
-    public DeleteDocumentService(DocumentoDAOPostgres dao) {
+    public DeleteDocumentService(DocumentoDAO dao) {
         this.dao = dao;
     }
 

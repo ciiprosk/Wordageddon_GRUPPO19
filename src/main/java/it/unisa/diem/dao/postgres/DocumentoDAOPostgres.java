@@ -5,6 +5,7 @@ import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,15 +13,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class DocumentoDAOPostgres implements DocumentoDAO {
-    private final String url;
-    private final String user;
-    private final String pass;
+    private  String url;
+    private  String user;
+    private  String pass;
 
     public DocumentoDAOPostgres(String url, String user, String pass) {
         this.url = url;
         this.user = user;
         this.pass = pass;
     }
+
+    public DocumentoDAOPostgres() {}
 
     @Override
     public Optional<Documento> selectByTitle(String documento) throws DBException {
@@ -29,7 +32,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "SELECT * FROM documento WHERE nome = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -59,7 +62,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "SELECT * FROM documento";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -84,7 +87,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "SELECT nome FROM documento";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -108,7 +111,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "SELECT nome FROM documento WHERE lingua = ? AND difficolta = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -134,7 +137,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "INSERT INTO DOCUMENTO (nome, percorso, lingua, difficolta) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -156,7 +159,7 @@ public class DocumentoDAOPostgres implements DocumentoDAO {
 
         String query = "DELETE FROM DOCUMENTO WHERE nome = ?";
 
-        try(Connection connection = DriverManager.getConnection(url, user, pass);
+        try(Connection connection = ConnectionManager.getConnection();
 
             PreparedStatement cmd = connection.prepareStatement(query)){
 

@@ -2,9 +2,11 @@ package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.DAO;
 import it.unisa.diem.dao.interfacce.SessioneDAO;
+import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -15,10 +17,10 @@ import java.util.Optional;
 
 public class SessioneDAOPostgres implements SessioneDAO {
 
-    private final String url;
-    private final String user;
-    private final String pass;
-    private final UtenteDAOPostgres utenteDAO;
+    private  String url;
+    private  String user;
+    private  String pass;
+    private  UtenteDAO utenteDAO;
 
     public SessioneDAOPostgres(String url, String user, String pass) {
         this.url = url;
@@ -27,7 +29,11 @@ public class SessioneDAOPostgres implements SessioneDAO {
         this.utenteDAO = new UtenteDAOPostgres(url, user, pass);
     }
 
-    public UtenteDAOPostgres getUtenteDAO() {
+    public SessioneDAOPostgres(UtenteDAO utenteDAO) {
+        this.utenteDAO = utenteDAO;
+    }
+
+    public UtenteDAO getUtenteDAO() {
         return utenteDAO;
     }
 
@@ -38,7 +44,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
         String query = "SELECT * FROM sessione WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -68,7 +74,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
         String query = "SELECT * FROM sessione WHERE utente = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -98,7 +104,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
         String query = "SELECT * FROM sessione ORDER BY dataInizio DESC";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -123,7 +129,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 "(utente, completato, dataInizio, punteggioottenuto) " +
                 "VALUES (?,?,?,?)";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query, Statement.RETURN_GENERATED_KEYS) ){
 
@@ -153,7 +159,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
                 "SET completato = ?, punteggioottenuto = ? \n" +
                 "WHERE id = ?\n";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -174,7 +180,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
         String query = "DELETE FROM sessione WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -193,7 +199,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     public void delete(long sessioneId) throws DBException {
         String query = "DELETE FROM sessione WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
             cmd.setLong(1, sessioneId);

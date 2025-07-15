@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.DocumentoDAO;
 import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.utility.PropertiesLoader;
 import javafx.concurrent.Service;
@@ -9,14 +10,18 @@ import java.util.List;
 
 public class LoadTitlesService extends Service<List<String>> {
 
-    private final DocumentoDAOPostgres dao;
+    private final DocumentoDAO dao;
 
     public LoadTitlesService() {
+        this.dao = new DocumentoDAOPostgres();
+        /*
         this.dao = new DocumentoDAOPostgres(
                 PropertiesLoader.getProperty("database.url"),
                 PropertiesLoader.getProperty("database.user"),
                 PropertiesLoader.getProperty("database.password")
         );
+
+         */
     }
 
     @Override

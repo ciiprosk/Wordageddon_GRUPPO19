@@ -1,6 +1,8 @@
 package it.unisa.diem.dao.postgres;
 
+import it.unisa.diem.dao.interfacce.SessioneDAO;
 import it.unisa.diem.dao.interfacce.StoricoSessioneDAO;
+import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Lingua;
@@ -9,6 +11,7 @@ import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.StoricoSessione;
 import it.unisa.diem.model.gestione.sessione.VoceStorico;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -16,11 +19,11 @@ import java.util.*;
 
 public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
 
-    private final String url;
-    private final String user;
-    private final String pass;
-    private final SessioneDAOPostgres sessioneDAO;
-    private final UtenteDAOPostgres utenteDAO;
+    private String url;
+    private String user;
+    private String pass;
+    private SessioneDAO sessioneDAO;
+    private UtenteDAO utenteDAO;
 
     public StoricoSessioneDAOPostgres(String url, String user, String pass) {
         this.url = url;
@@ -30,7 +33,11 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
         utenteDAO = new UtenteDAOPostgres(url, user, pass);
     }
 
-    public SessioneDAOPostgres getSessioneDAO() {
+    public StoricoSessioneDAOPostgres() {
+        sessioneDAO = new SessioneDAOPostgres(url, user, pass);
+        utenteDAO = new UtenteDAOPostgres(url, user, pass);
+    }
+    public SessioneDAO getSessioneDAO() {
         return sessioneDAO;
     }
     
@@ -43,7 +50,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 "FROM STORICOSESSIONE storico JOIN SESSIONE s ON storico.id_sessione=s.id " +
                 "WHERE s.utente = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -70,7 +77,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 "JOIN SESSIONE s ON ss.id_sessione = s.id " +
                 "WHERE id_sessione = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd = connection.prepareStatement (query) ){
 
@@ -99,7 +106,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
         String query = "SELECT * FROM STORICOSESSIONE"
                 + " JOIN SESSIONE s ON STORICOSESSIONE.id_sessione = s.id";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 
@@ -126,7 +133,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                 "ORDER BY ss.dataFine DESC " +
                 "LIMIT 10";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement cmd = connection.prepareStatement(query)) {
 
             cmd.setObject(1, difficolta.name(), Types.OTHER);
@@ -164,7 +171,7 @@ public class StoricoSessioneDAOPostgres implements StoricoSessioneDAO {
                         "ORDER BY media_punteggio DESC "+
                         "LIMIT 10";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 

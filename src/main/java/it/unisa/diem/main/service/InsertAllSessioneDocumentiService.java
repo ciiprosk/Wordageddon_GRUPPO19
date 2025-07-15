@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.dao.interfacce.SessioneDocumentoDAO;
 import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.sessione.GameSession;
@@ -11,12 +12,12 @@ import java.util.List;
 
 public class InsertAllSessioneDocumentiService extends Service<Void> {
     private final List<Analisi> analisiList;
-    private final SessioneDocumentoDAOPostgres sessioneDocumentoDAO;
+    private final SessioneDocumentoDAO sessioneDocumentoDAO;
     private final long sessioneId;
     private final GameSession gameSession;
 
     public InsertAllSessioneDocumentiService(List<Analisi> analisiList,
-                                             SessioneDocumentoDAOPostgres sessioneDocumentoDAO,
+                                             SessioneDocumentoDAO sessioneDocumentoDAO,
                                              long sessioneId,
                                              GameSession gameSession) {
         this.analisiList = analisiList;
