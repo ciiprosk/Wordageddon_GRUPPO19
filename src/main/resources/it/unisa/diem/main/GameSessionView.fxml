@@ -96,17 +96,19 @@
         </AnchorPane>
 
         <!-- === Result Pane === -->
+        <!-- === Result Pane === -->
         <AnchorPane fx:id="resultPane" prefHeight="800" prefWidth="1200" visible="false">
             <children>
                 <HBox layoutX="10.0" layoutY="10.0" maxHeight="60.0" prefHeight="48.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
-                <VBox alignment="TOP_CENTER" spacing="30" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50">
+                <VBox alignment="CENTER" spacing="30" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="150" AnchorPane.topAnchor="50">
                     <children>
                         <Label fx:id="scoreLabel" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Your Score" />
 
-                        <ScrollPane fitToWidth="true" prefHeight="500" prefWidth="900">
+                        <!-- ScrollPane modificato per assomigliare alla TextArea -->
+                        <ScrollPane fitToWidth="true" prefHeight="400" prefWidth="900" style="-fx-background-color: #ffd700; -fx-border-color: #ffd700; -fx-border-radius: 5; -fx-background-radius: 5;">
                             <content>
-                                <VBox fx:id="reviewBox" spacing="15">
+                                <VBox fx:id="reviewBox" spacing="15" style="-fx-font-size: 18px;">
                                     <padding>
                                         <Insets bottom="20" left="20" right="20" top="20" />
                                     </padding>
@@ -126,7 +128,7 @@
                 <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                     <children>
                         <ProgressIndicator fx:id="loadingSpinner" prefHeight="80" prefWidth="80" progress="-1" />
-                        <Label fx:id="loadingMessageLabel" style="-fx-text-fill: white; -fx-font-size: 25px;" text="Caricamento in corso..." />
+                        <Label fx:id="loadingMessageLabel" style="-fx-text-fill: #ffd700; -fx-font-size: 25px;" text="Caricamento in corso..." />
                     </children>
                 </VBox>
             </children>
@@ -138,7 +140,7 @@
                 <VBox alignment="CENTER" spacing="30" AnchorPane.topAnchor="150" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
                     <children>
                         <Label fx:id="loadingInstructionLabel" style="-fx-font-size: 25px; -fx-font-weight: bold; -fx-text-alignment: center;" wrapText="true" text="Instructions here" />
-                        <Label fx:id="difficultyMessageLabel" style="-fx-font-size: 20px; -fx-text-fill: gray;" text="Difficulty message here" />
+                        <Label fx:id="difficultyMessageLabel" style="-fx-font-size: 20px; -fx-text-fill: #ffd700;" text="Difficulty message here" />
                     </children>
                 </VBox>
 
