@@ -1,6 +1,5 @@
 package it.unisa.diem.main.controller;
 
-import it.unisa.diem.dao.postgres.DomandaDAOPostgres;
 import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
@@ -12,7 +11,6 @@ import it.unisa.diem.model.gestione.analisi.Lingua;
 import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.sessione.GameSession;
 import it.unisa.diem.model.gestione.sessione.Sessione;
-import it.unisa.diem.model.gestione.sessione.SessioneDocumento;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.SessionManager;
@@ -110,8 +108,6 @@ public class GameSessionController {
 
     private SessioneDAOPostgres sessioneDAO;
     private SessioneDocumentoDAOPostgres sessioneDocumentoDAO;
-    private DomandaDAOPostgres domandaDAO;
-
     private Timeline questionTimer;
     private int questionTimeRemaining;
     private boolean sessioneCompletata = false;
@@ -166,7 +162,6 @@ public class GameSessionController {
 
         sessioneDAO = new SessioneDAOPostgres(url, user, pass);
         sessioneDocumentoDAO = new SessioneDocumentoDAOPostgres(url, user, pass);
-        domandaDAO = new DomandaDAOPostgres(url, user, pass);
 
         setupSelectionPane();
 
@@ -444,7 +439,6 @@ public class GameSessionController {
     public void deleteGameSessionFromDB() {
         if (gameSession != null && !sessioneCompletata) {
             try {
-                domandaDAO.deleteBySessioneId(gameSession.getSessioneId());
                 sessioneDocumentoDAO.deleteBySessioneId(gameSession.getSessioneId());
                 sessioneDAO.delete(gameSession.getSessioneId());
                 System.out.println("✅ Sessione eliminata con successo");
@@ -561,11 +555,12 @@ public class GameSessionController {
 
 
     private void showResultPane() {
-        hideLoadingOverlay(); // 🔷 Nascondi overlay prima di mostrare i risultati
+        hideLoadingOverlay();
 
         questionPane.setVisible(false);
         resultPane.setVisible(true);
         sessioneCompletata = true;
+
         scoreLabel.setText("Punteggio: " + gameSession.getScore() + "/" + gameSession.getDomande().size());
 
         reviewBox.getChildren().clear();
@@ -585,28 +580,9 @@ public class GameSessionController {
             }
         }
 
-
-
         UpdateSessionService uss = new UpdateSessionService(sessioneDAO, gameSession);
         uss.setOnSucceeded(event -> {
-            System.out.println("Sessione aggiornata");
-            // Ora inserisci domande nel DB
-
-            Sessione sessione = new Sessione(gameSession.getSessioneId());
-            for (Domanda d : gameSession.getDomande()) {
-                d.setSessione(sessione);
-            }
-
-            InsertQuestionsService insertQuestionsService = new InsertQuestionsService(domandaDAO, gameSession.getDomande());
-            insertQuestionsService.setOnSucceeded(ev -> {
-                System.out.println("Domande inserite nel DB correttamente");
-            });
-            insertQuestionsService.setOnFailed(ev -> {
-                Throwable ex = insertQuestionsService.getException();
-                ex.printStackTrace();
-                showAlert("Errore durante il salvataggio delle domande: " + ex.getMessage());
-            });
-            insertQuestionsService.start();
+            System.out.println("Sessione aggiornata correttamente");
         });
         uss.setOnFailed(event -> {
             Throwable ex = uss.getException();
@@ -614,9 +590,8 @@ public class GameSessionController {
             showAlert("Errore durante l'aggiornamento della sessione: " + ex.getMessage());
         });
         uss.start();
-
-
     }
+
 
 
 
