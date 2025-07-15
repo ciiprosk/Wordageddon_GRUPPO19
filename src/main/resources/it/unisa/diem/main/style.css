@@ -1,3 +1,142 @@
+/* Colori principali */
+* {
+    -fx-primary: #2196f3;
+    -fx-primary-light: #64b5f6;
+    -fx-primary-dark: #1976d2;
+    -fx-accent: #FF4081;
+    -fx-grey-color: #b9b9b9;
+    -fx-light-grey-color: #d1d1d1;
+    -fx-background: #121212;
+}
+
+.root {
+    -fx-background-color: -fx-background;
+}
+
+/* Container di autenticazione */
+.auth-container {
+    -fx-padding: 40px;
+    -fx-max-width: 800px;  /* Aumentato per adattarsi ai font più grandi */
+    -fx-alignment: center;
+}
+
+.form-container {
+    -fx-background-color: #1E1E1E;
+    -fx-background-radius: 20px;
+    -fx-padding: 40px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+    -fx-min-width: 700px;  /* Aumentato la larghezza minima */
+    -fx-spacing: 15;       /* Ridotto lo spazio tra gli elementi */
+}
+
+/* Titoli più grandi */
+.auth-title {
+    -fx-font-size: 42px;  /* Aumentato */
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.auth-subtitle {
+    -fx-font-size: 22px;  /* Aumentato */
+    -fx-text-fill: -fx-grey-color;
+    -fx-padding: 0 0 20 0;
+}
+
+/* Campi di input più grandi */
+.modern-field {
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;  /* Aumentato */
+    -fx-padding: 18px;    /* Aumentato */
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-pref-height: 50px; /* Altezza fissa per uniformità */
+}
+
+.modern-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-background-color: #333333;
+}
+
+.modern-field:hover {
+    -fx-background-color: #333333;
+}
+
+/* Bottone più grande */
+.auth-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;  /* Aumentato */
+    -fx-padding: 18px;    /* Aumentato */
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-min-width: 250px; /* Aumentato */
+    -fx-max-width: 250px; /* Aumentato */
+}
+
+.auth-button:hover {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.auth-button:pressed {
+    -fx-background-color: -fx-primary-light;
+}
+
+/* Link e testo secondario più grandi */
+.link-label {
+    -fx-text-fill: -fx-primary;
+    -fx-cursor: hand;
+    -fx-font-size: 18px;  /* Aumentato */
+}
+
+.link-label:hover {
+    -fx-text-fill: -fx-primary-light;
+    -fx-underline: true;
+}
+
+.text-muted {
+    -fx-text-fill: -fx-grey-color;
+    -fx-font-size: 18px;  /* Aumentato */
+}
+
+/* Label di errore */
+.error-label {
+    -fx-text-fill: -fx-accent;
+    -fx-font-size: 16px;  /* Aumentato */
+    -fx-padding: 0 0 5 0; /* Ridotto */
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modern-spinner {
+    -fx-progress-color: white;
+}
+
+/* Loading text più grande */
+.loading-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;  /* Aumentato */
+}
+
+/* ScrollBar personalizzata */
+.scroll-bar:vertical {
+    -fx-background-color: #2A2A2A;
+    -fx-pref-width: 12;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-grey-color;
+    -fx-background-radius: 6;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -fx-light-grey-color;
+}
 .root {
     -fx-background-color: #2e2e2e;
     -fx-text-fill: #ffd700;
@@ -14,17 +153,36 @@
     -fx-border-width: 1;
 }
 
-/* Pulsanti con sfondo grigio medio e testo giallo */
+/* Stili per i Button */
 .button {
-    -fx-background-color: #444444;
-    -fx-border-color: #ffd700;
-    -fx-border-width: 1;
+    -fx-background-color: #ffd700;
+    -fx-text-fill: #2e2e2e;
+    -fx-font-size: 25px;
+    -fx-background-radius: 25px;  /* Bordi arrotondati */
+    -fx-border-radius: 25px;      /* Bordi arrotondati per il bordo */
+    -fx-padding: 10px 20px;       /* Padding interno */
+    -fx-cursor: hand;             /* Cambia il cursore quando passi sopra */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2); /* Ombreggiatura leggera */
 }
 
 .button:hover {
-    -fx-background-color: #636363;
-    -fx-border-width: 3px;
-    -fx-cursor: hand;
+    -fx-background-color: #ffb700;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 3); /* Ombreggiatura più pronunciata in hover */
+    -fx-translate-y: -1px;        /* Leggero effetto di sollevamento */
+}
+
+.button:pressed {
+    -fx-background-color: #ffa500;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1); /* Ombreggiatura ridotta quando premuto */
+    -fx-translate-y: 1px;         /* Effetto di pressione */
+}
+
+/* Per i bottoni piccoli (come quelli di back) puoi usare una classe specifica */
+.small-button {
+    -fx-background-radius: 15px;  /* Raggio più piccolo per bottoni piccoli */
+    -fx-border-radius: 15px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 18px;
 }
 
 .selected-button {
@@ -190,7 +348,45 @@
 }
 
 
-/*ListView*/
+/* Stili per ListView */
+.list-view {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #555555;
+    -fx-fixed-cell-size: 50; /* Aumenta l'altezza delle righe */
+}
+
+.list-cell {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: white;
+    -fx-font-size: 18px; /* Aumenta la dimensione del font */
+    -fx-padding: 10 15; /* Aumenta il padding interno delle celle */
+    -fx-alignment: center-left; /* Allinea il testo verticalmente al centro */
+}
+
+.list-cell:hover {
+    -fx-background-color: #4a4a4a;
+    -fx-text-fill: white;
+}
+
+.list-cell:selected {
+    -fx-background-color: #ffd700;
+    -fx-text-fill: #2e2e2e;
+}
+
+/* Personalizzazione della scrollbar per adattarsi alle celle più grandi */
+.list-view .scroll-bar:vertical {
+    -fx-pref-width: 16;
+}
+
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #555555;
+    -fx-background-radius: 8;
+}
+
+.list-view .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #666666;
+}
+
 .list-cell {
     -fx-border-color: #ffcc41;
     -fx-border-width: 0.3px;
@@ -229,4 +425,94 @@
     -fx-text-fill: gold;
 }
 
+/* Contenitore per il bottone */
+.button-container {
+    -fx-alignment: center;
+    -fx-padding: 10 0 15 0;  /* Ridotto il padding superiore */
+}
+/* Bottone principale (per login e signup) */
+.primary-button {
+    -fx-background-color: #2196f3;    /* Blu */
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-padding: 18px;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-min-width: 250px;
+    -fx-max-width: 250px;
+    -fx-effect: dropshadow(three-pass-box, rgba(33,150,243,0.3), 10, 0, 0, 0);
+}
 
+.primary-button:hover {
+    -fx-background-color: #1976d2;
+    -fx-effect: dropshadow(three-pass-box, rgba(33,150,243,0.5), 12, 0, 0, 0);
+    -fx-translate-y: -1px;
+}
+
+.primary-button:pressed {
+    -fx-background-color: #1565c0;
+    -fx-translate-y: 1px;
+}
+
+/* Bottone secondario (per back, cancel, ecc.) */
+.secondary-button {
+    -fx-background-color: #424242;     /* Grigio scuro */
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+.secondary-button:hover {
+    -fx-background-color: #616161;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 0);
+}
+
+.secondary-button:pressed {
+    -fx-background-color: #212121;
+}
+
+/* Bottone di pericolo (per delete, logout, ecc.) */
+.danger-button {
+    -fx-background-color: #f44336;     /* Rosso */
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+    -fx-effect: dropshadow(three-pass-box, rgba(244,67,54,0.3), 5, 0, 0, 0);
+}
+
+.danger-button:hover {
+    -fx-background-color: #d32f2f;
+    -fx-effect: dropshadow(three-pass-box, rgba(244,67,54,0.4), 8, 0, 0, 0);
+}
+
+.danger-button:pressed {
+    -fx-background-color: #c62828;
+}
+
+/* Bottone di successo (per confirm, save, ecc.) */
+.success-button {
+    -fx-background-color: #4caf50;     /* Verde */
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-width: 120px;
+    -fx-effect: dropshadow(three-pass-box, rgba(76,175,80,0.3), 5, 0, 0, 0);
+}
+
+.success-button:hover {
+    -fx-background-color: #388e3c;
+    -fx-effect: dropshadow(three-pass-box, rgba(76,175,80,0.4), 8, 0, 0, 0);
+}
+
+.success-button:pressed {
+    -fx-background-color: #2e7d32;
+}
