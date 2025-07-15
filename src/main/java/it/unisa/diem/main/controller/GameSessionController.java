@@ -5,10 +5,7 @@ import it.unisa.diem.dao.postgres.SessioneDAOPostgres;
 import it.unisa.diem.dao.postgres.SessioneDocumentoDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.main.Main;
-import it.unisa.diem.main.service.InsertQuestionsService;
-import it.unisa.diem.main.service.InsertSessionService;
-import it.unisa.diem.main.service.LoadAnalysesService;
-import it.unisa.diem.main.service.GenerateQuestionsService;
+import it.unisa.diem.main.service.*;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Lingua;
@@ -252,19 +249,36 @@ public class GameSessionController {
             List<Analisi> analyses = loadAnalysesService.getValue();
             gameSession.setAnalyses(analyses);
 
-            for (Analisi analisi : analyses) {
-                try {
-                    sessioneDocumentoDAO.insert(new SessioneDocumento(gameSession.getSessioneId(), analisi.getTitolo()));
-                } catch (DBException e) {
-                    hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
-                    showAlert("Errore nel salvataggio dei documenti: " + e.getMessage());
-                    return;
-                }
+            // 🔢 Contatore per tenere traccia dei completamenti
+            final int totalAnalisi = analyses.size();
+            final int[] completati = {0}; // usiamo array per poterlo modificare dentro lambda
+
+            if (totalAnalisi == 0) {
+                generateQuestions(analyses, difficolta);
+                return;
             }
 
-            generateQuestions(analyses, difficolta);
-        });
+            for (Analisi analisi : analyses) {
+                SessioneDocumento sd = new SessioneDocumento(gameSession.getSessioneId(), analisi.getTitolo());
+                InsertSessioneDocumentoService insertService = new InsertSessioneDocumentoService(sessioneDocumentoDAO, sd, gameSession, analisi);
 
+                insertService.setOnSucceeded(ev -> {
+                    completati[0]++;
+                    if (completati[0] == totalAnalisi) {
+                        generateQuestions(analyses, difficolta); // ✅ quando tutte completate
+                    }
+                });
+
+                insertService.setOnFailed(ev -> {
+                    hideLoadingOverlay();
+                    Throwable ex = insertService.getException();
+                    showAlert("Errore nel salvataggio dei documenti: " + ex.getMessage());
+                    // ❌ Interrompe la catena se c’è un errore
+                });
+
+                insertService.start();
+            }
+        });
         loadAnalysesService.setOnFailed(event -> {
             hideLoadingOverlay(); // 🔷 Nascondi in caso di errore
             Throwable ex = loadAnalysesService.getException();
@@ -298,7 +312,7 @@ public class GameSessionController {
 
         loadingProgressBar.setProgress(0);
 
-        // Simulazione caricamento
+        // Simulazione caricamento visuale (non logica!)
         Timeline progressTimeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.05), e -> {
                     double progress = loadingProgressBar.getProgress();
@@ -307,11 +321,11 @@ public class GameSessionController {
         );
         progressTimeline.setCycleCount(100);
         progressTimeline.setOnFinished(e -> {
-            loadingPane.setVisible(false);
-            showReadingPane();
+            loadingPane.setVisible(false); // ✅ Non avvia la lettura qui
         });
         progressTimeline.play();
     }
+
 
 
     // === GENERATE QUESTIONS ===
@@ -583,11 +597,12 @@ public class GameSessionController {
             sessione.setCompletato(true);
             sessione.setPunteggio(gameSession.getScore());
             sessioneDAO.update(sessione);
+            System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
         } catch (DBException e) {
             showAlert("Errore nel salvataggio del punteggio: " + e.getMessage());
         }
 
-        System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
+
     }
 
 
