@@ -516,3 +516,57 @@
 .success-button:pressed {
     -fx-background-color: #2e7d32;
 }
+.menu-background {
+    -fx-background-color: #121212;
+}
+
+/* Stile comune per i bottoni principali del gioco */
+.game-button {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 30.0;
+    -fx-padding: 25px;
+    -fx-pref-height: 100.0;
+    -fx-pref-width: 800.0;
+    -fx-background-radius: 10px;
+}
+
+.game-button:hover {
+    -fx-background-color: #1976d2;
+    -fx-translate-y: -2px;
+}
+
+/* Bottone Logout */
+.logout-button {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+    -fx-font-size: 20.0;
+    -fx-pref-height: 60.0;
+    -fx-pref-width: 160.0;
+    -fx-background-radius: 8px;
+}
+
+.logout-button:hover {
+    -fx-background-color: #d32f2f;
+    -fx-underline: true;
+}
+
+/* Bottone Admin */
+.admin-button {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-font-size: 20.0;
+    -fx-pref-height: 60.0;
+    -fx-pref-width: 160.0;
+    -fx-background-radius: 8px;
+}
+
+.admin-button:hover {
+    -fx-background-color: #616161;
+}
+
+/* Effetto pressed comune per tutti i bottoni */
+.game-button:pressed, .logout-button:pressed, .admin-button:pressed {
+    -fx-translate-y: 1px;
+}
