@@ -41,7 +41,9 @@ public class HistoryService extends Service<Map<Difficolta, List<VoceStorico>>> 
             protected Map<Difficolta, List<VoceStorico>> call() throws DBException {
                 Map<Difficolta, List<VoceStorico>> risultati = new HashMap<>();
                 for (Difficolta d : Difficolta.values()) {
+                    System.out.println("Recupero sessioni per difficoltà: " + d);
                     List<VoceStorico> lista = dao.selectByLastSessions(username, d);
+                    System.out.println("Trovate " + lista.size() + " sessioni per " + d);
                     risultati.put(d, lista);
                 }
                 return risultati;

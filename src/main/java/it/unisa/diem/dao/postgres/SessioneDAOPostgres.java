@@ -22,7 +22,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     private  String url;
     private  String user;
     private  String pass;
-    private  UtenteDAO utenteDAO;
+    private final UtenteDAO utenteDAO;
 
     public SessioneDAOPostgres(String url, String user, String pass) {
         this.url = url;
@@ -35,9 +35,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
         this.utenteDAO = new UtenteDAOPostgres();
     }
 
-    public UtenteDAO getUtenteDAO() {
-        return utenteDAO;
-    }
 
     @Override
     public Optional<Sessione> selectById(long id) throws DBException {
@@ -280,12 +277,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
     public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws DBException {
         List<VoceStorico> storico = new ArrayList<>();
 
-        String query = "SELECT s.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
+        String query = "SELECT DISTINCT ON (s.id) s.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
                 "FROM SESSIONE s " +
                 "JOIN SESSIONEDOCUMENTO sd ON sd.sessione = s.id " +
                 "JOIN DOCUMENTO d ON d.nome = sd.documento " +
                 "WHERE d.difficolta = ? AND s.utente = ? " +
-                "ORDER BY s.dataFine DESC " +
+                "ORDER BY s.id, s.dataFine DESC " +
                 "LIMIT 10";
 
         try (Connection connection = ConnectionManager.getConnection();
