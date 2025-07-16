@@ -27,33 +27,38 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="titleField" promptText="Text Title" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="titleField" prefHeight="33.0" prefWidth="548.0" promptText="Text Title">
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242;" text="Import" underline="true">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                      <padding>
                         <Insets left="100.0" right="100.0" />
                      </padding>
                   </VBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1000.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="1000.0">
                      <children>
-                        <Button fx:id="importButton" mnemonicParsing="false" onAction="#handleImport" prefHeight="60.0" prefWidth="200.0" text="Import" underline="true">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Button>
                         <Label fx:id="importedFileLabel" text="No file imported" visible="false">
                            <font>
                               <Font size="18.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="120.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
-                     <padding>
-                        <Insets left="100.0" right="100.0" /> <!-- ridotto top -->
-                     </padding>
-                     <VBox.margin>
-                        <Insets bottom="15.0" /> <!-- aumenta spazio sotto il bottone -->
-                     </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="74.0" prefWidth="1000.0">
+                  <HBox alignment="CENTER" maxHeight="100.0" minHeight="90.0" prefHeight="100.0" prefWidth="1000.0">
                      <children>
                         <VBox prefHeight="85.0" prefWidth="300.0" spacing="5.0">
                            <children>
@@ -117,9 +122,12 @@
                            </font>
                         </Label>
                         <TextField fx:id="inputField" promptText="Add element..." />
-                        <Button onAction="#handleAdd" prefHeight="56.0" prefWidth="121.0" text=" Add " />
-                        <Button onAction="#handleRemove" prefHeight="56.0" prefWidth="135.0" text="Remove" />
+                        <Button maxHeight="45.0" minHeight="45.0" onAction="#handleAdd" prefHeight="45.0" prefWidth="121.0" style="-fx-background-color: #E0E0E0; -fx-text-fill: #424242; -fx-font-size: 14px;" text=" Add " />
+                        <Button maxHeight="45.0" minHeight="45.0" onAction="#handleRemove" prefHeight="45.0" prefWidth="135.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 14px;" text="Remove" />
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
                   </HBox>
                   <ListView fx:id="stopwordsListView" prefHeight="140.0" prefWidth="1000.0" />
                   <Label fx:id="alertLabel" style="-fx-text-fill: red" text="This word is already here" />
