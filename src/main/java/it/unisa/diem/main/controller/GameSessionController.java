@@ -12,6 +12,7 @@ import it.unisa.diem.model.gestione.sessione.Domanda;
 import it.unisa.diem.model.gestione.sessione.GameSession;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.SessionManager;
 import javafx.concurrent.WorkerStateEvent;
@@ -140,7 +141,6 @@ public class GameSessionController {
         backButtonReading.setOnAction(this::handleBackToHomeWithConfirmation);
         backButtonQuestion.setOnAction(this::handleBackToHomeWithConfirmation);
 
-
         sessioneDAO = new SessioneDAOPostgres();
         sessioneDocumentoDAO = new SessioneDocumentoDAOPostgres();
 
@@ -152,27 +152,33 @@ public class GameSessionController {
                     if (newWindow != null) {
                         Stage stage = (Stage) newWindow;
                         stage.setOnCloseRequest(event -> {
-                            if (isGameStarted && !sessioneCompletata) { // Controlla se il gioco è iniziato e non è completato
-                                event.consume(); // blocca la chiusura finché non confermi
+                            if (isGameStarted && !sessioneCompletata) {
+                                event.consume();
 
-                                // Mostra alert di conferma
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.setTitle("Confirm exit");
-                                alert.setHeaderText("Quit the game?");
-                                alert.setContentText("If you quit now, your game will be deleted. Do you really want to exit?");
+                                // Alert modificato con AlertUtils
+                                Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                                confirmationAlert.setTitle("Confirm exit");
+                                confirmationAlert.setHeaderText("Quit the game?");
+                                confirmationAlert.setContentText("If you quit now, your game will be deleted. Do you really want to exit?");
 
                                 ButtonType siButton = new ButtonType("Yes, quit");
                                 ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
-                                alert.getButtonTypes().setAll(siButton, noButton);
+                                confirmationAlert.getButtonTypes().setAll(siButton, noButton);
 
-                                alert.showAndWait().ifPresent(response -> {
+                                // Applica lo stile
+                                DialogPane dialogPane = confirmationAlert.getDialogPane();
+                                dialogPane.getStylesheets().add(
+                                        AlertUtils.class.getResource("/it/unisa/diem/main/style.css").toExternalForm()
+                                );
+                                dialogPane.getStyleClass().add("dialog-pane");
+
+                                confirmationAlert.showAndWait().ifPresent(response -> {
                                     if (response == siButton) {
-                                        deleteGameSessionFromDB();  // elimina sessione se serve
+                                        deleteGameSessionFromDB();
                                         stage.close();
                                     }
                                 });
                             }
-                            // Se il gioco non è iniziato o è già completato, chiudi normalmente
                         });
                     }
                 });
@@ -229,7 +235,6 @@ public class GameSessionController {
         Utente utente = SessionManager.getInstance().getUtenteLoggato();
 
         if (lingua != null && difficoltaString  != null && utente != null) {
-
             Difficolta difficolta = convertStringToDifficolta(difficoltaString);
 
             boolean singleText = difficolta == Difficolta.FACILE;
@@ -250,15 +255,15 @@ public class GameSessionController {
                     hideLoadingOverlay();
                     Throwable ex = insertSessionService.getException();
                     ex.printStackTrace();
-                    showAlert("Errore nella creazione della sessione: " + ex.getMessage());
+                    AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                            "Errore nella creazione della sessione: " + ex.getMessage());
                 });
 
                 insertSessionService.start();
             });
-
-
         } else {
-            showAlert("Seleziona sia lingua che difficoltà (e assicurati di essere loggato).");
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Seleziona sia lingua che difficoltà (e assicurati di essere loggato).");
         }
     }
 
@@ -287,14 +292,14 @@ public class GameSessionController {
                     generateQuestions(analyses, difficolta);
                 }));
                 delay.play();
-               // generateQuestions(analyses, difficolta); // ✅ Dopo aver inserito tutti i documenti
             });
 
             insertAllService.setOnFailed(e -> {
                 hideLoadingOverlay();
                 Throwable ex = insertAllService.getException();
                 ex.printStackTrace();
-                showAlert("Errore nel salvataggio dei documenti: " + ex.getMessage());
+                AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                        "Errore nel salvataggio dei documenti: " + ex.getMessage());
             });
 
             insertAllService.start();
@@ -304,12 +309,12 @@ public class GameSessionController {
             hideLoadingOverlay();
             Throwable ex = loadAnalysesService.getException();
             ex.printStackTrace();
-            showAlert("Errore durante il caricamento dei testi: " + ex.getMessage());
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante il caricamento dei testi: " + ex.getMessage());
         });
 
         loadAnalysesService.start();
     }
-
 
     private void showLoadingScreen(Difficolta difficolta, boolean singleText, Runnable onComplete) {
         selectionPane.setVisible(false);
@@ -351,11 +356,9 @@ public class GameSessionController {
 
         generateQuestionsService.setOnSucceeded(event -> {
             List<Domanda> domande = generateQuestionsService.getValue();
-            gameSession.setDomande(domande); // salva in memoria
+            gameSession.setDomande(domande);
 
             loadingPane.setVisible(false);
-            // NON avviare subito InsertQuestionsService
-            // showReadingPane(); oppure il flusso successivo
             hideLoadingOverlay();
             showReadingPane();
         });
@@ -364,25 +367,33 @@ public class GameSessionController {
             hideLoadingOverlay();
             Throwable ex = generateQuestionsService.getException();
             ex.printStackTrace();
-            showAlert("Errore durante la generazione delle domande: " + ex.getMessage());
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante la generazione delle domande: " + ex.getMessage());
         });
 
         generateQuestionsService.start();
     }
 
-
     @FXML
     private void handleBackToHomeWithConfirmation(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm exit");
-        alert.setHeaderText("Quit the game?");
-        alert.setContentText("If you quit now, your game will be deleted. Do you really want to go back to home?");
+        // Alert modificato con AlertUtils
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirm exit");
+        confirmationAlert.setHeaderText("Quit the game?");
+        confirmationAlert.setContentText("If you quit now, your game will be deleted. Do you really want to go back to home?");
 
         ButtonType siButton = new ButtonType("Yes, quit");
         ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(siButton, noButton);
+        confirmationAlert.getButtonTypes().setAll(siButton, noButton);
 
-        alert.showAndWait().ifPresent(response -> {
+        // Applica lo stile
+        DialogPane dialogPane = confirmationAlert.getDialogPane();
+        dialogPane.getStylesheets().add(
+                AlertUtils.class.getResource("/it/unisa/diem/main/style.css").toExternalForm()
+        );
+        dialogPane.getStyleClass().add("dialog-pane");
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
             if (response == siButton) {
                 showLoadingOverlayWithMessage("Tornando alla home...");
                 if (!sessioneCompletata && !isTransitioningToResults) {
@@ -404,7 +415,6 @@ public class GameSessionController {
                     }
                 }));
                 delay.play();
-
             }
         });
     }
@@ -594,7 +604,8 @@ public class GameSessionController {
         uss.setOnFailed(event -> {
             Throwable ex = uss.getException();
             ex.printStackTrace();
-            showAlert("Errore durante l'aggiornamento della sessione: " + ex.getMessage());
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante l'aggiornamento della sessione: " + ex.getMessage());
         });
         uss.start();
     }

@@ -782,13 +782,14 @@
     -fx-background-color: #1976d2;
     -fx-text-fill: white;
     -fx-font-size: 16px;
-    -fx-padding: 8px 16px;
-    -fx-background-radius: 5px;
 }
 
 .dialog-pane .button-bar .button:hover {
     -fx-background-color: #1565c0;
 }
+
+.dialog-pane .label {
+
 
 .dialog-pane .button-bar .button:pressed {
     -fx-background-color: #0d47a1;
