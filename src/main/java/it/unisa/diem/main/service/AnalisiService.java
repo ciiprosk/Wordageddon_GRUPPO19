@@ -45,11 +45,6 @@ public class AnalisiService extends Service<Void> {
                 analisi.analizza();
                 analisi.caricaAnalisi();
 
-                updateMessage("Inserimento nel database...");
-                String url = PropertiesLoader.getProperty("database.url");
-                String user = PropertiesLoader.getProperty("database.user");
-                String pass = PropertiesLoader.getProperty("database.password");
-
                 DocumentoDAO daoDoc = new DocumentoDAOPostgres();
                 AnalisiDAO daoAn = new AnalisiDAOPostgres();
                 //DocumentoDAO daoDoc = new DocumentoDAOPostgres(url, user, pass);

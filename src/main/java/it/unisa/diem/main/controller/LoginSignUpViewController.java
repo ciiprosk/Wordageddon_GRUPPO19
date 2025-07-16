@@ -270,13 +270,6 @@ public class LoginSignUpViewController {
         }
     }
 
-    private static void mostraAlert(Alert.AlertType tipo, String titolo, String header, String contenuto) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titolo);
-        alert.setHeaderText(header);
-        alert.setContentText(contenuto);
-        alert.showAndWait();
-    }
 
     private void clearSignUpFields() {
         signUpEmailField.clear();

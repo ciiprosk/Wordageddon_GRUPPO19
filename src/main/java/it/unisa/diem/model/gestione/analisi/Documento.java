@@ -20,7 +20,8 @@ public class Documento {
     private Lingua lingua;
     private Difficolta difficolta;
     private String path;
-    private List<String> testo;
+    private String testoD;
+
 
     /**
      * Costruttore della classe Documento.
@@ -33,8 +34,8 @@ public class Documento {
         this.titolo = titolo;
         this.lingua = lingua;
         this.difficolta = difficolta;
-        testo=new ArrayList<>();
         path="data/"+lingua+"/"+difficolta.toString().toLowerCase()+"/"+titolo+".bin";
+        testoD = "";
     }
 
     public Documento(String titolo, Lingua lingua, Difficolta difficolta, String path) {
@@ -43,8 +44,12 @@ public class Documento {
         this.lingua = lingua;
         this.difficolta = difficolta;
         this.path = path;
-        testo=new ArrayList<>();
+        this.testoD = "";
 
+    }
+
+    public String getTestoD() {
+            return testoD;
     }
 
     /**
@@ -52,7 +57,7 @@ public class Documento {
      * Crea una nuova lista vuota per contenere il testo del documento.
      */
     public Documento() {
-        testo=new ArrayList<>();
+        testoD = "";
     }
 
     /**
@@ -99,9 +104,9 @@ public class Documento {
      * Restituisce una copia del testo del documento.
      * @return una nuova lista contenente il testo del documento
      */
-   public List<String> getTesto() {
-       return new ArrayList<>(testo); // non ritornare mai il dato effettivo
-   }
+//   public List<String> getTesto() {
+//       return new ArrayList<>(testo); // non ritornare mai il dato effettivo
+//   }
 
     /**
      * Converte un file di testo in formato binario, crittografando il contenuto.
@@ -118,10 +123,13 @@ public class Documento {
              DataOutputStream dos = new DataOutputStream(new   BufferedOutputStream(new FileOutputStream(outputFile)))) {
 
             String line;
+            StringBuilder sb = new StringBuilder();
             while ((line = reader.readLine()) != null) {
-                testo.add(line);
+                //testo.add(line);
+                sb.append(line).append("\n");
                 dos.writeUTF(CryptoAlphabet.cripta(line));
             }
+            testoD = sb.toString();
         }
     }
 
@@ -147,13 +155,19 @@ public class Documento {
         getAttributes(filename, dr);
         try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){
            String line;
+           StringBuilder sb=new StringBuilder();
            try {
                while (true) {
                    line = br.readUTF();
                    parole.add(CryptoAlphabet.decripta(line));
+                   if (sb.length() > 0 ) sb.append("\n");
+                   sb.append(CryptoAlphabet.decripta(line));
                }
            }catch(EOFException e){
-               dr.testo=parole;
+              // dr.testo=parole;
+               dr.testoD=sb.toString();
+
+               //return dr;
            }
 
 
@@ -204,7 +218,7 @@ public class Documento {
                 this.lingua = null;
                 this.difficolta = null;
                 this.path = null;
-                this.testo.clear();
+                this.testoD = null;
             }
         else throw new DeleteException("Il file del documento non esiste: " + file.getName());
     }
@@ -216,11 +230,7 @@ public class Documento {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (String s : testo) {
-            sb.append(s).append("\n");
-        }
-        return sb.toString();
+        return  testoD;
     }
 
 }

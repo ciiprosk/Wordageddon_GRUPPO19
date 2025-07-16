@@ -37,7 +37,7 @@ public class UpdateSessionService extends Service<Void> {
             @Override
             protected Void call() throws Exception {
                 try {
-                    Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
+                    Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow(() -> new DBException("Sessione con ID " + gameSession.getSessioneId() + " non trovata"));
                     sessione.setFine(LocalDateTime.now());
                     sessione.setPunteggio(gameSession.getScore());
                     sessioneDAO.update(sessione);

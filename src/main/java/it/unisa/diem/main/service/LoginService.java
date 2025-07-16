@@ -4,8 +4,10 @@ import it.unisa.diem.dao.interfacce.UtenteDAO;
 import it.unisa.diem.dao.postgres.UtenteDAOPostgres;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.utenti.Utente;
+import it.unisa.diem.utility.AlertUtils;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 import java.util.Optional;

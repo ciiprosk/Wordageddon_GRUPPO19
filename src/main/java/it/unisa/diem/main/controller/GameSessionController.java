@@ -425,7 +425,7 @@ public class GameSessionController {
         // Ottieni l'analisi corrispondente al documento corrente
         Analisi currentAnalysis = gameSession.getAnalyses().get(currentReadingIndex);
         textTitleLabel.setText(currentAnalysis.getTitolo());
-        textBodyArea.setText(String.join("\n", currentAnalysis.getDocumento().getTesto()));
+        textBodyArea.setText(currentAnalysis.getDocumento().getTestoD());
 
         setupReadingTimer();
 

@@ -57,7 +57,7 @@ public class Analisi {
         pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi.toString().toLowerCase() + "/" + titolo + "_analysis.bin";
 
     }
-    
+
 
 
     /**
@@ -97,32 +97,34 @@ public class Analisi {
 
     //il metodo prevede la divisione del testo in parole(con duplicati se presenti) -> ritorna la lista di tutte le parole presenti nel testo
     private List<String> getWordsDocument() {
-        List<String> testo=documento.getTesto();
+        String testoD  = documento.getTestoD();
         List<String> punteggiatura= switch(documento.getLingua().toString()){
             case "ITA" -> Arrays.stream(new StopwordITA().getPunteggiatura()).collect(Collectors.toList());
             case "ENG" -> Arrays.stream(new StopwordENG().getPunteggiatura()).collect(Collectors.toList());
             default -> throw new IllegalStateException("Unexpected value: " + documento.getLingua().toString());
         };
-        //tolgo la punteggiatura a prescindere dalle stopword
-        List<String> parole = testo.stream()
-            .flatMap(line -> Arrays.stream(line.split(" "))).map(word-> {
-                for(String punt: punteggiatura)
-                    word=word.replace(punt, "");
-                return word;
+
+
+        // divido il testo unico in parole (split per spazi, newline, ecc.)
+        List<String> paroleD = Arrays.stream(testoD.split("\\s+")) // split per spazi bianchi
+                .map(word -> {
+                    for (String punt : punteggiatura) {
+                        word = word.replace(punt, "");
+                    }
+                    return word;
                 })
-            .filter(word -> !word.trim().isEmpty())
-            .map(String::toLowerCase)
-            .collect(Collectors.toList());
-    
-    // nel caso in cui stopwrod analisi non sia null
-    if (stopwordAnalisi != null) {
-        parole = parole.stream()
-                .filter(word -> !word.isEmpty())
-                .filter(word -> !stopwordAnalisi.getParole().contains(word)) //esclude le stopword
+                .filter(word -> !word.trim().isEmpty())
+                .map(String::toLowerCase)
                 .collect(Collectors.toList());
-    }
-    
-    return parole;
+
+        if (stopwordAnalisi != null) {
+            paroleD = paroleD.stream()
+                    .filter(word -> !word.isEmpty())
+                    .filter(word -> !stopwordAnalisi.getParole().contains(word))
+                    .collect(Collectors.toList());
+        }
+
+    return paroleD;
 }
 
     /**
