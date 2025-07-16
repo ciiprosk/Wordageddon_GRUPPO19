@@ -5,6 +5,7 @@ import it.unisa.diem.dao.postgres.DocumentoDAOPostgres;
 import it.unisa.diem.main.service.AnalisiService;
 import it.unisa.diem.main.service.DeleteDocumentService;
 import it.unisa.diem.main.service.LoadTitlesService;
+import it.unisa.diem.main.service.ValidazioneDocumentoService;
 import it.unisa.diem.model.gestione.analisi.*;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordENG;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordITA;
@@ -235,12 +236,13 @@ public class AdminScreenViewController {
     public void clearStopwordList() { stopwordsListView.getItems().clear(); }
 
     // === CONFIRM ===
+    @FXML
     public void handleConfirm(ActionEvent actionEvent) {
         titolo = titleField.getText().trim();
 
         stopword.clear();
 
-        // Prima carica le predefinite
+        // Carica le stopword selezionate
         stopword.caricaStopword(
                 checkArticles.isSelected(),
                 checkPrepositions.isSelected(),
@@ -250,23 +252,40 @@ public class AdminScreenViewController {
                 checkCon.isSelected()
         );
 
-        // Poi aggiunge quelle dell'utente
+        // Aggiunge eventuali personalizzate
         for (String s : stopwordsListView.getItems()) {
             stopword.aggiungi(s);
         }
 
-        Documento documento = new Documento(titolo, lingua, difficolta);
-        AnalisiService analisiService = new AnalisiService(documento, stopword, fileImportato);
+        ValidazioneDocumentoService validazioneService = new ValidazioneDocumentoService();
+        validazioneService.setup(fileImportato, difficolta, stopword);
 
-        analisiService.setOnSucceeded(event -> showListPane());
-        analisiService.setOnFailed(event -> {
-            Throwable e = analisiService.getException();
-            LOGGER.log(Level.SEVERE, "Errore Analisi", e);
-            AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore Analisi", null, "Si è verificato un errore durante l'analisi o l'inserimento nel database.\n" + e.getMessage());
+        validazioneService.setOnSucceeded(event -> {
+            if (validazioneService.getValue()) {
+                Documento documento = new Documento(titolo, lingua, difficolta);
+                AnalisiService analisiService = new AnalisiService(documento, stopword, fileImportato);
+
+                analisiService.setOnSucceeded(e -> showListPane());
+                analisiService.setOnFailed(e -> {
+                    Throwable err = analisiService.getException();
+                    LOGGER.log(Level.SEVERE, "Errore Analisi", err);
+                    AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Errore Analisi", null,
+                            "Errore durante l'analisi o l'inserimento nel database.\n" + err.getMessage());
+                });
+
+                analisiService.start();
+            }
         });
 
-        analisiService.start();
+        validazioneService.setOnFailed(event -> {
+            Throwable err = validazioneService.getException();
+            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Documento non valido", null,
+                    err.getMessage() != null ? err.getMessage() : "Errore sconosciuto");
+        });
+
+        validazioneService.start();
     }
+
 
 
     private void validateConfirmButton() {
