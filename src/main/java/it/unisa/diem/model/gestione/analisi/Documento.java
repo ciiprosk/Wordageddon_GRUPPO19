@@ -142,7 +142,7 @@ public class Documento {
      * @throws IOException se si verificano errori durante la lettura del file
      * @throws ClassNotFoundException se si verificano errori durante la decrittografia
      */
-    public static Documento leggiDocumento(String filename) throws IOException, ClassNotFoundException {
+    public static Documento leggiDocumento(String filename) throws IOException {
         Documento dr = null;
         List<String> parole=new ArrayList<>();
         /*
@@ -156,19 +156,14 @@ public class Documento {
         try(DataInputStream br=new DataInputStream(new BufferedInputStream(new FileInputStream(filename)))){
            String line;
            StringBuilder sb=new StringBuilder();
-           try {
-               while (true) {
+
+               while (br.available() > 0) {
                    line = br.readUTF();
                    parole.add(CryptoAlphabet.decripta(line));
-                   if (sb.length() > 0 ) sb.append("\n");
+                   if (!sb.isEmpty()) sb.append("\n");
                    sb.append(CryptoAlphabet.decripta(line));
                }
-           }catch(EOFException e){
-              // dr.testo=parole;
                dr.testoD=sb.toString();
-
-               //return dr;
-           }
 
 
         }
