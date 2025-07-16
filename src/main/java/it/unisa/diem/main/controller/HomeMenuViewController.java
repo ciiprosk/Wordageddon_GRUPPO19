@@ -28,24 +28,29 @@ public class HomeMenuViewController {
 
     public void goToNewGame(ActionEvent actionEvent) {
         try {
-            // Reset dell'istanza precedente di GameSessionController se esiste
-            if (GameSessionController.getInstance() != null) {
-                GameSessionController.getInstance().deleteGameSessionFromDB();
+            GameSessionController controller = GameSessionController.getInstance();
+            if (controller != null) {
+                System.out.println("DEBUG - sessioneCompletata = " + controller.isSessioneCompletata());
+                if (!controller.isSessioneCompletata()) {
+                    controller.deleteGameSessionFromDB();
+                } else {
+                    System.out.println("DEBUG - Sessione già completata, non viene eliminata.");
+                }
             }
-        
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/GameSessionView.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) newGameButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("NEW GAME");
-        
-            // Rimuovi eventuali handler di chiusura precedenti
+
             stage.setOnCloseRequest(null);
-        
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
     public void goToLeaderboard(ActionEvent actionEvent) {
         try {

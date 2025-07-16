@@ -111,6 +111,7 @@ public class GameSessionController {
     private Timeline questionTimer;
     private int questionTimeRemaining;
     private boolean sessioneCompletata = false;
+    private boolean isTransitioningToResults = false;
 
 
 
@@ -231,6 +232,10 @@ public class GameSessionController {
     }
     private void startNewGame() {
         currentReadingIndex = 0;
+
+        if (gameSession != null && !sessioneCompletata) {
+            deleteGameSessionFromDB();
+        }
 
         Lingua lingua = linguaComboBox.getValue();
         String difficoltaString = difficoltaComboBox.getValue();
@@ -389,7 +394,9 @@ public class GameSessionController {
         alert.showAndWait().ifPresent(response -> {
             if (response == siButton) {
                 showLoadingOverlayWithMessage("Tornando alla home...");
-                deleteGameSessionFromDB();
+                if (!sessioneCompletata && !isTransitioningToResults) {
+                    deleteGameSessionFromDB();
+                }
 
                 Timeline delay = new Timeline(new KeyFrame(Duration.seconds(0.5), e -> {
                     try {
@@ -448,7 +455,7 @@ public class GameSessionController {
             try {
                 sessioneDocumentoDAO.deleteBySessioneId(gameSession.getSessioneId());
                 sessioneDAO.delete(gameSession.getSessioneId());
-                System.out.println("✅ Sessione eliminata con successo");
+                System.out.println("✅ Sessione eliminata con successo--> ODDIO");
             } catch (DBException e) {
                 System.err.println("Errore durante la cancellazione della sessione: " + e.getMessage());
             }
@@ -492,6 +499,7 @@ public class GameSessionController {
 
             startQuestionTimer(); // 🔷 Avvia timer per questa domanda
         } else {
+            isTransitioningToResults = true;
             showLoadingOverlayWithMessage("Sto analizzando le risposte...");
 
             // 🔷 Attendi 1 secondo prima di mostrare i risultati
@@ -567,6 +575,7 @@ public class GameSessionController {
         questionPane.setVisible(false);
         resultPane.setVisible(true);
         sessioneCompletata = true;
+        isGameStarted = false;
 
         scoreLabel.setText("Punteggio: " + gameSession.getScore() + "/" + gameSession.getDomande().size());
 
@@ -656,13 +665,13 @@ public class GameSessionController {
 
     @FXML
     private void handleBackToMenu(ActionEvent event) {
-        if (isGameStarted && !sessioneCompletata) {
+        if (isGameStarted && !sessioneCompletata && !isTransitioningToResults) {
             deleteGameSessionFromDB();
         }
-        
-        isGameStarted = false;  // Resetta lo stato
-        sessioneCompletata = false;  // Resetta lo stato
-        
+
+        isGameStarted = false;
+        sessioneCompletata = false;
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
             Parent root = loader.load();
@@ -672,10 +681,15 @@ public class GameSessionController {
             stage.setTitle("Menu");
         } catch (Exception ex) {
             ex.printStackTrace();
+        } finally {
+            instance = null;
         }
     }
 
 
+    public boolean isSessioneCompletata() {
+        return sessioneCompletata;
+    }
 
     private void hideLoadingOverlay() {
         loadingOverlay.setVisible(false);
