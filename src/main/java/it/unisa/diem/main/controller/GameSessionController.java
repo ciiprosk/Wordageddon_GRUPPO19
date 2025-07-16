@@ -115,19 +115,6 @@ public class GameSessionController {
 
 
 
-
-    //singleton ottengo l’istanza attiva se la schermata di gioco è stata caricata.
-    private static GameSessionController instance;
-
-    public GameSessionController() {
-        instance = this;
-    }
-
-    public static GameSessionController getInstance() {
-        return instance;
-    }
-
-
     // === METODO INITIALIZE ===
     @FXML
     public void initialize() {
@@ -681,8 +668,6 @@ public class GameSessionController {
             stage.setTitle("Menu");
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            instance = null;
         }
     }
 

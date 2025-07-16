@@ -28,15 +28,7 @@ public class HomeMenuViewController {
 
     public void goToNewGame(ActionEvent actionEvent) {
         try {
-            GameSessionController controller = GameSessionController.getInstance();
-            if (controller != null) {
-                System.out.println("DEBUG - sessioneCompletata = " + controller.isSessioneCompletata());
-                if (!controller.isSessioneCompletata()) {
-                    controller.deleteGameSessionFromDB();
-                } else {
-                    System.out.println("DEBUG - Sessione già completata, non viene eliminata.");
-                }
-            }
+
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/GameSessionView.fxml"));
             Parent root = loader.load();

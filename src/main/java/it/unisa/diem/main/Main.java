@@ -34,18 +34,13 @@ public class Main extends Application {
 
             System.out.println("Database connesso con successo!");
 
-            // 🔷 Gestisco la chiusura della finestra per eliminare la sessione attiva se esiste
-            primaryStage.setOnCloseRequest(event -> {
-                GameSessionController controller = GameSessionController.getInstance();
-                if (controller != null) {
-                    controller.deleteGameSessionFromDB(); // Assicurati che sia public se richiamato da qui
-                }
-            });
+            // RIMUOVI IL CODICE CHE GESTISCE LA CHIUSURA QUI, NON SERVE PIU'
 
         } catch (SQLException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Connessione al database fallita!", null, "Assicurati di essere connesso a internet!");
             Platform.exit();
         }
+
     }
 
     public static void main(String[] args) {
