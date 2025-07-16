@@ -18,23 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class SessioneDAOPostgres implements SessioneDAO {
-
-    private  String url;
-    private  String user;
-    private  String pass;
-    private final UtenteDAO utenteDAO;
-
-    public SessioneDAOPostgres(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-        this.utenteDAO = new UtenteDAOPostgres();
-    }
+    private  UtenteDAO utenteDAO;
 
     public SessioneDAOPostgres() {
         this.utenteDAO = new UtenteDAOPostgres();
     }
-
 
     @Override
     public Optional<Sessione> selectById(long id) throws DBException {
@@ -195,6 +183,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    @Override
     public void delete(long sessioneId) throws DBException {
         String query = "DELETE FROM sessione WHERE id = ?";
 
@@ -273,16 +262,16 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
 
     //LEADERBOARD & HISTORY
-
+    @Override
     public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws DBException {
         List<VoceStorico> storico = new ArrayList<>();
 
-        String query = "SELECT DISTINCT ON (s.id) s.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
+        String query = "SELECT s.dataFine, s.punteggioOttenuto, d.difficolta, d.lingua " +
                 "FROM SESSIONE s " +
                 "JOIN SESSIONEDOCUMENTO sd ON sd.sessione = s.id " +
                 "JOIN DOCUMENTO d ON d.nome = sd.documento " +
                 "WHERE d.difficolta = ? AND s.utente = ? " +
-                "ORDER BY s.id, s.dataFine DESC " +
+                "ORDER BY s.dataFine DESC " +
                 "LIMIT 10";
 
         try (Connection connection = ConnectionManager.getConnection();
@@ -304,6 +293,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
         return storico;
     }
 
+    @Override
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
 
         List<VoceClassifica> classifica = new ArrayList<>();
@@ -320,7 +310,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
                         "ORDER BY media_punteggio DESC "+
                         "LIMIT 10";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass);
+        try (Connection connection = ConnectionManager.getConnection();
 
              PreparedStatement cmd=connection.prepareStatement (query) ){
 

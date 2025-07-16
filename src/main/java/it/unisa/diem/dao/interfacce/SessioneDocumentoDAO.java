@@ -12,4 +12,5 @@ public interface SessioneDocumentoDAO extends NotEditableDAO<SessioneDocumento> 
 
     List<Documento> selectDocumentsBySession(long idSessione) throws DBException;
 
+    void deleteBySessioneId(long sessioneId) throws DBException;
 }

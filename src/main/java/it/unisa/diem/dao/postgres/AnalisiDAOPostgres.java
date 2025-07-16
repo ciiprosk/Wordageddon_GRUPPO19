@@ -16,16 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class AnalisiDAOPostgres implements AnalisiDAO {
-    private String url;
-    private String user;
-    private String password;
-
-    public AnalisiDAOPostgres(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.password = pass;
-    }
-
     public AnalisiDAOPostgres() {}
     @Override
     public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException{

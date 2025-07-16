@@ -13,15 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class DocumentoDAOPostgres implements DocumentoDAO {
-    private  String url;
-    private  String user;
-    private  String pass;
-
-    public DocumentoDAOPostgres(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-    }
 
     public DocumentoDAOPostgres() {}
 
