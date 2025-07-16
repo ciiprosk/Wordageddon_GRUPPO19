@@ -1,32 +1,18 @@
 package it.unisa.diem.dao.postgres;
 
-import it.unisa.diem.dao.interfacce.SessioneDAO;
 import it.unisa.diem.dao.interfacce.SessioneDocumentoDAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
 import it.unisa.diem.model.gestione.analisi.Lingua;
-import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.sessione.SessioneDocumento;
 import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
-
-    private  String url;
-    private  String user;
-    private  String pass;
-
-    public SessioneDocumentoDAOPostgres(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-    }
-
     public SessioneDocumentoDAOPostgres() {}
 
     @Override
@@ -165,6 +151,7 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
     }
 
+    @Override
     public void deleteBySessioneId(long sessioneId) throws DBException {
         String query = "DELETE FROM SESSIONEDOCUMENTO WHERE sessione = ?";
 

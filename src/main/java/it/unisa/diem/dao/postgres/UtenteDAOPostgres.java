@@ -12,16 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class UtenteDAOPostgres implements UtenteDAO {
-
-    private String url;
-    private String user;
-    private String pass;
-
-    public UtenteDAOPostgres(String url, String user, String pass) {
-        this.url = url;
-        this.user = user;
-        this.pass = pass;
-    }
     public UtenteDAOPostgres() {}
 
     @Override
@@ -212,7 +202,7 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
-
+    @Override
     public void delete(Utente utente) throws SQLException, DBException {
 
         String query = "DELETE FROM utente WHERE username = ?";

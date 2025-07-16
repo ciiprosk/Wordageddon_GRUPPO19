@@ -18,11 +18,7 @@ public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceCla
     private String username;
 
     public LoadLeaderboardService() {
-        dao = new SessioneDAOPostgres(
-                PropertiesLoader.getProperty("database.url"),
-                PropertiesLoader.getProperty("database.user"),
-                PropertiesLoader.getProperty("database.password")
-        );
+        dao = new SessioneDAOPostgres();
     }
 
     @Override
