@@ -408,10 +408,6 @@
     -fx-text-fill: #303030;
 }
 
-.list-view {
-    -fx-background-color: #1976d2;
-}
-
 .list-cell .text-field {
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -715,7 +711,7 @@
 }
 
 .table-cell:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-color: #1976d2;
 }
 
 /* Stili per ComboBox */
