@@ -283,7 +283,11 @@ public class GameSessionController {
                             gameSession.getSessioneId(), gameSession);
 
             insertAllService.setOnSucceeded(e -> {
-                generateQuestions(analyses, difficolta); // ✅ Dopo aver inserito tutti i documenti
+                Timeline delay = new Timeline(new KeyFrame(Duration.seconds(1.5), en -> {
+                    generateQuestions(analyses, difficolta);
+                }));
+                delay.play();
+               // generateQuestions(analyses, difficolta); // ✅ Dopo aver inserito tutti i documenti
             });
 
             insertAllService.setOnFailed(e -> {
