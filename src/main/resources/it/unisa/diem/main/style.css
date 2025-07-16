@@ -1,4 +1,4 @@
-/* Colori principali */
+/* Colori principali aggiornati */
 * {
     -fx-primary: #2196f3;
     -fx-primary-light: #64b5f6;
@@ -7,6 +7,8 @@
     -fx-grey-color: #b9b9b9;
     -fx-light-grey-color: #d1d1d1;
     -fx-background: #121212;
+    -fx-title-color: #ffd700;     /* Giallo solo per i titoli */
+    -fx-text-color: #ffffff;      /* Bianco per il testo normale */
 }
 
 .root {
@@ -152,7 +154,7 @@
     -fx-border-color: #ffd700;
     -fx-border-width: 1;
 }
-
+ 
 /* Stili per i Button */
 .button {
     -fx-background-color: #ffd700;
@@ -569,4 +571,190 @@
 /* Effetto pressed comune per tutti i bottoni */
 .game-button:pressed, .logout-button:pressed, .admin-button:pressed {
     -fx-translate-y: 1px;
+}
+/* Stili per il container dell'header */
+.header-container {
+    -fx-background-color: rgba(46, 46, 46, 0.95);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+/* Stili per i pulsanti di navigazione */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-background-radius: 25px;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+}
+
+/* Stili per il titolo della pagina */
+.page-title {
+    -fx-text-fill: -fx-title-color;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 3, 0, 0, 0);
+}
+
+/* Stili per la sezione modalità */
+.mode-label {
+    -fx-text-fill: -fx-text-color;
+}
+
+/* ComboBox principale */
+.mode-combo {
+    -fx-background-color: #3d3d3d;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #555555;
+    -fx-border-width: 2px;
+    -fx-padding: 5px;
+    -fx-font-size: 22px;
+    -fx-font-family: "Arial";
+    -fx-min-height: 50px;
+    -fx-pref-width: 300px;
+}
+
+/* Lista a discesa */
+.mode-combo .combo-box-popup .list-view {
+    -fx-background-color: #3d3d3d;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-padding: 5px;
+}
+
+/* Celle della lista */
+.mode-combo .combo-box-popup .list-cell {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: white;
+    -fx-padding: 12px 15px;
+    -fx-font-size: 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+/* Effetti hover e selezione */
+.mode-combo .combo-box-popup .list-cell:hover {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: white;
+}
+
+.mode-combo .combo-box-popup .list-cell:selected {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+}
+
+/* Stile della freccia */
+.mode-combo .arrow-button {
+    -fx-background-color: #2196f3;
+    -fx-background-radius: 0 8px 8px 0;
+    -fx-padding: 0 10px;
+}
+
+.mode-combo .arrow {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-padding: 4px;
+    -fx-shape: "M0 0 L6 5 L12 0 Z";
+}
+
+/* Effetti hover e focus del ComboBox */
+.mode-combo:hover {
+    -fx-background-color: #464646;
+    -fx-border-color: #2196f3;
+    -fx-effect: dropshadow(three-pass-box, rgba(33,150,243,0.3), 8, 0, 0, 0);
+}
+
+.mode-combo:focused {
+    -fx-background-color: #464646;
+    -fx-border-color: #2196f3;
+    -fx-effect: dropshadow(three-pass-box, rgba(33,150,243,0.4), 10, 0, 0, 0);
+}
+/* Stili per la tabella moderna */
+.modern-table {
+    -fx-background-color: rgba(68, 68, 68, 0.95);
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 18px;
+}
+
+.modern-table .column-header {
+    -fx-background-color: rgba(46, 46, 46, 0.95);
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-title-color;
+    -fx-padding: 15px;
+}
+
+.modern-table .table-row-cell {
+    -fx-cell-size: 50px;
+    -fx-text-fill: -fx-text-color;
+}
+
+.table-cell {
+    -fx-text-fill: -fx-text-color;
+    -fx-alignment: CENTER;
+}
+
+.table-cell:odd {
+    -fx-background-color: #383838;
+}
+
+.table-cell:even {
+    -fx-background-color: #2a2a2a;
+}
+
+.table-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Stili per ComboBox */
+.combo-box {
+    -fx-background-color: #3a3a3a;
+    -fx-border-color: #555555;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: -fx-text-color;
+}
+
+.combo-box .arrow {
+    -fx-background-color: -fx-text-color;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+.loading-text {
+    -fx-text-fill: -fx-text-color;
+    -fx-font-size: 20px;
+}
+
+/* ScrollBar */
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555555;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #666666;
 }
