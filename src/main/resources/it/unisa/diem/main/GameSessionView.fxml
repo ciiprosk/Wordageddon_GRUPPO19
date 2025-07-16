@@ -26,8 +26,8 @@
                 <VBox alignment="CENTER" spacing="30" AnchorPane.leftAnchor="300" AnchorPane.rightAnchor="300" AnchorPane.topAnchor="150">
                     <children>
                         <Label style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Select Language and Difficulty" />
-                        <ComboBox fx:id="linguaComboBox" prefWidth="400" promptText="Select Language" style="-fx-font-size: 20px;" />
-                        <ComboBox fx:id="difficoltaComboBox" prefWidth="400" promptText="Select Difficulty" style="-fx-font-size: 20px;" />
+                        <ComboBox fx:id="linguaComboBox" prefWidth="400" promptText="Select Language" style="-fx-font-size: 20px;" styleClass="cursor-hand"/>
+                        <ComboBox fx:id="difficoltaComboBox" prefWidth="400" promptText="Select Difficulty" style="-fx-font-size: 20px;" styleClass="cursor-hand"/>
                         <Button fx:id="instructionsToggleButton" prefWidth="300" style="-fx-font-size: 20px;" text="Show Instructions" />
 
                         <TextArea fx:id="instructionsTextArea" editable="false" prefHeight="200" prefWidth="500" style="-fx-font-size: 16px;" visible="false" wrapText="true">

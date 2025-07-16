@@ -758,3 +758,26 @@
 .scroll-bar .thumb:hover {
     -fx-background-color: #666666;
 }
+
+.check-box, .button, .combo-box {
+    -fx-cursor: hand;
+}
+
+/* Aggiungi questa regola CSS */
+.cursor-hand {
+    -fx-cursor: hand;
+}
+
+.combo-box {
+    -fx-cursor: hand;
+}
+
+/* Opzionale: stile per gli item nel dropdown */
+.combo-box .list-cell {
+    -fx-cursor: hand;
+}
+
+/* Opzionale: stile per la freccia del dropdown */
+.combo-box .arrow-button {
+    -fx-cursor: hand;
+}
