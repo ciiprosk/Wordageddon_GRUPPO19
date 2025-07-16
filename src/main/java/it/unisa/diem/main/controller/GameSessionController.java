@@ -672,9 +672,6 @@ public class GameSessionController {
     }
 
 
-    public boolean isSessioneCompletata() {
-        return sessioneCompletata;
-    }
 
     private void hideLoadingOverlay() {
         loadingOverlay.setVisible(false);

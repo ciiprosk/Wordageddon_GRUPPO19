@@ -34,7 +34,6 @@ public class Main extends Application {
 
             System.out.println("Database connesso con successo!");
 
-            // RIMUOVI IL CODICE CHE GESTISCE LA CHIUSURA QUI, NON SERVE PIU'
 
         } catch (SQLException e) {
             AlertUtils.mostraAlert(Alert.AlertType.ERROR, "Connessione al database fallita!", null, "Assicurati di essere connesso a internet!");
