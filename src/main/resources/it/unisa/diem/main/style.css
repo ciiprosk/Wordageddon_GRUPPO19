@@ -88,13 +88,13 @@
 
 /* Link e testo secondario più grandi */
 .link-label {
-    -fx-text-fill: -fx-primary;
+    -fx-text-fill: #1976d2 !important;
     -fx-cursor: hand;
     -fx-font-size: 18px;  /* Aumentato */
 }
 
 .link-label:hover {
-    -fx-text-fill: -fx-primary-light;
+    -fx-text-fill: -fx-primary-light !important;
     -fx-underline: true;
 }
 
