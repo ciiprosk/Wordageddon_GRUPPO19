@@ -67,7 +67,7 @@
 
                 <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="100">
                     <children>
-                        <Label fx:id="textTitleLabel" style="-fx-font-size: 25px; -fx-font-weight: bold;" text="Document Title" />
+                        <Label fx:id="textTitleLabel" style="-fx-font-size: 40px; -fx-font-weight: bold;" text="Document Title" />
                         <TextArea fx:id="textBodyArea" editable="false" prefHeight="400" prefWidth="900" style="-fx-font-size: 24px;" wrapText="true" />
                         <Label fx:id="timerLabel" style="-fx-font-size: 20px;" text="00:00" />
                         <Button fx:id="continueButton" prefWidth="200" style="-fx-font-size: 25px;" text="Continue" />

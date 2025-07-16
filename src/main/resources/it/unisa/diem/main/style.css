@@ -7,8 +7,8 @@
     -fx-grey-color: #b9b9b9;
     -fx-light-grey-color: #d1d1d1;
     -fx-background: #121212;
-    -fx-title-color: #1976d2;     /* Giallo solo per i titoli */
-    -fx-text-color: #ffffff;      /* Bianco per il testo normale */
+    -fx-title-color: #1976d2;
+    -fx-text-color: #ffffff;
 }
 
 .root {
