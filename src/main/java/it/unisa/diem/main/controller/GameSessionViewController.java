@@ -212,6 +212,25 @@ public class GameSessionViewController {
             instructionsToggleButton.setText("Hide Instructions");
         }
     }
+    private void tornaAlMenuHome() {
+        if (isGameStarted && !sessioneCompletata && !isTransitioningToResults) {
+            deleteGameSessionFromDB();
+        }
+
+        isGameStarted = false;
+        sessioneCompletata = false;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unisa/diem/main/HomeMenuView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) rootStackPane.getScene().getWindow(); // usa il tuo StackPane per ottenere lo Stage
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     private Difficolta convertStringToDifficolta(String difficoltaString) {
@@ -312,7 +331,7 @@ public class GameSessionViewController {
             AlertUtils.mostraAlertConAzione(Alert.AlertType.WARNING, "Attenzione", null,
                     "Errore durante il caricamento dei testi: " + ex.getMessage(), button -> {
 
-                    handleBackToMenu(null);         //DA MODIFICARE!!!!!!!
+                    tornaAlMenuHome();
                     });
         });
 
