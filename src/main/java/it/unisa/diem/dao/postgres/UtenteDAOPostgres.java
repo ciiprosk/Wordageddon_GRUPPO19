@@ -1,3 +1,7 @@
+/**
+ * @file UtenteDAOPostgres.java
+ * @brief Implementazione PostgreSQL per la gestione degli utenti
+ */
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.UtenteDAO;
@@ -11,9 +15,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @class UtenteDAOPostgres
+ * @brief Implementazione concreta di UtenteDAO per PostgreSQL
+ *
+ * Gestisce tutte le operazioni CRUD per gli utenti:
+ * - Registrazione e autenticazione
+ * - Gestione profili
+ * - Verifica credenziali
+ * - Gestione ruoli
+ */
 public class UtenteDAOPostgres implements UtenteDAO {
+
+    /**
+     * @brief Costruttore di default
+     */
     public UtenteDAOPostgres() {}
 
+    /**
+     * @brief Verifica se un'email è già registrata
+     * @param email Email da verificare
+     * @return true se l'email esiste, false altrimenti
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public boolean emailAlreadyExists(String email) throws SQLException, DBException {
 
@@ -47,6 +71,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Verifica se uno username è già in uso
+     * @param username Username da verificare
+     * @return true se lo username esiste, false altrimenti
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public boolean usernameAlreadyExists(String username) throws SQLException, DBException {
 
@@ -79,6 +109,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Ricerca un utente per username
+     * @param username Username da cercare
+     * @return Optional contenente l'utente se trovato
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public Optional<Utente> selectByUsername(String username) throws SQLException, DBException {
 
@@ -109,6 +145,11 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Recupera tutti gli utenti registrati
+     * @return Lista di tutti gli utenti
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<Utente> selectAll() throws SQLException, DBException {
 
@@ -133,6 +174,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
         return utenti;
     }
 
+    /**
+     * @brief Registra un nuovo utente
+     * @param utente L'utente da registrare
+     * @throws DBException in caso di errori di database
+     * @note Salva anche il salt per l'hash della password
+     */
     @Override
     public void insert(Utente utente) throws SQLException, DBException {
 
@@ -155,6 +202,11 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Aggiorna i dati di un utente (senza modificare lo username)
+     * @param utente L'utente con i dati aggiornati
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public void update(Utente utente) throws SQLException, DBException {     //NON PREVEDE l'aggiornamento di username
 
@@ -178,6 +230,12 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Aggiorna tutti i dati di un utente (incluso lo username)
+     * @param oldUsername Username attuale da modificare
+     * @param utente Nuovi dati dell'utente
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public void update(String oldUsername, Utente utente) throws SQLException, DBException {     //PREVEDE aggiornamento username
 
@@ -202,6 +260,11 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @brief Elimina un utente
+     * @param utente L'utente da eliminare
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public void delete(Utente utente) throws SQLException, DBException {
 
@@ -223,6 +286,13 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @private
+     * @brief Crea un oggetto Utente da un ResultSet
+     * @param rs ResultSet contenente i dati
+     * @return Utente creato
+     * @throws SQLException in caso di errori SQL
+     */
     private Utente getUser(ResultSet rs) throws SQLException {
 
         Utente utente = null;
@@ -239,6 +309,10 @@ public class UtenteDAOPostgres implements UtenteDAO {
 
     }
 
+    /**
+     * @private
+     * @brief Prepara lo statement per l'inserimento di un utente
+     */
     private void setUserForInsert(PreparedStatement cmd, Utente utente) throws SQLException {
         cmd.setString(1, utente.getUsername());
         cmd.setString(2, utente.getEmail());
@@ -247,6 +321,10 @@ public class UtenteDAOPostgres implements UtenteDAO {
         cmd.setObject(5, utente.getRuolo().name(), java.sql.Types.OTHER);
     }
 
+    /**
+     * @private
+     * @brief Prepara lo statement per l'aggiornamento (senza username)
+     */
     private void setUserForUpdate(PreparedStatement cmd, Utente utente) throws SQLException {
         cmd.setString(1, utente.getEmail());
         cmd.setString(2, utente.getHashedPassword());
@@ -254,6 +332,10 @@ public class UtenteDAOPostgres implements UtenteDAO {
         cmd.setString(4, utente.getUsername());
     }
 
+    /**
+     * @private
+     * @brief Prepara lo statement per l'aggiornamento (con username)
+     */
     private void setUserForUpdate(PreparedStatement cmd, String oldUsername, Utente utente) throws SQLException {
         cmd.setString(1, utente.getUsername());
         cmd.setString(2, utente.getEmail());
@@ -262,7 +344,10 @@ public class UtenteDAOPostgres implements UtenteDAO {
         cmd.setString(5, oldUsername);
     }
 
-
+    /**
+     * @private
+     * @brief Prepara lo statement per l'eliminazione di un utente
+     */
     private void setUserForDelete(PreparedStatement cmd, Utente utente) throws SQLException {
         cmd.setString(1, utente.getUsername());
     }
