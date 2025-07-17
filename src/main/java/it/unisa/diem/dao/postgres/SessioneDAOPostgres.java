@@ -37,7 +37,6 @@ public class SessioneDAOPostgres implements SessioneDAO {
     private  UtenteDAO utenteDAO;
 
     /**
-     * @brief Costruttore principale
      *
      * Inizializza una nuova istanza del DAO creando una dipendenza
      * con UtenteDAOPostgres per la gestione degli utenti
