@@ -1,6 +1,6 @@
 /**
- * @file SessioneDAOPostgres.java
- * @brief Implementazione PostgreSQL per la gestione delle sessioni
+ *  SessioneDAOPostgres.java
+ *  Implementazione PostgreSQL per la gestione delle sessioni
  */
 
 package it.unisa.diem.dao.postgres;
@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @class SessioneDAOPostgres
- * @brief Implementazione concreta di SessioneDAO per PostgreSQL
+ *  SessioneDAOPostgres
+ *  Implementazione concreta di SessioneDAO per PostgreSQL
  *
  * Gestisce tutte le operazioni CRUD per le sessioni:
  * - Creazione e gestione sessioni utente
@@ -46,7 +46,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Ricerca una sessione per ID
+     *  Ricerca una sessione per ID
      * @param id L'ID della sessione da cercare
      * @return Optional contenente la sessione se trovata
      * @throws DBException in caso di errori di database
@@ -82,7 +82,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Ricerca l'ultima sessione di un utente
+     *  Ricerca l'ultima sessione di un utente
      * @param username L'username dell'utente
      * @return Optional contenente la sessione se trovata
      * @throws DBException in caso di errori di database
@@ -118,7 +118,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Recupera tutte le sessioni ordinate per data
+     *  Recupera tutte le sessioni ordinate per data
      * @return Lista di tutte le sessioni (ordine decrescente per data)
      * @throws DBException in caso di errori di database
      */
@@ -148,10 +148,10 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Inserisce una nuova sessione
+     *  Inserisce una nuova sessione
      * @param sessione La sessione da inserire
      * @throws DBException in caso di errori di database
-     * @note Imposta l'ID generato automaticamente sulla sessione
+     *  Imposta l'ID generato automaticamente sulla sessione
      */
 
     @Override
@@ -185,7 +185,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Aggiorna i dati di una sessione esistente
+     *  Aggiorna i dati di una sessione esistente
      * @param sessione La sessione con i dati aggiornati
      * @throws DBException in caso di errori di database
      */
@@ -213,7 +213,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Elimina una sessione
+     *  Elimina una sessione
      * @param sessione La sessione da eliminare
      * @throws DBException in caso di errori di database
      */
@@ -240,7 +240,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Elimina una sessione per ID
+     *  Elimina una sessione per ID
      * @param sessioneId L'ID della sessione da eliminare
      * @throws DBException in caso di errori di database
      */
@@ -267,7 +267,7 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     //LEADERBOARD & HISTORY
     /**
-     * @brief Recupera le ultime 10 sessioni di un utente per difficoltà
+     *  Recupera le ultime 10 sessioni di un utente per difficoltà
      * @param username L'username dell'utente
      * @param difficolta Il livello di difficoltà da filtrare
      * @return Lista delle voci dello storico
@@ -305,11 +305,11 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @brief Recupera la top 10 della classifica per difficoltà
+     *  Recupera la top 10 della classifica per difficoltà
      * @param difficolta Il livello di difficoltà da filtrare
      * @return Lista delle voci di classifica
      * @throws DBException in caso di errori di database
-     * @note Ordinata per punteggio medio decrescente
+     *
      */
     @Override
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
@@ -353,8 +353,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     //METODI PRIVATI
 
     /**
-     * @private
-     * @brief Crea un oggetto Sessione da un ResultSet
+     *
+     *  Crea un oggetto Sessione da un ResultSet
      * @param rs Il ResultSet contenente i dati
      * @return L'oggetto Sessione creato
      * @throws SQLException in caso di errori SQL
@@ -383,8 +383,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @private
-     * @brief Recupera un utente dal database
+     *
+     *  Recupera un utente dal database
      * @param username L'username dell'utente
      * @return L'oggetto Utente
      * @throws DBException se l'utente non viene trovato
@@ -400,8 +400,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @private
-     * @brief Prepara lo statement per l'inserimento di una sessione
+     *
+     *  Prepara lo statement per l'inserimento di una sessione
      */
     private void setSessionForInsert(PreparedStatement cmd, Sessione sessione) throws SQLException {
 
@@ -414,8 +414,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @private
-     * @brief Prepara lo statement per l'aggiornamento di una sessione
+     *
+     *  Prepara lo statement per l'aggiornamento di una sessione
      */
     private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException{
 
@@ -426,8 +426,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @private
-     * @brief Prepara lo statement per l'eliminazione di una sessione
+     *
+     *  Prepara lo statement per l'eliminazione di una sessione
      */
     private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException{
 
@@ -436,8 +436,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
     /**
-     * @private
-     * @brief Crea una voce di classifica da un ResultSet
+     *
+     *  Crea una voce di classifica da un ResultSet
      */
 
     private VoceClassifica getLeaderboard(ResultSet rs) throws SQLException {
@@ -458,8 +458,8 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
 
     /**
-     * @private
-     * @brief Crea una voce dello storico da un ResultSet
+     *
+     *  Crea una voce dello storico da un ResultSet
      */
     private VoceStorico getLastSessions(ResultSet rs) throws SQLException {
 
