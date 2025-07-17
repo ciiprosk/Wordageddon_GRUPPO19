@@ -13,15 +13,18 @@ public class GameSession {
     private Lingua lingua;
     private Difficolta difficolta;
     private long sessioneId;
-
-
     private List<Analisi> analyses;
     private List<Domanda> domande;
-
     private int currentQuestionIndex;
     private int score;
 
-    // === COSTRUTTORE ===
+    /**
+     * Costruttore per creare una nuova sessione di gioco.
+     *
+     * @param utente L'utente associato alla sessione
+     * @param lingua La lingua selezionata per la sessione
+     * @param difficolta Il livello di difficoltà selezionato per la sessione
+     */
     public GameSession(Utente utente, Lingua lingua, Difficolta difficolta) {
         this.utente = utente;
         this.lingua = lingua;
@@ -30,7 +33,6 @@ public class GameSession {
         this.score = 0;
     }
 
-    // === GETTER E SETTER ===
     public Utente getUtente() {
         return utente;
     }
@@ -75,8 +77,11 @@ public class GameSession {
         this.score = score;
     }
 
-    // === METODI DI UTILITY ===
-
+    /**
+     * Restituisce la domanda corrente.
+     *
+     * @return La domanda corrente, o null se non ci sono più domande
+     */
     public Domanda getCurrentQuestion() {
         if (currentQuestionIndex >= 0 && currentQuestionIndex < domande.size()) {
             return domande.get(currentQuestionIndex);
@@ -84,14 +89,25 @@ public class GameSession {
         return null;
     }
 
+    /**
+     * Verifica se ci sono altre domande disponibili.
+     *
+     * @return true se ci sono altre domande, false altrimenti
+     */
     public boolean hasNextQuestion() {
         return currentQuestionIndex < domande.size();
     }
 
+    /**
+     * Incrementa l'indice della domanda corrente.
+     */
     public void incrementQuestionIndex() {
         currentQuestionIndex++;
     }
 
+    /**
+     * Incrementa il punteggio della sessione.
+     */
     public void incrementScore() {
         score++;
     }
