@@ -1,7 +1,7 @@
 @startuml
 
 package it.unisa.diem.model.gestione.utenti as uteneti{
-    enum it.unisa.diem.model.gestione.utenti.Ruolo{
+    enum Ruolo{
     +  USER
     +  ADMIN
     }
@@ -283,6 +283,25 @@ package it.unisa.diem.model.gestione.analisi.stopword as stopword{
     + String toString()
     }
 
+
+    class StopwordITA {
+    # String[] getArticoli()
+    # String[] getPreposizioni()
+    # String[] getPronomi()
+    # String[] getVerbiAvere()
+    # String[] getVerbiEssere()
+    # String[] getConnettiviCongiunzioni()
+    }
+    class StopwordENG {
+    # String[] getArticoli()
+    # String[] getPreposizioni()
+    # String[] getPronomi()
+    # String[] getVerbiAvere()
+    # String[] getVerbiEssere()
+    # String[] getConnettiviCongiunzioni()
+    }
+
+
 }
 package it.unisa.diem.dao.postgres as postgres{
     class SessioneDAOPostgres {
@@ -356,46 +375,10 @@ package it.unisa.diem.dao.postgres as postgres{
 }
 
 
-
-
-
-
-class it.unisa.diem.model.gestione.analisi.stopword.StopwordITA {
-# String[] getArticoli()
-# String[] getPreposizioni()
-# String[] getPronomi()
-# String[] getVerbiAvere()
-# String[] getVerbiEssere()
-# String[] getConnettiviCongiunzioni()
-}
-
-
-
-
-
-
-
-
-
-class it.unisa.diem.model.gestione.analisi.stopword.StopwordENG {
-# String[] getArticoli()
-# String[] getPreposizioni()
-# String[] getPronomi()
-# String[] getVerbiAvere()
-# String[] getVerbiEssere()
-# String[] getConnettiviCongiunzioni()
-}
-
-
-
-
-
-
-
-
 DAO <|-- SessioneDAO
 SessioneDAO <|.. SessioneDAOPostgres
 NotEditableDAO <|-- SessioneDocumentoDAO
+SessioneDAOPostgres <|-- SessioneDocumentoDAO
 NotEditableDAO <|-- DocumentoDAO
 UtenteDAO <|.. UtenteDAOPostgres
 NotEditableDAO <|-- interfacce.AnalisiDAO

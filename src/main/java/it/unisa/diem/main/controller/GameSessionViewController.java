@@ -14,6 +14,7 @@ import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.SessionManager;
+import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -145,44 +146,11 @@ public class GameSessionViewController {
 
         setupSelectionPane();
 
-        rootStackPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.windowProperty().addListener((obsWin, oldWindow, newWindow) -> {
-                    if (newWindow != null) {
-                        Stage stage = (Stage) newWindow;
-                        stage.setOnCloseRequest(event -> {
-                            if (isGameStarted && !sessioneCompletata) {
-                                event.consume();
-
-                                // Alert modificato con AlertUtils
-                                Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                                confirmationAlert.setTitle("Confirm exit");
-                                confirmationAlert.setHeaderText("Quit the game?");
-                                confirmationAlert.setContentText("If you quit now, your game will be deleted. Do you really want to exit?");
-
-                                ButtonType siButton = new ButtonType("Yes, quit");
-                                ButtonType noButton = new ButtonType("No, continue", ButtonBar.ButtonData.CANCEL_CLOSE);
-                                confirmationAlert.getButtonTypes().setAll(siButton, noButton);
-
-                                // Applica lo stile
-                                DialogPane dialogPane = confirmationAlert.getDialogPane();
-                                dialogPane.getStylesheets().add(
-                                        AlertUtils.class.getResource("/it/unisa/diem/main/style.css").toExternalForm()
-                                );
-                                dialogPane.getStyleClass().add("dialog-pane");
-
-                                confirmationAlert.showAndWait().ifPresent(response -> {
-                                    if (response == siButton) {
-                                        deleteGameSessionFromDB();
-                                        stage.close();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
+        Platform.runLater(() -> {
+            Stage stage = (Stage) rootStackPane.getScene().getWindow();
+            impostaChiusuraFinestra(stage);
         });
+
     }
 
 
@@ -646,16 +614,6 @@ public class GameSessionViewController {
 
 
 
-    /*
-    private void showAlert(String msg) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Attenzione");
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-    */
-
     private void showLoadingOverlayWithMessage(String message) {
         loadingMessageLabel.setText(message);
         loadingOverlay.setVisible(true);
@@ -719,6 +677,19 @@ public class GameSessionViewController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    private void impostaChiusuraFinestra(Stage stage) {
+        stage.setOnCloseRequest(event -> {
+            if (isGameStarted && !sessioneCompletata) {
+                event.consume();
+                AlertUtils.mostraConfermaUscitaGioco(button -> {
+                    deleteGameSessionFromDB();
+                    stage.close();
+                });
+            }
+        });
     }
 
 

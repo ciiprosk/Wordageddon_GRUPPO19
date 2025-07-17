@@ -14,8 +14,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 /**
- * @interface AnalisiDAO
- * @brief Interfaccia per l'accesso ai dati delle analisi.
+ *Interfaccia per l'accesso ai dati delle analisi.
  *
  * Estende NotEditableDAO<Analisi> e aggiunge operazioni specifiche per la gestione delle analisi.
  * Fornisce metodi per selezionare, inserire ed eliminare analisi nel database.
