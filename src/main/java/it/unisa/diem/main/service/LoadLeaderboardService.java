@@ -12,15 +12,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servizio per il caricamento della classifica dei punteggi per ogni livello di difficoltà.
+ * Estende {@link Service} per fornire un'esecuzione asincrona del task.
+ */
 public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceClassifica>>> {
 
     private final SessioneDAOPostgres dao;
     private String username;
 
+    /**
+     * Costruttore della classe. Inizializza il DAO per l'accesso al database.
+     */
     public LoadLeaderboardService() {
         dao = new SessioneDAOPostgres();
     }
 
+    /**
+     * Crea e restituisce un task per il caricamento della classifica.
+     * Il task esegue una query per ogni livello di difficoltà e restituisce una mappa con i risultati.
+     *
+     * @return Task per il caricamento della classifica
+     */
     @Override
     protected Task<Map<Difficolta, List<VoceClassifica>>> createTask() {
         return new Task<>() {
@@ -36,6 +49,11 @@ public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceCla
         };
     }
 
+    /**
+     * Restituisce la mappa contenente le classifiche per ogni livello di difficoltà.
+     *
+     * @return Mappa con le classifiche divise per difficoltà
+     */
     public Map<Difficolta, List<VoceClassifica>> getValueMap() {
         return getValue();
     }

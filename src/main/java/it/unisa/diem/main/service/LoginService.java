@@ -14,18 +14,34 @@ import java.util.Optional;
 
 import static it.unisa.diem.model.gestione.utenti.SicurezzaPassword.verificaPassword;
 
+/**
+ * Servizio per il login di un utente.
+ * Estende la classe Service di JavaFX per eseguire l'operazione in background.
+ */
 public class LoginService extends Service<Utente> {
 
     private final String username;
     private final String password;
     private final UtenteDAO utentePostgres;
 
+    /**
+     * Costruttore del servizio di login.
+     *
+     * @param username lo username dell'utente che sta effettuando il login
+     * @param password la password dell'utente che sta effettuando il login
+     * @param utentePostgres l'DAO per l'accesso ai dati degli utenti
+     */
     public LoginService(String username, String password, UtenteDAO utentePostgres) {
         this.username = username;
         this.password = password;
         this.utentePostgres = utentePostgres;
     }
 
+    /**
+     * Crea e restituisce un Task per l'operazione di login.
+     *
+     * @return un Task che esegue il login e restituisce l'utente se autenticato, null altrimenti
+     */
     @Override
     protected Task<Utente> createTask() {
         return new Task<>() {

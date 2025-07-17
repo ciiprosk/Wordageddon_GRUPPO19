@@ -10,12 +10,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+/**
+ * Servizio per la validazione di un documento in base a determinati criteri.
+ * Verifica la lunghezza del documento, le parole significative e la copertura del dizionario.
+ */
 public class ValidazioneDocumentoService extends Service<Boolean> {
 
     private File file;
     private Difficolta difficolta;
     private StopwordManager stopword;
 
+    /**
+     * Configura i parametri per la validazione del documento.
+     * @param file Il file da validare
+     * @param difficolta Il livello di difficoltà del documento
+     * @param stopword Il gestore delle stopword da utilizzare
+     */
     public void setup(File file, Difficolta difficolta, StopwordManager stopword) {
         this.file = file;
         this.difficolta = difficolta;
@@ -31,14 +41,11 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
                     throw new IllegalArgumentException("Parametri di validazione mancanti.");
                 }
 
-                // === Lettura contenuto ===
                 String contenuto = Files.readString(file.toPath());
 
-                // === Conteggio parole totali ===
                 String[] paroleRaw = contenuto.trim().split("\\s+");
                 int numParole = paroleRaw.length;
 
-                // === Limiti minimi e massimi in base alla difficoltà ===
                 int minParole, maxParole;
                 switch (difficolta) {
                     case FACILE -> {
@@ -64,7 +71,6 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
                     throw new IllegalStateException("Il documento ha " + numParole + " parole.\nMassimo consentito: " + maxParole);
                 }
 
-                // === Rimozione stopword e raccolta parole significative ===
                 Set<String> stopwords = new HashSet<>(stopword.getParole());
 
                 List<String> paroleSignificative = new ArrayList<>();
@@ -77,7 +83,6 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
 
                 Set<String> paroleDistinte = new HashSet<>(paroleSignificative);
 
-                // === Vincoli interni per generazione domande ===
                 if (paroleSignificative.size() < 50) {
                     throw new IllegalStateException("Il documento contiene solo " + paroleSignificative.size() +
                             " parole significative (non-stopword). Ne servono almeno 50.");
@@ -88,7 +93,6 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
                             " parole significative distinte. Ne servono almeno 20.");
                 }
 
-                // === Verifica per domanda di assenza ===
                 List<String> dizionario = List.of(
                         "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
                         "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"

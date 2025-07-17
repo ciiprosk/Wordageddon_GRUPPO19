@@ -8,22 +8,26 @@ import javafx.concurrent.Task;
 
 import java.util.List;
 
+/**
+ * Servizio per il caricamento dei titoli dei documenti in background.
+ * Estende la classe Service di JavaFX per operazioni asincrone.
+ */
 public class LoadTitlesService extends Service<List<String>> {
 
     private final DocumentoDAO dao;
 
+    /**
+     * Costruttore della classe. Inizializza il DAO per l'accesso ai documenti.
+     */
     public LoadTitlesService() {
         this.dao = new DocumentoDAOPostgres();
-        /*
-        this.dao = new DocumentoDAOPostgres(
-                PropertiesLoader.getProperty("database.url"),
-                PropertiesLoader.getProperty("database.user"),
-                PropertiesLoader.getProperty("database.password")
-        );
-
-         */
     }
 
+    /**
+     * Crea e restituisce un Task per il recupero dei titoli dei documenti.
+     *
+     * @return Task che rappresenta l'operazione di recupero dei titoli
+     */
     @Override
     protected Task<List<String>> createTask() {
         return new Task<>() {
