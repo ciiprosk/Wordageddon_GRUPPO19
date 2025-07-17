@@ -175,7 +175,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.6.3</version>
                 <configuration>
-                    <excludePackageNames>**.controller</excludePackageNames>
+                    <excludePackageNames>it.unisa.diem.controller.*, it.unisa.diem.main.Wordageddon, it.unisa.diem.main.controller, it.unisa.diem.test, it.unisa.diem.dao.interfacce</excludePackageNames>
                 </configuration>
             </plugin>
 
