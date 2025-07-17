@@ -13,27 +13,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Servizio per il recupero della cronologia delle sessioni di un utente, organizzate per difficoltà.
+ */
 public class HistoryService extends Service<Map<Difficolta, List<VoceStorico>>> {
 
     private final SessioneDAOPostgres dao;
     private String username;
 
+    /**
+     * Costruttore che inizializza il DAO per l'accesso al database.
+     */
     public HistoryService() {
         this.dao = new SessioneDAOPostgres();
-        /*
-        this.dao = new SessioneDAOPostgres(
-                PropertiesLoader.getProperty("database.url"),
-                PropertiesLoader.getProperty("database.user"),
-                PropertiesLoader.getProperty("database.password")
-        );
-
-         */
     }
 
+    /**
+     * Imposta il nome utente per cui recuperare la cronologia.
+     * @param username Il nome utente di cui recuperare la cronologia
+     */
     public void setParameters(String username) {
         this.username = username;
     }
 
+    /**
+     * Crea e restituisce un task per il recupero della cronologia delle sessioni.
+     * @return Task che recupera la cronologia organizzata per difficoltà
+     */
     @Override
     protected Task<Map<Difficolta, List<VoceStorico>>> createTask() {
         return new Task<>() {
@@ -51,6 +57,10 @@ public class HistoryService extends Service<Map<Difficolta, List<VoceStorico>>> 
         };
     }
 
+    /**
+     * Restituisce la mappa contenente le sessioni organizzate per difficoltà.
+     * @return Mappa con difficoltà come chiave e lista di sessioni come valore
+     */
     public Map<Difficolta, List<VoceStorico>> getValueMap() {
         return getValue();
     }

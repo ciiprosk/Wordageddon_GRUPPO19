@@ -27,7 +27,6 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
         return new Task<>() {
             @Override
             protected List<Analisi> call() throws Exception {
-                System.out.println("CIAO SONO QUI");
                 List<Analisi> analyses = new ArrayList<>();
                 String folderPath = "analysis/" + lingua + "/" + difficolta.toString().toLowerCase();
                 File folder = new File(folderPath);
@@ -65,17 +64,15 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
     }
 
     /**
-     * Converte un path di analisi in path del relativo file .bin di testo.
-     * Esempio: analysis/ITA/facile/prezzemolo_analysis.bin -> data/ITA/facile/prezzemolo.bin
+     * Converte il percorso di un file di analisi nel percorso del relativo file di dati.
+     * @param analysisPath Il percorso del file di analisi
+     * @return Il percorso del file di dati corrispondente
      */
     private String convertAnalysisToDataPath(String analysisPath) {
-        System.out.println("DEBUG - convertAnalysisToDataPath input: " + analysisPath);
         File file = new File(analysisPath);
         String fileName = file.getName();
-        System.out.println(fileName);
         String titolo = fileName.replace("_analysis.bin", "");
 
-        // Recupero cartelle padre
         File difficoltaDir = file.getParentFile();
         File linguaDir = difficoltaDir.getParentFile();
 
@@ -86,5 +83,4 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
         System.out.println("DEBUG - convertAnalysisToDataPath output: " + dataPath);
         return dataPath;
     }
-
 }

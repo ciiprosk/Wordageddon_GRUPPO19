@@ -1,7 +1,11 @@
+/**
+ * @file AnalisiDAOPostgres.java
+ * @brief Implementazione PostgreSQL per la gestione delle analisi
+ */
+
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.AnalisiDAO;
-import it.unisa.diem.dao.interfacce.DAO;
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
@@ -11,12 +15,29 @@ import it.unisa.diem.utility.dbpool.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @class AnalisiDAOPostgres
+ * @brief Implementazione concreta di AnalisiDAO per PostgreSQL
+ *
+ * Gestisce le operazioni CRUD per le analisi sul database PostgreSQL.
+ * La classe sfrutta un connection pool per la gestione delle connessioni.
+ */
 public class AnalisiDAOPostgres implements AnalisiDAO {
+
+    /**
+     * @brief Costruttore di default
+     */
     public AnalisiDAOPostgres() {}
+
+    /**
+     * @brief Ricerca un'analisi per titolo
+     * @param titolo Il titolo dell'analisi da cercare
+     * @return Optional contenente l'analisi se trovata
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException{
         Optional<Analisi> analisi = Optional.empty();
@@ -38,25 +59,12 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         }
         return analisi;
     }
-/*
-    @Override
-    public void update(Analisi a, String oldTitolo) throws SQLException, DBException { //c'è un trigger che cambia anche documento e vale il viceversa
-        String query = "UPDATE analisi SET nome = ? percorso = ? WHERE nome = ?";
-        try(Connection con=DriverManager.getConnection(url, user, password);
-        PreparedStatement ps=con.prepareStatement(query);){
-            ps.setString(1, a.getTitolo());
-            ps.setString(2, a.getPathAnalisi());
-            ps.setString(3, oldTitolo);
-            int lines=ps.executeUpdate();
-            if(lines == 0) throw new DBException("Errore: nessuna riga modificata");
 
-        }catch(SQLException e){
-            throw new DBException("Errore nel databse, Impossibile inserire username",e);
-        }
-    }
-
-
- */
+    /**
+     * @brief Recupera tutte le analisi presenti
+     * @return Lista di tutte le analisi
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<Analisi> selectAll() throws DBException{
         List<Analisi> analisi=  new ArrayList<>();
@@ -73,6 +81,12 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         }
         return analisi;
     }
+
+    /**
+     * @brief Inserisce una nuova analisi
+     * @param analisi L'analisi da inserire
+     * @throws DBException in caso di errori di database
+     */
 
     @Override
     public void insert(Analisi analisi) throws DBException{
@@ -92,6 +106,13 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
 
     }
 
+    /**
+     * @brief Elimina un'analisi esistente
+     * @param analisi L'analisi da eliminare
+     * @throws DBException in caso di errori di database
+     * @note Un trigger sul database elimina automaticamente i documenti associati
+     */
+
     @Override
     public void delete(Analisi analisi) throws DBException {
         //nel db c'è un trigger che alla cancellazione di analisi cancella anche il documento
@@ -107,13 +128,18 @@ public class AnalisiDAOPostgres implements AnalisiDAO {
         }
     }
 
+    /**
+     * @brief Crea un oggetto Analisi da un ResultSet
+     * @param rs Il ResultSet contenente i dati
+     * @return L'oggetto Analisi creato
+     * @throws SQLException in caso di errori SQL
+     * @private Metodo helper per la costruzione di oggetti Analisi
+     */
     private Analisi getAnalisi(ResultSet rs)throws SQLException{
         Analisi a=null;
-        String nome=rs.getString("nome");
         String documento=rs.getString("documento");
         String path=rs.getString("percorso");
         String split[]= path.split("[/.]");
-        String nomeFile=split[split.length-2];
         Difficolta difficolta= Difficolta.valueOf(split[split.length-3].toUpperCase());
         Lingua lingua= Lingua.valueOf(split[split.length-4].toUpperCase());
         a = new Analisi(new Documento(documento,lingua, difficolta), null); //non mi interessano le stopword

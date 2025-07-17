@@ -1,3 +1,8 @@
+/**
+ * @file SessioneDAOPostgres.java
+ * @brief Implementazione PostgreSQL per la gestione delle sessioni
+ */
+
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.SessioneDAO;
@@ -17,13 +22,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @class SessioneDAOPostgres
+ * @brief Implementazione concreta di SessioneDAO per PostgreSQL
+ *
+ * Gestisce tutte le operazioni CRUD per le sessioni:
+ * - Creazione e gestione sessioni utente
+ * - Recupero storico sessioni
+ * - Gestione classifiche
+ * - Operazioni di ranking
+ */
+
 public class SessioneDAOPostgres implements SessioneDAO {
     private  UtenteDAO utenteDAO;
 
+    /**
+     * @brief Costruttore principale
+     *
+     * Inizializza una nuova istanza del DAO creando una dipendenza
+     * con UtenteDAOPostgres per la gestione degli utenti
+     */
     public SessioneDAOPostgres() {
         this.utenteDAO = new UtenteDAOPostgres();
     }
 
+    /**
+     * @brief Ricerca una sessione per ID
+     * @param id L'ID della sessione da cercare
+     * @return Optional contenente la sessione se trovata
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public Optional<Sessione> selectById(long id) throws DBException {
 
@@ -54,6 +82,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    /**
+     * @brief Ricerca l'ultima sessione di un utente
+     * @param username L'username dell'utente
+     * @return Optional contenente la sessione se trovata
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public Optional<Sessione> selectByUser(String username) throws DBException {
 
@@ -84,6 +118,11 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    /**
+     * @brief Recupera tutte le sessioni ordinate per data
+     * @return Lista di tutte le sessioni (ordine decrescente per data)
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<Sessione> selectAll() throws DBException {
 
@@ -108,6 +147,13 @@ public class SessioneDAOPostgres implements SessioneDAO {
         return sessioni;
 
     }
+
+    /**
+     * @brief Inserisce una nuova sessione
+     * @param sessione La sessione da inserire
+     * @throws DBException in caso di errori di database
+     * @note Imposta l'ID generato automaticamente sulla sessione
+     */
 
     @Override
     public void insert(Sessione sessione) throws DBException {
@@ -139,6 +185,11 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    /**
+     * @brief Aggiorna i dati di una sessione esistente
+     * @param sessione La sessione con i dati aggiornati
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public void update(Sessione sessione) throws DBException {
 
@@ -162,6 +213,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    /**
+     * @brief Elimina una sessione
+     * @param sessione La sessione da eliminare
+     * @throws DBException in caso di errori di database
+     */
+
     @Override
     public void delete(Sessione sessione) throws DBException {
 
@@ -183,6 +240,12 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    /**
+     * @brief Elimina una sessione per ID
+     * @param sessioneId L'ID della sessione da eliminare
+     * @throws DBException in caso di errori di database
+     */
+
     @Override
     public void delete(long sessioneId) throws DBException {
         String query = "DELETE FROM sessione WHERE id = ?";
@@ -203,65 +266,14 @@ public class SessioneDAOPostgres implements SessioneDAO {
         }
     }
 
-
-    private Sessione getSession(ResultSet rs) throws SQLException, DBException {
-
-        Sessione sessione = null;
-
-        long id = rs.getLong("id");
-
-        String username = rs.getString("utente");
-
-        Utente utente = getUser(username);
-
-        LocalDateTime inizio = rs.getTimestamp("dataInizio").toLocalDateTime();
-
-        int punteggio = rs.getInt("punteggioottenuto");
-
-        LocalDateTime fine = rs.getTimestamp("dataFine").toLocalDateTime();
-
-        sessione = new Sessione(id, utente, inizio, punteggio, fine);
-
-        return sessione;
-
-    }
-
-    private Utente getUser(String username) throws SQLException, DBException {
-
-        Optional<Utente> optionalUtente = utenteDAO.selectByUsername(username);
-
-        return optionalUtente.orElseThrow(() ->
-                new DBException("ERRORE: Utente " + username + " non trovato!")
-        );
-
-    }
-
-    private void setSessionForInsert(PreparedStatement cmd, Sessione sessione) throws SQLException {
-
-        cmd.setString(1, sessione.getUtente().getUsername());
-        cmd.setTimestamp(2, Timestamp.valueOf(sessione.getFine()));
-        cmd.setTimestamp(3, Timestamp.valueOf(sessione.getInizio()));
-        cmd.setInt(4, sessione.getPunteggio());
-
-
-    }
-
-    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException{
-
-        cmd.setTimestamp(1, Timestamp.valueOf(sessione.getFine()));
-        cmd.setInt(2, sessione.getPunteggio());
-        cmd.setLong(3, sessione.getId());
-
-    }
-
-    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException{
-
-        cmd.setLong(1, sessione.getId());
-
-    }
-
-
     //LEADERBOARD & HISTORY
+    /**
+     * @brief Recupera le ultime 10 sessioni di un utente per difficoltà
+     * @param username L'username dell'utente
+     * @param difficolta Il livello di difficoltà da filtrare
+     * @return Lista delle voci dello storico
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<VoceStorico> selectByLastSessions(String username, Difficolta difficolta) throws DBException {
         List<VoceStorico> storico = new ArrayList<>();
@@ -293,6 +305,13 @@ public class SessioneDAOPostgres implements SessioneDAO {
         return storico;
     }
 
+    /**
+     * @brief Recupera la top 10 della classifica per difficoltà
+     * @param difficolta Il livello di difficoltà da filtrare
+     * @return Lista delle voci di classifica
+     * @throws DBException in caso di errori di database
+     * @note Ordinata per punteggio medio decrescente
+     */
     @Override
     public List<VoceClassifica> selectByTopRanking(Difficolta difficolta) throws DBException {
 
@@ -332,6 +351,96 @@ public class SessioneDAOPostgres implements SessioneDAO {
 
     }
 
+    //METODI PRIVATI
+
+    /**
+     * @private
+     * @brief Crea un oggetto Sessione da un ResultSet
+     * @param rs Il ResultSet contenente i dati
+     * @return L'oggetto Sessione creato
+     * @throws SQLException in caso di errori SQL
+     * @throws DBException se l'utente non viene trovato
+     */
+    private Sessione getSession(ResultSet rs) throws SQLException, DBException {
+
+        Sessione sessione = null;
+
+        long id = rs.getLong("id");
+
+        String username = rs.getString("utente");
+
+        Utente utente = getUser(username);
+
+        LocalDateTime inizio = rs.getTimestamp("dataInizio").toLocalDateTime();
+
+        int punteggio = rs.getInt("punteggioottenuto");
+
+        LocalDateTime fine = rs.getTimestamp("dataFine").toLocalDateTime();
+
+        sessione = new Sessione(id, utente, inizio, punteggio, fine);
+
+        return sessione;
+
+    }
+
+    /**
+     * @private
+     * @brief Recupera un utente dal database
+     * @param username L'username dell'utente
+     * @return L'oggetto Utente
+     * @throws DBException se l'utente non viene trovato
+     */
+    private Utente getUser(String username) throws SQLException, DBException {
+
+        Optional<Utente> optionalUtente = utenteDAO.selectByUsername(username);
+
+        return optionalUtente.orElseThrow(() ->
+                new DBException("ERRORE: Utente " + username + " non trovato!")
+        );
+
+    }
+
+    /**
+     * @private
+     * @brief Prepara lo statement per l'inserimento di una sessione
+     */
+    private void setSessionForInsert(PreparedStatement cmd, Sessione sessione) throws SQLException {
+
+        cmd.setString(1, sessione.getUtente().getUsername());
+        cmd.setTimestamp(2, Timestamp.valueOf(sessione.getFine()));
+        cmd.setTimestamp(3, Timestamp.valueOf(sessione.getInizio()));
+        cmd.setInt(4, sessione.getPunteggio());
+
+
+    }
+
+    /**
+     * @private
+     * @brief Prepara lo statement per l'aggiornamento di una sessione
+     */
+    private void setSessionForUpdate(PreparedStatement cmd, Sessione sessione) throws SQLException{
+
+        cmd.setTimestamp(1, Timestamp.valueOf(sessione.getFine()));
+        cmd.setInt(2, sessione.getPunteggio());
+        cmd.setLong(3, sessione.getId());
+
+    }
+
+    /**
+     * @private
+     * @brief Prepara lo statement per l'eliminazione di una sessione
+     */
+    private void setSessionForDelete(PreparedStatement cmd, Sessione sessione) throws SQLException{
+
+        cmd.setLong(1, sessione.getId());
+
+    }
+
+    /**
+     * @private
+     * @brief Crea una voce di classifica da un ResultSet
+     */
+
     private VoceClassifica getLeaderboard(ResultSet rs) throws SQLException {
 
         VoceClassifica vc = null;
@@ -349,6 +458,10 @@ public class SessioneDAOPostgres implements SessioneDAO {
     }
 
 
+    /**
+     * @private
+     * @brief Crea una voce dello storico da un ResultSet
+     */
     private VoceStorico getLastSessions(ResultSet rs) throws SQLException {
 
         VoceStorico voceStorico = null;

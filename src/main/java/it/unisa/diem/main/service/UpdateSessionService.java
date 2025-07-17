@@ -9,30 +9,32 @@ import javafx.concurrent.Task;
 
 import java.time.LocalDateTime;
 
+/**
+ * Servizio per l'aggiornamento di una sessione di gioco nel database.
+ * Estende la classe {@link Service} di JavaFX per l'esecuzione in background.
+ */
 public class UpdateSessionService extends Service<Void> {
-    /*
-
-
-        try {
-            Sessione sessione = sessioneDAO.selectById(gameSession.getSessioneId()).orElseThrow();
-            sessione.setCompletato(true);
-            sessione.setPunteggio(gameSession.getScore());
-            sessioneDAO.update(sessione);
-            System.out.println("✅ Sessione completata e punteggio salvato: " + gameSession.getScore());
-        } catch (DBException e) {
-            showAlert("Errore nel salvataggio del punteggio: " + e.getMessage());
-        }
-
-     */
     private final SessioneDAO sessioneDAO;
     private GameSession gameSession;
-    public UpdateSessionService(SessioneDAO sessioneDAO,GameSession gameSession) {
-        this.sessioneDAO = sessioneDAO;
 
+    /**
+     * Costruttore della classe.
+     *
+     * @param sessioneDAO DAO per l'accesso alle sessioni nel database
+     * @param gameSession Sessione di gioco da aggiornare
+     */
+    public UpdateSessionService(SessioneDAO sessioneDAO, GameSession gameSession) {
+        this.sessioneDAO = sessioneDAO;
         this.gameSession = gameSession;
     }
+
+    /**
+     * Crea e restituisce un Task per l'aggiornamento della sessione.
+     *
+     * @return Task per l'aggiornamento della sessione
+     */
     @Override
-    protected  Task<Void> createTask(){
+    protected Task<Void> createTask() {
         return new Task<>() {
             @Override
             protected Void call() throws Exception {
@@ -41,7 +43,7 @@ public class UpdateSessionService extends Service<Void> {
                     sessione.setFine(LocalDateTime.now());
                     sessione.setPunteggio(gameSession.getScore());
                     sessioneDAO.update(sessione);
-                }catch (DBException e){
+                } catch (DBException e) {
                     throw e;
                 }
                 return null;

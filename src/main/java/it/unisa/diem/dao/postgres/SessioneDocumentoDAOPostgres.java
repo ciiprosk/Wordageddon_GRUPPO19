@@ -1,3 +1,7 @@
+/**
+ * @file SessioneDocumentoDAOPostgres.java
+ * @brief Implementazione PostgreSQL per la gestione delle associazioni Sessione-Documento
+ */
 package it.unisa.diem.dao.postgres;
 
 import it.unisa.diem.dao.interfacce.SessioneDocumentoDAO;
@@ -12,9 +16,26 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @class SessioneDocumentoDAOPostgres
+ * @brief Implementazione concreta di SessioneDocumentoDAO per PostgreSQL
+ *
+ * Gestisce le operazioni CRUD per le associazioni tra sessioni e documenti.
+ * Utilizza un connection pool per la gestione delle connessioni al database.
+ */
 public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
+
+    /**
+     * @brief Costruttore di default
+     */
     public SessioneDocumentoDAOPostgres() {}
 
+    /**
+     * @brief Recupera i documenti associati a una sessione
+     * @param idSessione ID della sessione
+     * @return Lista dei documenti associati
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<Documento> selectDocumentsBySession(long idSessione) throws DBException {
 
@@ -46,6 +67,11 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
     }
 
+    /**
+     * @brief Recupera tutte le associazioni sessione-documento
+     * @return Lista di tutte le associazioni
+     * @throws DBException in caso di errori di database
+     */
     @Override
     public List<SessioneDocumento> selectAll() throws DBException {
 
@@ -74,6 +100,12 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
     }
 
+    /**
+     * @brief Inserisce una nuova associazione sessione-documento
+     * @param sessioneDocumento L'associazione da inserire
+     * @throws DBException in caso di errori di database
+     */
+
     @Override
     public void insert(SessioneDocumento sessioneDocumento) throws DBException {
 
@@ -97,6 +129,12 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
         }
 
     }
+
+    /**
+     * @brief Elimina un'associazione sessione-documento
+     * @param SessioneDocumento L'associazione da eliminare
+     * @throws DBException in caso di errori di database
+     */
 
     @Override
     public void delete(SessioneDocumento SessioneDocumento) throws DBException {
@@ -122,35 +160,12 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
 
     }
 
-    private Documento getDocument(ResultSet rs) throws SQLException {
-
-        Documento documento = null;
-
-        String titolo = rs.getString("nome");
-        Lingua lingua = Lingua.valueOf(rs.getString("lingua"));
-        Difficolta difficolta = Difficolta.valueOf(rs.getString("difficolta"));
-        String path = rs.getString("percorso");
-
-        documento = new Documento(titolo, lingua, difficolta, path);
-
-        return documento;
-
-    }
-
-    private SessioneDocumento getSessionDocument(ResultSet rs) throws SQLException {
-
-        SessioneDocumento sessioneDocumento = null;
-
-        long idSessione = rs.getLong("sessione");
-
-        String documento = rs.getString("documento");
-
-        sessioneDocumento = new SessioneDocumento(idSessione, documento);
-
-        return sessioneDocumento;
-
-    }
-
+    /**
+     * @brief Elimina tutte le associazioni di una sessione
+     * @param sessioneId ID della sessione
+     * @throws DBException in caso di errori di database
+     * @note Stampa il numero di associazioni eliminate
+     */
     @Override
     public void deleteBySessioneId(long sessioneId) throws DBException {
         String query = "DELETE FROM SESSIONEDOCUMENTO WHERE sessione = ?";
@@ -166,6 +181,49 @@ public class SessioneDocumentoDAOPostgres implements SessioneDocumentoDAO {
         } catch (SQLException e) {
             throw new DBException("Errore: impossibile eliminare sessione-documento della sessione " + sessioneId + "!", e);
         }
+    }
+
+    /**
+     * @private
+     * @brief Crea un oggetto Documento da un ResultSet
+     * @param rs ResultSet contenente i dati
+     * @return Documento creato
+     * @throws SQLException in caso di errori SQL
+     */
+    private Documento getDocument(ResultSet rs) throws SQLException {
+
+        Documento documento = null;
+
+        String titolo = rs.getString("nome");
+        Lingua lingua = Lingua.valueOf(rs.getString("lingua"));
+        Difficolta difficolta = Difficolta.valueOf(rs.getString("difficolta"));
+        String path = rs.getString("percorso");
+
+        documento = new Documento(titolo, lingua, difficolta, path);
+
+        return documento;
+
+    }
+
+    /**
+     * @private
+     * @brief Crea un oggetto SessioneDocumento da un ResultSet
+     * @param rs ResultSet contenente i dati
+     * @return SessioneDocumento creato
+     * @throws SQLException in caso di errori SQL
+     */
+    private SessioneDocumento getSessionDocument(ResultSet rs) throws SQLException {
+
+        SessioneDocumento sessioneDocumento = null;
+
+        long idSessione = rs.getLong("sessione");
+
+        String documento = rs.getString("documento");
+
+        sessioneDocumento = new SessioneDocumento(idSessione, documento);
+
+        return sessioneDocumento;
+
     }
 
 
