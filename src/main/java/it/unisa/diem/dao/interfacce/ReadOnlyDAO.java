@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @interface ReadOnlyDAO
- * @brief Interfaccia per accesso in sola lettura alle entità
+ *  ReadOnlyDAO
+ *  Interfaccia per accesso in sola lettura alle entità
  * @tparam T Tipo dell'entità gestita dal DAO
  */
 public interface ReadOnlyDAO<T> {
 
     /**
-     * @brief Recupera tutte le entità
+     *  Recupera tutte le entità
      * @return Lista contenente tutte le entità
      * @throws SQLException in caso di errori SQL
      * @throws DBException in caso di errori applicativi
@@ -25,7 +25,7 @@ public interface ReadOnlyDAO<T> {
     List<T> selectAll() throws SQLException, DBException;
 
     /**
-     * @brief Cerca un'entità per ID
+     *  Cerca un'entità per ID
      * @param id Identificativo dell'entità da cercare
      * @return Optional contenente l'entità se trovata
      * @throws SQLException in caso di errori SQL
