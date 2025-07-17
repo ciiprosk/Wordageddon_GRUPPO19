@@ -24,17 +24,21 @@
 
         <!-- JavaFX base dependencies without classifier -->
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+        <!-- JavaFX with Mac classifier -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
+            <classifier>mac-aarch64</classifier> <!-- usa mac se sei su Intel -->
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
+            <classifier>mac-aarch64</classifier>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
