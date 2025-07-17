@@ -1,6 +1,5 @@
 package it.unisa.diem.main;
 
-import it.unisa.diem.main.controller.GameSessionController;
 import it.unisa.diem.utility.AlertUtils;
 import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.dbpool.ConnectionManager;
@@ -14,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Main extends Application {

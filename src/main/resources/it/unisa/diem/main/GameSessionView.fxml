@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.*?>
 
-<StackPane fx:id="rootStackPane" prefHeight="800" prefWidth="1200" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.GameSessionController">
+<StackPane fx:id="rootStackPane" prefHeight="800" prefWidth="1200" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unisa.diem.main.controller.GameSessionViewController">
     <children>
 
         <!-- === Selection Pane === -->
