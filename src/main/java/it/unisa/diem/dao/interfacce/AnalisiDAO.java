@@ -1,48 +1,38 @@
-/**
- * @file AnalisiDAO.java
- * @brief Interfaccia per l'accesso ai dati delle analisi nel database.
- *
- * Definisce le operazioni CRUD specifiche per le analisi, estendendo le funzionalità base di NotEditableDAO.
- */
-
 package it.unisa.diem.dao.interfacce;
 
 import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 /**
- *Interfaccia per l'accesso ai dati delle analisi.
- *
- * Estende NotEditableDAO<Analisi> e aggiunge operazioni specifiche per la gestione delle analisi.
- * Fornisce metodi per selezionare, inserire ed eliminare analisi nel database.
+ * Interfaccia DAO per la gestione delle operazioni di accesso ai dati relativi all'entità {@link Analisi}.
+ * Estende NotEditableDAO
  */
 public interface AnalisiDAO extends NotEditableDAO<Analisi> {
 
     /**
-     * @brief Ricerca un'analisi per titolo.
+     * Seleziona un'analisi a partire dal titolo del documento associato.
      *
-     * @param titolo Il titolo dell'analisi da cercare
-     * @return Un Optional contenente l'analisi se trovata, altrimenti Optional.empty()
-     * @throws DBException Se si verifica un errore durante l'accesso al database
+     * @param titolo il titolo del documento
+     * @return un Optional contenente l'analisi se trovata, altrimenti vuoto
+     * @throws DBException se si verifica un errore nell'accesso al database
      */
     Optional<Analisi> selectAnalisiByTitle(String titolo) throws DBException;
 
     /**
-     * @brief Inserisce una nuova analisi nel database.
+     * Inserisce una nuova analisi nel database.
      *
-     * @param analisi L'analisi da inserire
-     * @throws DBException Se si verifica un errore durante l'accesso al database
+     * @param analisi l'oggetto Analisi} da inserire
+     * @throws DBException se si verifica un errore nell'inserimento
      */
     void insert(Analisi analisi) throws DBException;
 
     /**
-     * @brief Elimina un'analisi dal database.
+     * Elimina un'analisi dal database.
      *
-     * @param analisi L'analisi da eliminare
-     * @throws DBException Se si verifica un errore durante l'accesso al database
+     * @param analisi l'oggetto Analisi da eliminare
+     * @throws DBException se si verifica un errore durante l'eliminazione
      */
     void delete(Analisi analisi) throws DBException;
 }

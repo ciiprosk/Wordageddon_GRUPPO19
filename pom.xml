@@ -174,13 +174,14 @@
                 </configuration>
             </plugin>
 
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.6.3</version>
-                </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <excludePackageNames>**.controller</excludePackageNames>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>
