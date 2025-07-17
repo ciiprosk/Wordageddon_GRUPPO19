@@ -27,6 +27,7 @@ public class LoadTitlesService extends Service<List<String>> {
      * Crea e restituisce un Task per il recupero dei titoli dei documenti.
      *
      * @return Task che rappresenta l'operazione di recupero dei titoli
+     * @throws Exception se si verifica un errore durante l'accesso al DAO o il recupero dei dati
      */
     @Override
     protected Task<List<String>> createTask() {

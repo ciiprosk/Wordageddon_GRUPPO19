@@ -33,6 +33,7 @@ public class LoadLeaderboardService extends Service<Map<Difficolta, List<VoceCla
      * Il task esegue una query per ogni livello di difficoltà e restituisce una mappa con i risultati.
      *
      * @return Task per il caricamento della classifica
+     * @throws Exception se si verifica un errore durante l'accesso al database
      */
     @Override
     protected Task<Map<Difficolta, List<VoceClassifica>>> createTask() {

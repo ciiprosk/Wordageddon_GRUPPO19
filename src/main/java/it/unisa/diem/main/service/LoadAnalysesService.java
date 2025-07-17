@@ -24,6 +24,16 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
 
     @Override
     protected Task<List<Analisi>> createTask() {
+
+        /**
+         * Crea e restituisce un Task per il caricamento di una lista di analisi.
+         * Le analisi vengono caricate casualmente da file binari nella cartella specificata,
+         * in base alla lingua e difficoltà selezionate.
+         *
+         * @return Task<List<Analisi>> Task per il caricamento delle analisi
+         * @throws DBException Se non vengono trovate analisi per la lingua e difficoltà specificate
+         */
+
         return new Task<>() {
             @Override
             protected List<Analisi> call() throws Exception {

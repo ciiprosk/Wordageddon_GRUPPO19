@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * Servizio per l'aggiornamento di una sessione di gioco nel database.
- * Estende la classe {@link Service} di JavaFX per l'esecuzione in background.
+ * Estende la classe di JavaFX per l'esecuzione in background.
  */
 public class UpdateSessionService extends Service<Void> {
     private final SessioneDAO sessioneDAO;
@@ -32,6 +32,7 @@ public class UpdateSessionService extends Service<Void> {
      * Crea e restituisce un Task per l'aggiornamento della sessione.
      *
      * @return Task per l'aggiornamento della sessione
+     * @throws Exception se non trova la sessione con il giusto id
      */
     @Override
     protected Task<Void> createTask() {
