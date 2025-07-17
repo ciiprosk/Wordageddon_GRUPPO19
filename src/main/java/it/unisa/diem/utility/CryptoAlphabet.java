@@ -1,38 +1,60 @@
 package it.unisa.diem.utility;
 
+/**
+ * Classe di utilità per cifrare e decifrare stringhe usando un alfabeto personalizzato.
+ * L'algoritmo utilizza una semplice sostituzione di caratteri tra un alfabeto chiaro e uno cifrato.
+ */
 public class CryptoAlphabet {
-    public static final String alphabet="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ,.!?";
-    private static final String alfabeto_cifrato  = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm9876543210£,.!?";
 
-    //non ha senso mettere il costruttore
-    public static String cripta(String line){
-        StringBuffer str=new StringBuffer();
-        for(char carattere: line.toCharArray()){
-            //devo convertire il singolo carattere nel carattere a cui corrisponde nel cifrato
-            //per farlo devo trovare la posizione in cui si trova nella mia stringa alphabet
-            /*the index of the first occurrence of the character in the character
-             sequence represented by this object, or -1 if the character does not occur.
-             */
+    /**
+     * Alfabeto originale usato come base per la cifratura.
+     */
+    public static final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ,.!?";
 
-            int posAlphabet=alphabet.indexOf(carattere);
+    /**
+     * Alfabeto cifrato corrispondente all'alfabeto originale.
+     * Ogni carattere ha un mapping uno-a-uno con l'alfabeto in chiaro.
+     */
+    private static final String alfabeto_cifrato = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm9876543210£,.!?";
 
-            if(posAlphabet!=-1){
-                char criptato=alfabeto_cifrato.charAt(posAlphabet);//cerco nell'alfabeto criptato dove si trova la lettera corrispondente
+    /**
+     * Cifra una stringa usando l'alfabeto personalizzato.
+     * I caratteri non presenti nell'alfabeto vengono lasciati invariati.
+     *
+     * @param line la stringa da cifrare
+     * @return la stringa cifrata
+     */
+    public static String cripta(String line) {
+        StringBuffer str = new StringBuffer();
+        for (char carattere : line.toCharArray()) {
+            int posAlphabet = alphabet.indexOf(carattere);
+            if (posAlphabet != -1) {
+                char criptato = alfabeto_cifrato.charAt(posAlphabet);
                 str.append(criptato);
-            }else str.append(carattere); //in questo caso vuol dire che non ha trovato corrispondenze e lo mettiamo così com'è
-
+            } else {
+                str.append(carattere);
+            }
         }
         return str.toString();
     }
 
-    public static String decripta(String line){//fa la stessa cosa ma al contrario
-        StringBuffer str=new StringBuffer();
-        for(char carattere : line.toCharArray()){
-            int posCifrato=alfabeto_cifrato.indexOf(carattere);
-            if(posCifrato!=-1){
-                char decriptato=alphabet.charAt(posCifrato);
+    /**
+     * Decifra una stringa precedentemente cifrata
+     * I caratteri non presenti nell'alfabeto cifrato vengono lasciati invariati.
+     *
+     * @param line la stringa da decifrare
+     * @return la stringa decifrata
+     */
+    public static String decripta(String line) {
+        StringBuffer str = new StringBuffer();
+        for (char carattere : line.toCharArray()) {
+            int posCifrato = alfabeto_cifrato.indexOf(carattere);
+            if (posCifrato != -1) {
+                char decriptato = alphabet.charAt(posCifrato);
                 str.append(decriptato);
-            }else str.append(carattere);
+            } else {
+                str.append(carattere);
+            }
         }
         return str.toString();
     }
