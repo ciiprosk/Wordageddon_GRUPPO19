@@ -31,6 +31,7 @@ public class InsertSessionService extends Service<Sessione> {
      * Crea e restituisce un Task per l'inserimento della sessione.
      *
      * @return Task per l'inserimento della sessione
+     * @throws Exception se vi è un errore durante l'inserimento della sessione
      */
     @Override
     protected Task<Sessione> createTask() {

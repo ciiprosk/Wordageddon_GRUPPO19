@@ -25,6 +25,7 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
      * @param file Il file da validare
      * @param difficolta Il livello di difficoltà del documento
      * @param stopword Il gestore delle stopword da utilizzare
+     * @throws Exception se ci sono parametri di validazione mancanti
      */
     public void setup(File file, Difficolta difficolta, StopwordManager stopword) {
         this.file = file;
