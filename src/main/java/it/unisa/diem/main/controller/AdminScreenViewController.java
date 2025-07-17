@@ -21,6 +21,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,6 +37,8 @@ import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static javafx.geometry.Side.RIGHT;
 
 public class AdminScreenViewController {
 
@@ -55,6 +58,9 @@ public class AdminScreenViewController {
     @FXML private TextField titleField;
     @FXML private CheckBox checkIt, checkEng, checkEasy, checkNormal, checkHard;
     @FXML private Label alertLabel, importedFileLabel;
+
+    @FXML
+    private Button infoButton;
 
     private StopwordManager stopword;
     private ObservableList<String> observableList;
@@ -100,6 +106,19 @@ public class AdminScreenViewController {
 
         // Load titles immediately (first load)
         loadTitlesAsync();
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem infoItem = new MenuItem("Il titolo non deve contenere caratteri speciali");
+        infoItem.setDisable(true); // Solo lettura
+        contextMenu.getItems().add(infoItem);
+
+        infoButton.setOnAction(e -> {
+            if (!contextMenu.isShowing()) {
+                contextMenu.show(infoButton, Side.BOTTOM, 0, 0);
+            } else {
+                contextMenu.hide();
+            }
+        });
     }
 
     // === STOPWORDS ===

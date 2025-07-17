@@ -799,3 +799,21 @@
     -fx-text-fill: #ffffff;
     -fx-font-size: 15px;
 }
+
+
+.context-menu {
+    -fx-background-color: #232323;
+}
+
+.context-menu {
+    -fx-background-color: #2e2e2e;
+}
+
+.context-menu .menu-item {
+    -fx-text-fill: white;
+}
+
+.context-menu .menu-item .label {
+    -fx-text-fill: white !important;
+}
+
