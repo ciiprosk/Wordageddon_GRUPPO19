@@ -11,8 +11,8 @@ import it.unisa.diem.model.gestione.sessione.SessioneDocumento;
 import java.util.List;
 
 /**
- * @interface SessioneDocumentoDAO
- * @brief Interfaccia per l'accesso alle associazioni tra sessioni e documenti
+ *  SessioneDocumentoDAO
+ *  Interfaccia per l'accesso alle associazioni tra sessioni e documenti
  *
  * Estende NotEditableDAO<SessioneDocumento> fornendo operazioni specifiche per:
  * - Recupero dei documenti associati a una sessione
@@ -21,7 +21,7 @@ import java.util.List;
 public interface SessioneDocumentoDAO extends NotEditableDAO<SessioneDocumento> {
 
     /**
-     * @brief Recupera tutti i documenti associati a una sessione
+     *  Recupera tutti i documenti associati a una sessione
      * @param idSessione Identificativo della sessione
      * @return Lista dei documenti associati alla sessione
      * @throws DBException in caso di errori di accesso al database
@@ -30,7 +30,7 @@ public interface SessioneDocumentoDAO extends NotEditableDAO<SessioneDocumento> 
     List<Documento> selectDocumentsBySession(long idSessione) throws DBException;
 
     /**
-     * @brief Elimina tutte le associazioni per una sessione
+     *  Elimina tutte le associazioni per una sessione
      * @param sessioneId Identificativo della sessione
      * @throws DBException in caso di errori di accesso al database
      *
