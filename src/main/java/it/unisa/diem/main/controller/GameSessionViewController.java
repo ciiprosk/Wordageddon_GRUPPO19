@@ -273,8 +273,12 @@ public class GameSessionViewController {
                     hideLoadingOverlay();
                     Throwable ex = insertSessionService.getException();
                     //ex.printStackTrace();
-                    AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
-                            "Errore nella creazione della sessione: " + ex.getMessage());
+                    AlertUtils.mostraAlertConAzione(Alert.AlertType.WARNING, "Attenzione", null,
+                            "Errore nella creazione della sessione: " + ex.getMessage(), button -> {
+
+                                tornaAlMenuHome();
+
+                            });
 
                 });
 
@@ -332,7 +336,7 @@ public class GameSessionViewController {
                     "Errore durante il caricamento dei testi: " + ex.getMessage(), button -> {
 
                     tornaAlMenuHome();
-                    });
+                    });  
         });
 
         loadAnalysesService.start();
@@ -389,8 +393,11 @@ public class GameSessionViewController {
             hideLoadingOverlay();
             Throwable ex = generateQuestionsService.getException();
             ex.printStackTrace();
-            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
-                    "Errore durante la generazione delle domande: " + ex.getMessage());
+            AlertUtils.mostraAlertConAzione(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante la generazione delle domande: " + ex.getMessage(), button -> {
+
+                    tornaAlMenuHome();
+                    });
         });
 
         generateQuestionsService.start();
@@ -626,15 +633,20 @@ public class GameSessionViewController {
         uss.setOnFailed(event -> {
             Throwable ex = uss.getException();
             ex.printStackTrace();
-            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
-                    "Errore durante l'aggiornamento della sessione: " + ex.getMessage());
+            AlertUtils.mostraAlertConAzione(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante l'aggiornamento della sessione: " + ex.getMessage(), button -> {
+
+                        tornaAlMenuHome();
+
+                    });
         });
+
         uss.start();
     }
 
 
 
-
+    /*
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Attenzione");
@@ -642,6 +654,7 @@ public class GameSessionViewController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    */
 
     private void showLoadingOverlayWithMessage(String message) {
         loadingMessageLabel.setText(message);
