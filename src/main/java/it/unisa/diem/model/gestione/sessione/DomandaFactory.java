@@ -6,15 +6,30 @@ import it.unisa.diem.utility.TipoDomanda;
 
 import java.util.*;
 
+/**
+ * Factory per la generazione di domande basate su un insieme di analisi.
+ * Supporta la generazione di diversi tipi di domande con vari livelli di difficoltà.
+ */
 public class DomandaFactory {
     List<Domanda> listaDomande;
-    List<Analisi> listaAnalisi; //lista di documenti scelti da controller
+    List<Analisi> listaAnalisi;
 
+    /**
+     * Costruttore che inizializza la factory con una lista di analisi.
+     *
+     * @param listaAnalisi la lista di analisi da utilizzare per generare le domande
+     */
     public DomandaFactory(List <Analisi> listaAnalisi) {
         this.listaAnalisi = listaAnalisi;
         listaDomande = new ArrayList<>();
     }
 
+    /**
+     * Genera una lista di domande in base al livello di difficoltà specificato.
+     *
+     * @param difficolta il livello di difficoltà delle domande da generare
+     * @return una lista di domande generate
+     */
     public List<Domanda> generaDomande(Difficolta difficolta) {
         if (difficolta == Difficolta.FACILE) {
             listaDomande.add(generaDomandaAssociazione());
@@ -29,61 +44,57 @@ public class DomandaFactory {
         return listaDomande;
     }
 
-
-
+    /**
+     * Genera una domanda sulla frequenza di una parola in un documento.
+     *
+     * @return una domanda di tipo FREQUENZA
+     */
     private Domanda generaDomandaFrequenza() {
         Random random = new Random();
-
-        // Selezione casuale di un'analisi
         Analisi analisiScelta = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
-
         Map<String, Integer> frequenze = analisiScelta.getFrequenzeTesto();
 
-        // Scelgo una parola a caso
         List<String> parole = new ArrayList<>(frequenze.keySet());
         String parolaScelta = parole.get(random.nextInt(parole.size()));
         int frequenzaCorretta = frequenze.get(parolaScelta);
 
-        // Ho scelto set per evitare duplicati
         Set<Integer> opzioniNumeriche = new HashSet<>();
         opzioniNumeriche.add(frequenzaCorretta);
 
-        // Genera 3 alternative sbagliate plausibili
         while (opzioniNumeriche.size() < 4) {
-            //uso questa variabile per creare risposte sbagliate ma vicine e plausibili alla risposta corretta
-            int variazione = random.nextInt(5) + 1; // variazione da 1 a 5
+            int variazione = random.nextInt(5) + 1;
             int alternativa = frequenzaCorretta + (random.nextBoolean() ? variazione : -variazione);
             if (alternativa >= 1) {
                 opzioniNumeriche.add(alternativa);
             }
         }
 
-        // Converto le opzioni in String
         List<String> opzioni = new ArrayList<>();
         for (Integer val : opzioniNumeriche) {
             opzioni.add(String.valueOf(val));
         }
 
-        // Mischia le opzioni
         Collections.shuffle(opzioni);
 
-        // Usa il titolo del documento per costruire la domanda
-        String titoloDocumento = analisiScelta.getDocumento().getTitolo(); // oppure toString()
+        String titoloDocumento = analisiScelta.getDocumento().getTitolo();
         String testoDomanda = String.format(
                 "How many times does the word \"%s\" appear in the document \"%s\"?",
                 parolaScelta, titoloDocumento
         );
 
-        // Crea la domanda passando la risposta corretta come String
         return new Domanda(testoDomanda, TipoDomanda.FREQUENZA, opzioni, String.valueOf(frequenzaCorretta));
     }
 
-
+    /**
+     * Genera una domanda di confronto tra le frequenze di parole in tutti i documenti.
+     *
+     * @return una domanda di tipo CONFRONTO
+     * @throws IllegalStateException se non ci sono abbastanza parole per generare la domanda
+     */
     private Domanda generaDomandaConfronto() {
         Random random = new Random();
         Map<String, Integer> frequenzeGlobali = new HashMap<>();
 
-        // sommo le frequenze di tutte le analisi
         for (Analisi analisi : listaAnalisi) {
             Map<String, Integer> frequenze = analisi.getFrequenzeTesto();
             for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
@@ -95,12 +106,10 @@ public class DomandaFactory {
             }
         }
 
-        // Se ci sono meno di 4 parole, non possiamo creare la domanda
         if (frequenzeGlobali.size() < 4) {
             throw new IllegalStateException("Non ci sono abbastanza parole per creare la domanda di confronto.");
         }
 
-        // Seleziono 4 parole diverse casuali dalla mappa
         List<String> tutteLeParole = new ArrayList<>(frequenzeGlobali.keySet());
         Collections.shuffle(tutteLeParole);
         List<String> paroleSelezionate = tutteLeParole.subList(0, 4);
@@ -124,6 +133,12 @@ public class DomandaFactory {
         return new Domanda(testoDomanda, TipoDomanda.CONFRONTO, opzioni, rispostaCorretta);
     }
 
+    /**
+     * Genera una domanda di associazione tra una parola e la sua frequenza in un documento.
+     *
+     * @return una domanda di tipo ASSOCIAZIONE
+     * @throws IllegalStateException se il documento non contiene abbastanza parole
+     */
     private Domanda generaDomandaAssociazione() {
         Random random = new Random();
         Analisi analisi = listaAnalisi.get(random.nextInt(listaAnalisi.size()));
@@ -133,7 +148,6 @@ public class DomandaFactory {
             throw new IllegalStateException("Il documento non contiene abbastanza parole per creare la domanda.");
         }
 
-        // Trovo la parola con frequenza massima
         String parolaMax = null;
         int maxFreq = -1;
         for (Map.Entry<String, Integer> entry : frequenze.entrySet()) {
@@ -143,7 +157,6 @@ public class DomandaFactory {
             }
         }
 
-        // distrattori: parole diverse da quella corretta
         List<String> distrattori = new ArrayList<>(frequenze.keySet());
         distrattori.remove(parolaMax);
         Collections.shuffle(distrattori);
@@ -154,23 +167,27 @@ public class DomandaFactory {
             opzioni.add(distrattori.get(i));
         }
 
-        // Se non abbiamo abbastanza opzioni, la domanda non è valida
         if (opzioni.size() < 4) {
             throw new IllegalStateException("Non ci sono abbastanza parole diverse per generare la domanda.");
         }
 
         Collections.shuffle(opzioni);
 
-        String titoloDoc = analisi.getDocumento().getTitolo(); // o toString()
+        String titoloDoc = analisi.getDocumento().getTitolo();
         String testoDomanda = String.format(
                 "Which word appears most frequently in the document \"%s\"?",
                 titoloDoc
         );
 
-        // Crea la domanda
         return new Domanda(testoDomanda, TipoDomanda.ASSOCIAZIONE, opzioni, parolaMax);
     }
 
+    /**
+     * Genera una domanda sull'assenza di una parola in tutti i documenti.
+     *
+     * @return una domanda di tipo ASSENZA
+     * @throws IllegalStateException se non ci sono parole assenti o abbastanza distrattori
+     */
     private Domanda generaDomandaAssenza() {
         Random random = new Random();
         Set<String> parolePresenti = new HashSet<>();
@@ -178,13 +195,11 @@ public class DomandaFactory {
             parolePresenti.addAll(analisi.getFrequenzeTesto().keySet());
         }
 
-        // Lista fittizia di parole "dizionario" da cui attingere
         List<String> dizionario = Arrays.asList(
                 "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
                 "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"
         );
 
-        // Trova parole che non compaiono nei documenti (presenti nel dizionario ma non nei testi)
         List<String> paroleAssenti = new ArrayList<>();
         for (String parola : dizionario) {
             if (!parolePresenti.contains(parola)) {
