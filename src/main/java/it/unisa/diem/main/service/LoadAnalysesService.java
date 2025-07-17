@@ -1,5 +1,6 @@
 package it.unisa.diem.main.service;
 
+import it.unisa.diem.exceptions.DBException;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.Documento;
@@ -33,7 +34,7 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
                 File[] files = folder.listFiles((dir, name) -> name.endsWith("_analysis.bin"));
 
                 if (files == null || files.length == 0) {
-                    throw new IOException("No analyses found for selected language and difficulty.");
+                    throw new DBException("No analyses found for selected language and difficulty.");
                 }
 
                 Random random = new Random();

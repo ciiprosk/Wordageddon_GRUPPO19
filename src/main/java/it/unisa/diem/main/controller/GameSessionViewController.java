@@ -253,9 +253,10 @@ public class GameSessionViewController {
                 insertSessionService.setOnFailed(event -> {
                     hideLoadingOverlay();
                     Throwable ex = insertSessionService.getException();
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                     AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
                             "Errore nella creazione della sessione: " + ex.getMessage());
+
                 });
 
                 insertSessionService.start();
@@ -308,8 +309,11 @@ public class GameSessionViewController {
             hideLoadingOverlay();
             Throwable ex = loadAnalysesService.getException();
             ex.printStackTrace();
-            AlertUtils.mostraAlert(Alert.AlertType.WARNING, "Attenzione", null,
-                    "Errore durante il caricamento dei testi: " + ex.getMessage());
+            AlertUtils.mostraAlertConAzione(Alert.AlertType.WARNING, "Attenzione", null,
+                    "Errore durante il caricamento dei testi: " + ex.getMessage(), button -> {
+
+                    handleBackToMenu(null);         //DA MODIFICARE!!!!!!!
+                    });
         });
 
         loadAnalysesService.start();

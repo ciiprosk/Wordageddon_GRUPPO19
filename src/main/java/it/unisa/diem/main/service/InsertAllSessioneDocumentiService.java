@@ -33,6 +33,7 @@ public class InsertAllSessioneDocumentiService extends Service<Void> {
             protected Void call() throws Exception {
                 for (Analisi analisi : analisiList) {
                     SessioneDocumento sd = new SessioneDocumento(sessioneId, analisi.getTitolo());
+
                     sessioneDocumentoDAO.insert(sd); // inserimento sincrono
                 }
                 return null;
