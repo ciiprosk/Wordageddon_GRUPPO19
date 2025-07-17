@@ -42,6 +42,7 @@ public class InsertAllSessioneDocumentiService extends Service<Void> {
      * Crea e restituisce un Task per l'inserimento dei documenti di sessione.
      *
      * @return Task che esegue l'inserimento dei documenti
+     * @throws Exception se si verifica un errore durante l'inserimento nel database
      */
     @Override
     protected Task<Void> createTask() {
