@@ -1,60 +1,51 @@
-/**
- * @file DAO.java
- * @brief Interfaccia generica per l'accesso ai dati (Data Access Object).
- *
- * Definisce le operazioni CRUD di base per l'interazione con il database.
- */
-
 package it.unisa.diem.dao.interfacce;
 
 import it.unisa.diem.exceptions.DBException;
+
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * @interface DAO
- * @brief Interfaccia generica per il pattern Data Access Object.
+ * Interfaccia generica per le operazioni CRUD (Create, Read, Update, Delete)
+ * su entità di tipo T
  *
- * @tparam T Il tipo dell'entità gestita dal DAO
- *
- * Fornisce i metodi fondamentali per le operazioni CRUD (Create, Read, Update, Delete)
- * su qualsiasi entità del dominio.
+ * @param <T> il tipo di entità gestito dal DAO
  */
 public interface DAO<T> {
 
     /**
-     * @brief Recupera tutte le istanze dell'entità dal database.
+     * Restituisce la lista completa degli oggetti presenti nel database.
      *
-     * @return Una lista contenente tutte le entità presenti nel database
-     * @throws SQLException Se si verifica un errore SQL
-     * @throws DBException Se si verifica un errore specifico dell'applicativo
+     * @return una lista di oggetti  T
+     * @throws SQLException se si verifica un errore JDBC
+     * @throws DBException  se si verifica un errore di business logic o di mapping
      */
     List<T> selectAll() throws SQLException, DBException;
 
     /**
-     * @brief Inserisce una nuova istanza dell'entità nel database.
+     * Inserisce un nuovo oggetto nel database.
      *
-     * @param t L'entità da inserire
-     * @throws SQLException Se si verifica un errore SQL
-     * @throws DBException Se si verifica un errore specifico dell'applicativo
+     * @param t l'oggetto da inserire
+     * @throws SQLException se si verifica un errore JDBC
+     * @throws DBException  se si verifica un errore di business logic o di vincoli
      */
     void insert(T t) throws SQLException, DBException;
 
     /**
-     * @brief Aggiorna un'entità esistente nel database.
+     * Aggiorna un oggetto esistente nel database.
      *
-     * @param t L'entità da aggiornare
-     * @throws SQLException Se si verifica un errore SQL
-     * @throws DBException Se si verifica un errore specifico dell'applicativo
+     * @param t l'oggetto da aggiornare
+     * @throws SQLException se si verifica un errore JDBC
+     * @throws DBException  se si verifica un errore di business logic
      */
     void update(T t) throws SQLException, DBException;
 
     /**
-     * @brief Elimina un'entità dal database.
+     * Elimina un oggetto dal database.
      *
-     * @param t L'entità da eliminare
-     * @throws SQLException Se si verifica un errore SQL
-     * @throws DBException Se si verifica un errore specifico dell'applicativo
+     * @param t l'oggetto da eliminare
+     * @throws SQLException se si verifica un errore JDBC
+     * @throws DBException  se si verifica un errore durante l'eliminazione
      */
     void delete(T t) throws SQLException, DBException;
 }
