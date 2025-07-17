@@ -290,11 +290,13 @@ public class AdminScreenViewController {
 
     private void validateConfirmButton() {
         boolean isTitleFilled = !titleField.getText().trim().isEmpty();
+        boolean isTitleSpecial = titleField.getText().matches(".*[^a-zA-Z0-9 ].*");
+
         boolean isFileImported = fileImportato != null;
         boolean isLanguageSelected = checkIt.isSelected() || checkEng.isSelected();
         boolean isDifficultySelected = checkEasy.isSelected() || checkNormal.isSelected() || checkHard.isSelected();
 
-        confirmButton.setDisable(!(isTitleFilled && isFileImported && isLanguageSelected && isDifficultySelected));
+        confirmButton.setDisable(!(isTitleFilled && !isTitleSpecial && isFileImported && isLanguageSelected && isDifficultySelected));
     }
 
     // === LIST TEXTS LOGIC ===
@@ -371,6 +373,7 @@ public class AdminScreenViewController {
             LOGGER.log(Level.SEVERE, "Error loading HomeMenuView", ex);
         }
     }
+
 
     private Utente getUtente() {
         return SessionManager.getInstance().getUtenteLoggato();
