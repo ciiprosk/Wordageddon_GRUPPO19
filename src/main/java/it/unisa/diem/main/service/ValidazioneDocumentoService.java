@@ -2,7 +2,6 @@ package it.unisa.diem.main.service;
 
 import it.unisa.diem.model.gestione.analisi.Difficolta;
 import it.unisa.diem.model.gestione.analisi.stopword.StopwordManager;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -10,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ValidazioneDocumentoService extends Service<Boolean> {
 
@@ -33,31 +31,45 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
                     throw new IllegalArgumentException("Parametri di validazione mancanti.");
                 }
 
+                // === Lettura contenuto ===
                 String contenuto = Files.readString(file.toPath());
-                int numParole = contenuto.trim().split("\\s+").length;
-                int numCaratteri = contenuto.length();
 
-                int maxParole = difficolta == Difficolta.DIFFICILE ? 250 : 200;
-                int maxCaratteri = difficolta == Difficolta.DIFFICILE ? 1250 : 1000;
+                // === Conteggio parole totali ===
+                String[] paroleRaw = contenuto.trim().split("\\s+");
+                int numParole = paroleRaw.length;
+
+                // === Limiti minimi e massimi in base alla difficoltà ===
+                int minParole, maxParole;
+                switch (difficolta) {
+                    case FACILE -> {
+                        minParole = 180;
+                        maxParole = 200;
+                    }
+                    case INTERMEDIO -> {
+                        minParole = 200;
+                        maxParole = 225;
+                    }
+                    case DIFFICILE -> {
+                        minParole = 225;
+                        maxParole = 250;
+                    }
+                    default -> throw new IllegalStateException("Difficoltà non riconosciuta.");
+                }
+
+                if (numParole < minParole) {
+                    throw new IllegalStateException("Il documento ha solo " + numParole + " parole.\nMinimo richiesto: " + minParole);
+                }
 
                 if (numParole > maxParole) {
-                    throw new IllegalStateException("Il documento contiene troppe parole: " + numParole +
-                            ". Limite: " + maxParole);
+                    throw new IllegalStateException("Il documento ha " + numParole + " parole.\nMassimo consentito: " + maxParole);
                 }
 
-                if (numCaratteri > maxCaratteri) {
-                    throw new IllegalStateException("Il documento contiene troppi caratteri: " + numCaratteri +
-                            ". Limite: " + maxCaratteri);
-                }
-
-                // Applica stopword
+                // === Rimozione stopword e raccolta parole significative ===
                 Set<String> stopwords = new HashSet<>(stopword.getParole());
-
-                String[] paroleRaw = contenuto.toLowerCase().split("\\s+");
 
                 List<String> paroleSignificative = new ArrayList<>();
                 for (String parola : paroleRaw) {
-                    String pulita = parola.replaceAll("[^a-zA-ZàèìòùÀÈÌÒÙ]", "");
+                    String pulita = parola.replaceAll("[^a-zA-ZàèìòùÀÈÌÒÙ]", "").toLowerCase();
                     if (!pulita.isBlank() && !stopwords.contains(pulita)) {
                         paroleSignificative.add(pulita);
                     }
@@ -65,16 +77,18 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
 
                 Set<String> paroleDistinte = new HashSet<>(paroleSignificative);
 
+                // === Vincoli interni per generazione domande ===
                 if (paroleSignificative.size() < 50) {
                     throw new IllegalStateException("Il documento contiene solo " + paroleSignificative.size() +
-                            " parole significative. Ne servono almeno 50.");
+                            " parole significative (non-stopword). Ne servono almeno 50.");
                 }
 
                 if (paroleDistinte.size() < 20) {
                     throw new IllegalStateException("Il documento ha solo " + paroleDistinte.size() +
-                            " parole diverse. Ne servono almeno 20.");
+                            " parole significative distinte. Ne servono almeno 20.");
                 }
 
+                // === Verifica per domanda di assenza ===
                 List<String> dizionario = List.of(
                         "gatto", "cane", "sole", "luna", "tavolo", "computer", "libro", "penna",
                         "scuola", "auto", "telefono", "acqua", "vento", "cuore", "pane"
@@ -82,7 +96,7 @@ public class ValidazioneDocumentoService extends Service<Boolean> {
 
                 boolean copreTuttoIlDizionario = dizionario.stream().allMatch(paroleDistinte::contains);
                 if (copreTuttoIlDizionario) {
-                    throw new IllegalStateException("Il documento contiene tutte le parole comuni. Impossibile generare la domanda di assenza.");
+                    throw new IllegalStateException("Il documento contiene tutte le parole comuni del dizionario.\nNon è possibile generare la domanda di assenza.");
                 }
 
                 return true;
