@@ -1,7 +1,3 @@
-/**
- * @file GenerateQuestionsService.java
- * @brief Servizio per la generazione di domande in background
- */
 package it.unisa.diem.main.service;
 
 import it.unisa.diem.model.gestione.analisi.Difficolta;
@@ -10,16 +6,12 @@ import it.unisa.diem.model.gestione.sessione.DomandaFactory;
 import it.unisa.diem.model.gestione.analisi.Analisi;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+
 import java.util.List;
 
 /**
- * @class GenerateQuestionsService
- * @brief Servizio JavaFX per la generazione asincrona di domande
- *
- * Estende javafx.concurrent.Service per generare domande in background.
- * Utilizza una DomandaFactory per creare domande basate su:
- * - Una lista di analisi
- * - Un livello di difficoltà specificato
+ * Servizio JavaFX per la generazione asincrona di domande a partire da analisi testuali.
+ * Utilizza DomandaFactory per produrre una lista di domande in base alla difficoltà specificata.
  */
 public class GenerateQuestionsService extends Service<List<Domanda>> {
 
@@ -27,29 +19,27 @@ public class GenerateQuestionsService extends Service<List<Domanda>> {
     private Difficolta difficolta;
 
     /**
-     * @brief Imposta la lista di analisi da usare per generare le domande
-     * @param analyses Lista di oggetti Analisi contenenti i dati per le domande
+     * Imposta la lista delle analisi su cui basare la generazione delle domande.
+     *
+     * @param analyses la lista di oggetti Analisi
      */
     public void setAnalyses(List<Analisi> analyses) {
         this.analyses = analyses;
     }
 
     /**
-     * @brief Imposta il livello di difficoltà per le domande
-     * @param difficolta Livello di difficoltà (FACILE, MEDIO, DIFFICILE)
+     * Imposta il livello di difficoltà delle domande da generare.
+     *
+     * @param difficolta la difficoltà
      */
     public void setDifficolta(Difficolta difficolta) {
         this.difficolta = difficolta;
     }
 
     /**
-     * @brief Crea il task per la generazione asincrona delle domande
-     * @return Task che genera e restituisce una lista di Domanda
+     * Crea il task che genera domande basate sulle analisi e sulla difficoltà specificata.
      *
-     * Il processo:
-     * 1. Crea una nuova DomandaFactory con le analisi fornite
-     * 2. Genera le domande in base alla difficoltà specificata
-     * 3. Restituisce la lista di domande generate
+     * @return il task da eseguire, che restituisce una lista di domande
      */
     @Override
     protected Task<List<Domanda>> createTask() {
