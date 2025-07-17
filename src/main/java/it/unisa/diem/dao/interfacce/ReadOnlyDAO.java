@@ -1,6 +1,6 @@
 /**
  * @file ReadOnlyDAO.java
- * @brief Interfaccia per operazioni di sola lettura su database
+ *  Interfaccia per operazioni di sola lettura su database
  */
 package it.unisa.diem.dao.interfacce;
 
