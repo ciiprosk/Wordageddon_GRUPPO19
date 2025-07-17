@@ -1,0 +1,36 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Wordageddon_GRUPPO19Mac:jar">
+    <output-path>$PROJECT_DIR$</output-path>
+    <root id="archive" name="Wordageddon_GRUPPO19.jar">
+      <element id="module-output" name="Wordageddon_GRUPPO19" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/zaxxer/HikariCP/6.3.0/HikariCP-6.3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/postgresql/postgresql/42.7.5/postgresql-42.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/checkerframework/checker-qual/3.48.3/checker-qual-3.48.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.5.18/logback-classic-1.5.18.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.5.18/logback-core-1.5.18.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx.web.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libdecora_sse.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libfxplugins.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libglass.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libglib-lite.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libgstreamer-lite.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libjavafx_font.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libjavafx_iio.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libjfxmedia.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libjfxmedia_avf.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libjfxwebkit.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libprism_common.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libprism_es2.dylib" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../../../Program Files/Java/javafx-sdk-mac-17.0.14/lib/libprism_sw.dylib" />
+    </root>
+  </artifact>
+</component>
