@@ -13,7 +13,6 @@ import it.unisa.diem.model.gestione.sessione.GameSession;
 import it.unisa.diem.model.gestione.sessione.Sessione;
 import it.unisa.diem.model.gestione.utenti.Utente;
 import it.unisa.diem.utility.AlertUtils;
-import it.unisa.diem.utility.PropertiesLoader;
 import it.unisa.diem.utility.SessionManager;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -37,7 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
-public class GameSessionController {
+public class GameSessionViewController {
 
     @FXML private StackPane rootStackPane;
 

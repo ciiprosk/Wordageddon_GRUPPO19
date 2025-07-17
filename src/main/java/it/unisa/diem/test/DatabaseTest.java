@@ -21,16 +21,7 @@ Caricare classi e risorse in memoria.*/
 public class DatabaseTest {
     public static void main(String[] args) {
 
-        /*try(InputStream fis = DatabaseTest.class.getClassLoader().getResourceAsStream("ITA/facile/storiella.txt")) {
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-        }catch(Exception e) {
-            e.printStackTrace();
-        }*/
+
         PropertiesLoader.init();
         String url=PropertiesLoader.getProperty("database.url");
         System.out.println("url:"+url);
@@ -43,7 +34,7 @@ public class DatabaseTest {
             Connection co=DriverManager.getConnection(url, user, password);
             System.out.println("okay");
         } catch (SQLException e) {
-            System.out.println("porcodio");
+            System.out.println("noooooo");
         }
 
     }

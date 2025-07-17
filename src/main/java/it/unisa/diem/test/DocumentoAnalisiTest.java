@@ -12,7 +12,7 @@ public class DocumentoAnalisiTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("ciao");
         Documento documento = new Documento("PROVA", Lingua.ENG, Difficolta.FACILE);
-        documento.convertiTxtToBin(new File("data/ENG/facile/joker.txt"));
+        documento.convertiTxtToBin(new File("A Cup of Tea.txt"));
         Analisi a=new Analisi(documento);
         a.analizza();
         System.out.println(a.getFrequenzeTesto());
