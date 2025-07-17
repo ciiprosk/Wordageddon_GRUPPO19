@@ -24,6 +24,7 @@ public class Analisi {
     private String titolo;
     private StopwordManager stopwordAnalisi;
     private String pathAnalisi;
+    private String titoloFinale;
 
 
     /**
@@ -42,8 +43,9 @@ public class Analisi {
         this.documento= documento;
         linguaAnalisi=documento.getLingua();
         difficoltaAnalisi=documento.getDifficolta();
-        titolo=documento.getTitolo();
-        pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi.toString().toLowerCase()+"/"+titolo+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
+        titolo=documento.getTitolo().toUpperCase();
+        titoloFinale = documento.getTitoloFinale();
+        pathAnalisi="analysis/"+ linguaAnalisi+"/"+difficoltaAnalisi.toString().toLowerCase()+"/"+titoloFinale+"_analysis.bin";//cpstruisco il percorso in cui deve finire l'analisi
         if(stopwordAnalisi != null){
             this.stopwordAnalisi=stopwordAnalisi;
         }
@@ -54,7 +56,8 @@ public class Analisi {
         linguaAnalisi = documento.getLingua();
         difficoltaAnalisi = documento.getDifficolta();
         titolo = documento.getTitolo();
-        pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi.toString().toLowerCase() + "/" + titolo + "_analysis.bin";
+        titoloFinale = documento.getTitoloFinale();
+        pathAnalisi = "analysis/" + linguaAnalisi + "/" + difficoltaAnalisi.toString().toLowerCase() + "/" + titoloFinale + "_analysis.bin";
 
     }
 
@@ -218,7 +221,8 @@ public class Analisi {
      */
 
     private static String recuperaAnalisiPath(Documento doc){
-       String path="analysis/"+ doc.getLingua().toString()+"/"+doc.getDifficolta().toString()+"/"+doc.getTitolo()+"_analysis.bin";
+       String path="analysis/"+ doc.getLingua().toString()+"/"+doc.getDifficolta().toString().toLowerCase()+"/"+doc.getTitoloFinale()+"_analysis.bin";
+        System.out.println(doc.getTitoloFinale());
 
        return path;
     }
@@ -231,6 +235,7 @@ public class Analisi {
     public void eliminaAnalisi() throws DeleteException{
         String path=this.pathAnalisi;
         File file = Path.of(path).toFile();
+        System.out.println(path );
 
         if(file.exists()){
             if(!file.delete()) throw new DeleteException("Impossibile eliminare il file di analisi: " + file.getName());
@@ -242,6 +247,7 @@ public class Analisi {
                 this.documento = null; // resetto il documento
                 this.linguaAnalisi = null; // resetto la lingua
                 this.difficoltaAnalisi = null; // resetto la difficoltà
+
             }
         }else  throw new DeleteException("Il file di analisi non esiste: " + file.getName());
     }

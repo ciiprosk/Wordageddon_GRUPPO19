@@ -281,7 +281,7 @@ public class GameSessionViewController {
                 generateQuestions(analyses, difficolta);
                 return;
             }
-
+            System.out.println(analyses.size());
             InsertAllSessioneDocumentiService insertAllService =
                     new InsertAllSessioneDocumentiService(analyses, sessioneDocumentoDAO,
                             gameSession.getSessioneId(), gameSession);

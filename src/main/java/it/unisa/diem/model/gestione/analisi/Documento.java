@@ -21,6 +21,7 @@ public class Documento {
     private Difficolta difficolta;
     private String path;
     private String testoD;
+    private String titoloFinale;
 
 
     /**
@@ -31,10 +32,11 @@ public class Documento {
      * Crea inoltre una nuova lista per contenere il testo del documento.
      */
     public Documento(String titolo, Lingua lingua, Difficolta difficolta) {
-        this.titolo = titolo;
+        this.titolo = titolo.toUpperCase();
         this.lingua = lingua;
         this.difficolta = difficolta;
-        path="data/"+lingua+"/"+difficolta.toString().toLowerCase()+"/"+titolo+".bin";
+        titoloFinale = this.titolo.replaceAll(" ", "_").toLowerCase();
+        path="data/"+lingua+"/"+difficolta.toString().toLowerCase()+"/"+titoloFinale+".bin";
         testoD = "";
     }
 
@@ -43,9 +45,13 @@ public class Documento {
         this.titolo = titolo;
         this.lingua = lingua;
         this.difficolta = difficolta;
+        titoloFinale = this.titolo.replaceAll(" ", "_").toLowerCase();
         this.path = path;
         this.testoD = "";
 
+    }
+    public String getTitoloFinale() {
+        return titoloFinale;
     }
 
     public String getTestoD() {
@@ -190,7 +196,8 @@ public class Documento {
             throw new IllegalArgumentException("Path non valido: " + filename + " - Split length: " + split.length);
         }
 
-        dr.titolo = split[split.length - 2];
+        dr.titolo = split[split.length - 2].replaceAll("_", " ").toUpperCase();
+        dr.titoloFinale = dr.titolo.replaceAll(" ", "_").toLowerCase();
         dr.difficolta = Difficolta.valueOf(split[split.length - 3].toUpperCase());
         dr.lingua = Lingua.valueOf(split[split.length - 4].toUpperCase());
         dr.path = filename;

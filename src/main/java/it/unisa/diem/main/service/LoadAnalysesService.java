@@ -53,6 +53,7 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
                     File selectedFile = fileList.remove(random.nextInt(fileList.size()));
                     System.out.println("DEBUG - Selected file: " + selectedFile.getPath());
                     Documento doc = Documento.leggiDocumento(convertAnalysisToDataPath(selectedFile.getPath()));
+                    System.out.println(doc);
                     Analisi analisi = Analisi.leggiAnalisi(doc);
                     analyses.add(analisi);
                 }
@@ -70,6 +71,7 @@ public class LoadAnalysesService extends Service<List<Analisi>> {
         System.out.println("DEBUG - convertAnalysisToDataPath input: " + analysisPath);
         File file = new File(analysisPath);
         String fileName = file.getName();
+        System.out.println(fileName);
         String titolo = fileName.replace("_analysis.bin", "");
 
         // Recupero cartelle padre
