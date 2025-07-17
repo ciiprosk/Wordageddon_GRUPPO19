@@ -226,12 +226,14 @@ public class AdminScreenViewController {
     @FXML
     public void handleRemove(ActionEvent actionEvent) {
         hideAlert();
-        String text = inputField.getText().trim();
-        if (!text.isEmpty()) {
-            stopwordsListView.getItems().remove(text);
-            inputField.clear();
+        String selected = stopwordsListView.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            stopwordsListView.getItems().remove(selected);
+        } else {
+            showAlert("Seleziona una stopword dalla lista per rimuoverla.");
         }
     }
+
 
     public void clearStopwordList() { stopwordsListView.getItems().clear(); }
 
