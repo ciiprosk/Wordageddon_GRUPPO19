@@ -50,6 +50,7 @@ public class Analisi {
             this.stopwordAnalisi=stopwordAnalisi;
         }
     }
+
     public Analisi(Documento documento) {
         frequenzeTesto = new HashMap<>();
         this.documento = documento;
